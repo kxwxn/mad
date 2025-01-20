@@ -1,0 +1,36 @@
+/* styles/BottomNav.module.css */
+.bottomNav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      padding: 0.1rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 50;
+    }
+    
+    .container {
+      display: flex;
+      justify-content: center;  /* 왼쪽 정렬 */
+      align-items: center;
+      gap: 8rem;
+      max-width: 100%;
+      overflow-x: auto;  /* 필요시 가로 스크롤 */
+      scrollbar-width: none;  /* Firefox */
+      -ms-overflow-style: none;  /* IE and Edge */
+    }
+    
+    /* Chrome, Safari 스크롤바 숨기기 */
+    .container::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .menuItem {
+      font-size: 0.5rem;
+      color: #0000FF;
+      text-decoration: none;
+      white-space: nowrap;  /* 텍스트 줄바꿈 방지 */
+      font-weight: 100;
+      letter-spacing: 0.05em;
+    }

@@ -1,0 +1,69 @@
+.nav {
+      background-color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      width: 100%;
+    }
+    
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* padding: 1rem 1rem; */
+      width: 100%;
+      gap: rem;
+      white-space: nowrap; /* 줄바꿈 방지 */
+    }
+    
+    .logo {
+      font-size: 6vw; /* 뷰포트 너비에 따른 동적 폰트 크기 */
+      color: #0000FF;
+      text-decoration: none;
+    }
+    
+    .menuItems {
+      display: flex;
+      gap: 3rem;
+    }
+    
+    .menuItem {
+      font-size: 6vw; /* 뷰포트 너비에 따른 동적 폰트 크기 */
+      color: #0000FF;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .menuItem:hover {
+      color: #0000FF;
+    }
+    
+    .menuItem:visited {
+      color: #0000FF;
+    }
+    
+    .active {
+      color: #0000FF;
+    }
+    
+    /* 최대 폰트 크기 제한 (화면이 너무 클 때) */
+    @media (min-width: 1200px) {
+      .logo, .menuItem {
+        font-size: 72px; /* 최대 폰트 크기 */
+      }
+    }
+    
+    /* 최소 폰트 크기 제한 (화면이 너무 작을 때) */
+    @media (max-width: 480px) {
+      .logo, .menuItem {
+        font-size: 28px; /* 최소 폰트 크기 */
+      }
+      .container {
+        gap: 2rem; /* 작은 화면에서는 간격 줄임 */
+      }
+      .menuItems {
+        gap: 2rem;
+      }
+    }
