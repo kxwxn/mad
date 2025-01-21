@@ -1,36 +1,63 @@
-/* styles/BottomNav.module.css */
 .bottomNav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: white;
-      padding: 0.1rem;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-      z-index: 50;
-    }
-    
-    .container {
-      display: flex;
-      justify-content: center;  /* 왼쪽 정렬 */
-      align-items: center;
-      gap: 8rem;
-      max-width: 100%;
-      overflow-x: auto;  /* 필요시 가로 스크롤 */
-      scrollbar-width: none;  /* Firefox */
-      -ms-overflow-style: none;  /* IE and Edge */
-    }
-    
-    /* Chrome, Safari 스크롤바 숨기기 */
-    .container::-webkit-scrollbar {
-      display: none;
-    }
-    
-    .menuItem {
-      font-size: 0.5rem;
-      color: #0000FF;
-      text-decoration: none;
-      white-space: nowrap;  /* 텍스트 줄바꿈 방지 */
-      font-weight: 100;
-      letter-spacing: 0.05em;
-    }
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: transparent;
+  padding: 0.5rem 0;
+  z-index: 50;
+  backdrop-filter: blur(5px);
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(2rem, 8vw, 16rem); /* 간격 2배 증가 */
+  max-width: 1800px; /* 최대 너비 증가 */
+  margin: 0 auto;
+  padding: 0 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
+}
+
+.menuItem {
+  font-size: clamp(0.375rem, 0.75vw, 0.5rem);
+  color: #0000FF;
+  text-decoration: none;
+  white-space: nowrap;
+  font-weight: 100;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .bottomNav {
+    padding: 0.3rem 0;
+  }
+  
+  .container {
+    gap: clamp(1rem, 4vw, 2rem); /* 모바일에서도 간격 2배 증가 */
+  }
+  
+  .menuItem {
+    font-size: clamp(0.25rem, 0.5vw, 0.375rem);
+  }
+}
+
+/* Tablet */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container {
+    gap: clamp(2rem, 6vw, 8rem); /* 태블릿에서도 간격 2배 증가 */
+  }
+  
+  .menuItem {
+    font-size: clamp(0.325rem, 0.625vw, 0.45rem);
+  }
+}

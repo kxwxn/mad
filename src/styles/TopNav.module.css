@@ -1,69 +1,82 @@
 .nav {
-      background-color: white;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 50;
-      width: 100%;
-    }
-    
-    .container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      /* padding: 1rem 1rem; */
-      width: 100%;
-      gap: rem;
-      white-space: nowrap; /* 줄바꿈 방지 */
-    }
-    
-    .logo {
-      font-size: 6vw; /* 뷰포트 너비에 따른 동적 폰트 크기 */
-      color: #0000FF;
-      text-decoration: none;
-    }
-    
-    .menuItems {
-      display: flex;
-      gap: 3rem;
-    }
-    
-    .menuItem {
-      font-size: 6vw; /* 뷰포트 너비에 따른 동적 폰트 크기 */
-      color: #0000FF;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    
-    .menuItem:hover {
-      color: #0000FF;
-    }
-    
-    .menuItem:visited {
-      color: #0000FF;
-    }
-    
-    .active {
-      color: #0000FF;
-    }
-    
-    /* 최대 폰트 크기 제한 (화면이 너무 클 때) */
-    @media (min-width: 1200px) {
-      .logo, .menuItem {
-        font-size: 72px; /* 최대 폰트 크기 */
-      }
-    }
-    
-    /* 최소 폰트 크기 제한 (화면이 너무 작을 때) */
-    @media (max-width: 480px) {
-      .logo, .menuItem {
-        font-size: 28px; /* 최소 폰트 크기 */
-      }
-      .container {
-        gap: 2rem; /* 작은 화면에서는 간격 줄임 */
-      }
-      .menuItems {
-        gap: 2rem;
-      }
-    }
+  background-color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0;
+  z-index: 50;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: row; /* 기본적으로 가로 정렬 */
+  gap: 2vw;
+  flex-wrap: nowrap; /* 줄바꿈 방지 */
+  justify-content: center; /* 가운데 정렬 */
+  padding: 0; /* 좌우 여백 제거 */
+  box-sizing: border-box; /* 패딩 포함 크기 계산 */
+}
+
+.mad,
+.info,
+.shop {
+  font-size: 13vw;
+  color: #0000FF;
+  text-decoration: none;
+  font-weight: 800;
+  line-height: 0.9;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  transition: opacity 0.3s ease;
+}
+
+.mad:hover,
+.info:hover,
+.shop:hover {
+  opacity: 0.8;
+}
+
+/* 모바일 화면에서만 세로 정렬 */
+@media (max-width: 640px) {
+  .container {
+    flex-direction: column; /* 모바일에서만 세로 정렬 */
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .mad,
+  .info,
+  .shop {
+    font-size: 18vw;
+    margin-bottom: 1vh; /* 세로 간격 추가 */
+  }
+}
+
+/* 태블릿 */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container {
+    padding: 2vw; /* 여백 유지 */
+  }
+  
+  .mad,
+  .info,
+  .shop {
+    font-size: 12.4vw; /* 글자 크기 조정 */
+  }
+}
+
+/* PC */
+@media (min-width: 1025px) {
+  .container {
+    max-width: 100%; /* 화면 너비를 가득 채우도록 설정 */
+    margin: 0 auto; /* 가운데 정렬 */
+    padding: 0; /* 여백 제거 */
+  }
+
+  .mad,
+  .info,
+  .shop {
+    font-size: 12.4vw; /* 글자 크기를 화면에 맞게 조정 */
+  }
+}
