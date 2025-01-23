@@ -17,17 +17,22 @@
     
     /* 텍스트 섹션 */
     .textSection {
-      padding: 4rem 2rem;
+      padding: 0rem 0rem;
       max-width: 1200px;
       margin: 0 auto;
-      background-color: #eaf20a;
+      background-color: #e0e422;
     }
     
-    .description {
-      font-size: clamp(1rem, 2vw, 1.5rem);
-      line-height: 1.6;
-      color: #333;
-      text-align: center;
+    .descriptionTop {
+      font-size: clamp(3rem, 2vw, 2rem);
+      color: #0000FF;
+      text-align: justify;
+    }
+
+    .descriptionBtm{
+      font-size: clamp(2rem, 1.5vw, 1.5rem);
+      color: #0000FF;
+      text-align: justify;
     }
     
     /* 좌우 분할 이미지 섹션 */
@@ -75,5 +80,7 @@
     
       .textSection {
         padding: 2rem 1rem;
+      font-size: clamp(1rem, 2vw, 2rem);
+
       }
     }

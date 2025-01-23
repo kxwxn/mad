@@ -25,7 +25,7 @@ export default function TopNav() {
               pathname === "/info" ? styles.active : ""
             }`}
           >
-            INFO
+            info
           </Link>
         </div>
         <div className={styles.bottomRow}>
@@ -35,7 +35,7 @@ export default function TopNav() {
               pathname === "/shop" ? styles.active : ""
             }`}
           >
-            SHOP
+            shop
           </Link>
         </div>
       </div>
