@@ -1,23 +1,31 @@
-// middleware.ts
-import { withAuth } from "next-auth/middleware"
-import { NextResponse } from "next/server"
+import { NextResponse } from 'next/server';
+import { getToken } from 'next-auth/jwt';
+import { NextRequestWithAuth } from 'next-auth/middleware';
 
-export default withAuth(
- function middleware(req) {
-   // 대시보드 등 관리자 페이지 접근 시 인증 체크
-   if (req.nextUrl.pathname.startsWith('/admin') && 
-       req.nextUrl.pathname !== '/admin' && 
-       !req.nextauth?.token?.role) {
-     return NextResponse.redirect(new URL('/admin', req.url))
-   }
- },
- {
-   callbacks: {
-     authorized: ({ token }) => !!token
-   },
- }
-)
+export default async function middleware(req: NextRequestWithAuth) {
+  const token = await getToken({ req });
+  const isAuth = !!token;
+  const isAuthPage = req.nextUrl.pathname.startsWith('/admin/login');
+
+  if (isAuthPage) {
+    if (isAuth) {
+      return NextResponse.redirect(new URL('/admin/dashboard', req.url));
+    }
+    return null;
+  }
+
+  if (!isAuth) {
+    let from = req.nextUrl.pathname;
+    if (req.nextUrl.search) {
+      from += req.nextUrl.search;
+    }
+
+    return NextResponse.redirect(
+      new URL(`/admin/login?from=${encodeURIComponent(from)}`, req.url)
+    );
+  }
+}
 
 export const config = {
- matcher: ["/admin/:path*"]
-}
+  matcher: ['/admin/:path*']
+};
