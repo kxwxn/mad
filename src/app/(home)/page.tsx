@@ -15,6 +15,7 @@ export default function Home() {
           priority
           quality={100}
           className={styles.heroImage}
+          loading="eager"
         />
       </section>
 
