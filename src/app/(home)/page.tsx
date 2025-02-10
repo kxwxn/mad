@@ -8,7 +8,7 @@ export default function Home() {
 
       <section className={styles.fullscreenSection}>
         <Image
-          src={process.env.NEXT_PUBLIC_BASE_PATH + '/images/002.jpg'} 
+          src="/images/002.jpg"
           alt="Hero Image"
           fill
           sizes="100vw"
