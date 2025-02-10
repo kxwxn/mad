@@ -8,7 +8,7 @@ export default function Home() {
 
       <section className={styles.fullscreenSection}>
         <Image
-          src="/images/002.jpg"
+          src="/Images/002.jpg"
           alt="Hero Image"
           fill
           sizes="100vw"
@@ -32,7 +32,7 @@ export default function Home() {
       <section className={styles.splitSection}>
         <div className={styles.imageContainer}>
           <Image
-            src="/images/003.jpg"
+            src="/Images/003.jpg"
             alt="Left Split Image 1"
             fill
             sizes="50vw"
@@ -42,7 +42,7 @@ export default function Home() {
         </div>
         <div className={styles.imageContainer}>
           <Image
-            src="/images/004.jpg"
+            src="/Images/004.jpg"
             alt="Right Split Image 1"
             fill
             sizes="50vw"
@@ -64,7 +64,7 @@ export default function Home() {
       <section className={styles.splitSection}>
         <div className={styles.imageContainer}>
           <Image
-            src="/images/Poster.png"
+            src="/Images/Poster.png"
             alt="Left Split Image 2"
             fill
             className={styles.splitImage}
@@ -72,7 +72,7 @@ export default function Home() {
         </div>
         <div className={styles.imageContainer}>
           <Image
-            src="/images/Poster_flashyfinal.jpg"
+            src="/Images/Poster_flashyfinal.jpg"
             alt="Right Split Image 2"
             fill
             className={styles.splitImage}
