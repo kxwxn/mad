@@ -17,6 +17,7 @@
     
     /* 텍스트 섹션 */
     .textSection {
+      width: 100%;
       padding: 0rem 0rem;
       max-width: 1200px;
       margin: 0 auto;
@@ -27,12 +28,15 @@
       font-size: clamp(3rem, 2vw, 2rem);
       color: #0000FF;
       text-align: justify;
+      width: 100%;
     }
 
     .descriptionBtm{
       font-size: clamp(2rem, 1.5vw, 1.5rem);
       color: #0000FF;
       text-align: justify;
+      width: 100%;
+
     }
     
     /* 좌우 분할 이미지 섹션 */
