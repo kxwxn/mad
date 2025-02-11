@@ -3,7 +3,6 @@ import "@/styles/globals.css";
 import TopNav from "@/components/TopNav";
 import localFont from "next/font/local";
 import Footer from "@/components/Footer";
-import Providers from "@/components/Providers";
 
 export const metadata: Metadata = {
   title: "MAD",
@@ -21,7 +20,7 @@ export default function RootLayout({
     <html lang="en" className={helvetica.className}>
       <body>
         <TopNav />
-        <Providers>{children}</Providers>
+        {children}
         <Footer />
       </body>
     </html>
