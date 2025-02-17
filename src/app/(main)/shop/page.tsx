@@ -1,3 +1,9 @@
-export default function Shop() {
-  return <div>Shop</div>;
+import ProductList from "@/components/shop/ProductList";
+
+export default async function ShopPage() {
+  return (
+    <main className="container mx-auto px-4 py-8">
+      <ProductList />
+    </main>
+  );
 }
