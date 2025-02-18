@@ -1,0 +1,224 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  min-height: 100vh;
+  max-width: 2000px;
+  margin: 0 auto;
+  gap: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: white;
+ }
+ 
+ .imageSection {
+  height: 100vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0 2rem;
+ }
+ 
+ .imageSection::-webkit-scrollbar {
+  display: none;
+ }
+ 
+ .divider {
+  width: 1px;
+  height: 100%;
+  background-color: #000;
+  margin: 0;
+ }
+ 
+ .infoSection {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 2rem;
+  overflow-y: auto;
+ }
+ 
+ .productInfo {
+  padding: 1rem;
+ }
+ 
+ .brand {
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+ }
+ 
+ .name {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  font-weight: 400;
+ }
+ 
+ .priceContainer {
+  margin-bottom: 2rem;
+ }
+ 
+ .price {
+  font-size: 1rem;
+  margin-right: 1rem;
+ }
+ 
+ .originalPrice {
+  font-size: 1rem;
+  text-decoration: line-through;
+  color: #666;
+ }
+ 
+ .sizeGuideBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  padding: 0;
+ }
+ 
+ .selectBoxContainer {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+ }
+ 
+ .selectBoxWrapper {
+  flex: 2;
+  position: relative;
+ }
+ 
+ .selectBox {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #000;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+ }
+ 
+ .selectBox.active {
+  border-bottom: none;
+ }
+ 
+ .optionsContainer {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border: 1px solid #000;
+  border-top: none;
+  background: white;
+  z-index: 1;
+ }
+ 
+ .option {
+  padding: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+ }
+ 
+ .option:hover {
+  background-color: #f5f5f5;
+ }
+ 
+ .arrowDown {
+  font-size: 0.75rem;
+  transition: transform 0.2s;
+ }
+ 
+ .active .arrowDown {
+  transform: rotate(180deg);
+ }
+ 
+ .addToCartBox {
+  flex: 3;
+  padding: 1rem;
+  border: 1px solid #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+ }
+ 
+ .addToCartBox:hover {
+  background-color: #000;
+  color: white;
+ }
+ 
+ .heartIcon {
+  border-left: 1px solid #000;
+  padding-left: 1rem;
+  margin-left: 1rem;
+ }
+ 
+ .accordionContainer {
+  margin-top: 2rem;
+ }
+ 
+ .accordionItem {
+  border-top: 1px solid #ddd;
+  padding: 1rem 0;
+ }
+ 
+ .accordionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.875rem;
+ }
+ 
+ .accordionContent {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  font-size: 0.875rem;
+  line-height: 1.5;
+ }
+ 
+ .accordionContent.open {
+  max-height: 500px;
+  padding-top: 1rem;
+ }
+ 
+ .toggleIcon {
+  font-size: 0.875rem;
+ }
+ 
+ .footerText {
+  margin-top: 2rem;
+  font-size: 0.75rem;
+  color: #666;
+ }
+ 
+ @media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    position: relative;
+  }
+ 
+  .divider {
+    display: none;
+  }
+ 
+  .imageSection,
+  .infoSection {
+    height: auto;
+    position: relative;
+  }
+ 
+  .selectBoxContainer {
+    flex-direction: column;
+  }
+ 
+  .addToCartBox {
+    width: 100%;
+  }
+ }
