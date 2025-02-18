@@ -6,29 +6,50 @@
   width: 100%;
   padding: 0;
   z-index: 50;
+  transform: translateY(0);
+  transition: transform 0.3s ease-in-out;
 }
 
 .container {
   width: 100%;
   display: flex;
-  flex-direction: row; /* 기본적으로 가로 정렬 */
+  flex-direction: row;
   gap: 2vw;
-  flex-wrap: nowrap; /* 줄바꿈 방지 */
-  justify-content: center; /* 가운데 정렬 */
-  padding: 0; /* 좌우 여백 제거 */
-  box-sizing: border-box; /* 패딩 포함 크기 계산 */
+  flex-wrap: nowrap;
+  justify-content: center;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .mad,
 .info,
 .shop {
   font-size: 13vw;
-  color: #0000FF;
+  color: #0000ff;
   text-decoration: none;
   font-weight: 800;
   line-height: 0.9;
-  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  white-space: nowrap;
   transition: opacity 0.3s ease;
+  position: relative;
+}
+
+/* 활성화된 메뉴에 대한 가로선 스타일 */
+.active {
+  position: relative;
+  display: inline-block;
+}
+
+.active::before {
+  content: "";
+  position: absolute;
+  left: -2%;
+  top: 45%;
+  width: 104%;
+  height: 15px;
+  background-color: #0000ff;
+  z-index: -1;
+  transform: translateY(-50%);
 }
 
 .mad:hover,
@@ -40,7 +61,7 @@
 /* 모바일 화면에서만 세로 정렬 */
 @media (max-width: 640px) {
   .container {
-    flex-direction: column; /* 모바일에서만 세로 정렬 */
+    flex-direction: column;
     align-items: flex-start;
     gap: 0;
   }
@@ -49,34 +70,47 @@
   .info,
   .shop {
     font-size: 18vw;
-    margin-bottom: 1vh; /* 세로 간격 추가 */
+    margin-bottom: 1vh;
+  }
+
+  .active::before {
+    height: 20px;
+    top: 45%;
   }
 }
 
 /* 태블릿 */
 @media (min-width: 641px) and (max-width: 1024px) {
   .container {
-    padding: 2vw; /* 여백 유지 */
+    padding: 2vw;
   }
-  
+
   .mad,
   .info,
   .shop {
-    font-size: 12.4vw; /* 글자 크기 조정 */
+    font-size: 12.4vw;
+  }
+
+  .active::before {
+    height: 18px;
   }
 }
 
 /* PC */
 @media (min-width: 1025px) {
   .container {
-    max-width: 100%; /* 화면 너비를 가득 채우도록 설정 */
-    margin: 0 auto; /* 가운데 정렬 */
-    padding: 0; /* 여백 제거 */
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
   }
 
   .mad,
   .info,
   .shop {
-    font-size: 12.4vw; /* 글자 크기를 화면에 맞게 조정 */
+    font-size: 12.4vw;
+  }
+
+  .active::before {
+    height: 15px;
   }
 }

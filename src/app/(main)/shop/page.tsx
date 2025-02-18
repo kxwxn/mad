@@ -1,4 +1,5 @@
-import ProductList from "@/components/shop/ProductList";
+
+import ProductList from "@/components/shop/ProductList/ProductList";
 
 export default async function ShopPage() {
   return (
