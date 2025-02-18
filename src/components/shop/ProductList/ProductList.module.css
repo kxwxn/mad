@@ -82,13 +82,26 @@
   margin-top: 4px;
 }
 
+.productLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.2s ease;
+}
 
+.productLink:visited {
+  color: inherit;
+}
+
+.productLink:hover {
+  transform: translateY(-5px);
+}
 
 @media (max-width: 1024px) {
   .container {
     margin-top: calc(12.4vw * 0.9);
   }
-  
+
   .productGrid {
     grid-template-columns: repeat(3, 1fr);
   }

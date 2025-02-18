@@ -1,0 +1,58 @@
+.container {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr; /* 1px은 구분선을 위한 공간 */
+      min-height: 100vh;
+      max-width: 2000px;
+      margin: 0 auto;
+      gap: 0;
+    }
+    
+    .imageSection {
+      height: 100vh;
+      overflow-y: auto;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
+      padding: 0 2rem;
+    }
+    
+    .imageSection::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+    
+    .divider {
+      width: 1px;
+      height: 100%;
+      background-color: #000;
+      margin: 0;
+    }
+    
+    .infoSection {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+    
+    .productImage {
+      width: 100%;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+    
+    /* 반응형 디자인 */
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+      
+      .divider {
+        display: none;
+      }
+      
+      .imageSection, 
+      .infoSection {
+        height: auto;
+        position: relative;
+      }
+    }

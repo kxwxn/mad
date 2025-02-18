@@ -5,7 +5,7 @@
   left: 0;
   width: 100%;
   padding: 0;
-  z-index: 50;
+  z-index: 0;
   transform: translateY(0);
   transition: transform 0.3s ease-in-out;
 }
