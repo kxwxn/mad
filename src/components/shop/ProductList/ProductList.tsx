@@ -1,28 +1,48 @@
-import Link from 'next/link';
-import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
-import styles from './ProductList.module.css'
+"use client";
 
-export default async function ProductList() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import styles from "./ProductList.module.css";
+import CartModal from "../CartModal/CartModal";
+import { createClient } from "@/utils/supabase/client";
 
-  const { data: products, error } = await supabase
-    .from("products")
-    .select("*");
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  brand?: string;
+  image_url?: string;
+  status?: string;
+  original_price?: number;
+}
 
-  if (error) {
-    console.error("Error fetching products:", error);
-    return <div>에러가 발생했습니다: {error.message}</div>;
-  }
+const ProductList: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data, error } = await supabase.from("products").select("*");
+
+      if (error) {
+        console.error("Error fetching products:", error);
+        return;
+      }
+
+      if (data) {
+        setProducts(data);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <div className={styles.container}>
       <div className={styles.productGrid}>
         {products?.map((product) => (
-          // Link 컴포넌트로 각 상품 카드를 감싸줍니다
-          <Link 
-            href={`/shop/${product.id}`} 
+          <Link
+            href={`/shop/${product.id}`}
             key={product.id}
             className={styles.productLink}
           >
@@ -34,31 +54,27 @@ export default async function ProductList() {
                   className={styles.image}
                 />
               </div>
-              
+
               <div className={styles.productInfo}>
                 <h3 className={styles.brand}>
                   {product.brand || "Brand Name"}
                 </h3>
-                
-                <h4 className={styles.name}>
-                  {product.name}
-                </h4>
-                
+
+                <h4 className={styles.name}>{product.name}</h4>
+
                 <div className={styles.priceContainer}>
                   <span className={styles.price}>
                     ${product.price?.toLocaleString()}
                   </span>
                   {product.original_price && (
                     <span className={styles.originalPrice}>
-                      ￦{product.original_price?.toLocaleString()}
+                      ${product.original_price?.toLocaleString()}
                     </span>
                   )}
                 </div>
-                
+
                 {product.status === "SOLD_OUT" && (
-                  <span className={styles.soldOut}>
-                    SOLD OUT
-                  </span>
+                  <span className={styles.soldOut}>SOLD OUT</span>
                 )}
               </div>
             </div>
@@ -67,4 +83,6 @@ export default async function ProductList() {
       </div>
     </div>
   );
-}
+};
+
+export default ProductList;

@@ -19,6 +19,12 @@ export default clerkMiddleware(async (auth, req) => {
     const url = new URL('/', req.url);
     return NextResponse.redirect(url);
   }
+    // 관리자가 아닌 경우 /admin/product 접근 방지
+    if (path === '/admin/product' && !isAdmin) {
+      const url = new URL('/', req.url);
+      return NextResponse.redirect(url);
+    }
+  
 
   // 로그인한 관리자의 경우
   if (userId && isAdmin && path === '/admin') {

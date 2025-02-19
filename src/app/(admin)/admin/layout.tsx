@@ -1,13 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "MAD Admin",
@@ -26,12 +19,8 @@ export default function AdminLayout({
       <html lang="en" className={helvetica.className}>
         <body>
           <header className="flex justify-end items-center p-4 gap-4 h-16">
-            <SignedOut>
-              <SignInButton />
-              <SignUpButton />
-            </SignedOut>
             <SignedIn>
-              <UserButton />
+              <UserButton signOutUrl="/admin/sign-in" />
             </SignedIn>
           </header>
           {children}
