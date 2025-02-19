@@ -1,49 +1,291 @@
-// src/components/admin/AddProductButton/AddProductModal.tsx
-"use client";
-import React, { useEffect, useState } from "react";
-import styles from "./AddProductModal.module.css";
+import React, { useState, useEffect } from 'react';
+import styles from './AddProductModal.module.css';
+import { insertProduct } from '@/lib/supabase/product';
+import { uploadProductImage } from '@/lib/supabase/storage';
 
 interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+interface SizeQuantity {
+  size: string;
+  quantity: number;
+}
+
+interface ProductFormData {
+  name: string;
+  price: number;
+  description: string;
+  product_info: string;
+  sizeType: 'numbered' | 'onesize';
+  size_1: number;
+  size_2: number;
+  size_3: number;
+  os: number;
+  image?: File;
+}
+
 const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [formData, setFormData] = useState<ProductFormData>({
+    name: '',
+    price: 0,
+    description: '',
+    product_info: '',
+    sizeType: 'numbered',
+    size_1: 0,
+    size_2: 0,
+    size_3: 0,
+    os: 0,
+    image: undefined
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
-      document.body.style.overflow = 'hidden'; // 오버플로우 숨기기
     } else {
       setTimeout(() => {
         setIsVisible(false);
-        document.body.style.overflow = ''; // 오버플로우 복원
       }, 300);
     }
   }, [isOpen]);
 
   const handleClose = () => {
-    setIsVisible(false);
-    setTimeout(() => {
-      onClose();
-    }, 300);
+    onClose();
   };
 
-  if (!isOpen && !isVisible) return null;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSizeQuantityChange = (size: string, quantity: number) => {
+    setFormData(prev => ({
+      ...prev,
+      sizes: prev.sizes.map(s => 
+        s.size === size ? { ...s, quantity } : s
+      )
+    }));
+  };
+
+  const handleSizeTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newSizeType = e.target.value as 'numbered' | 'onesize';
+    setFormData(prev => ({
+      ...prev,
+      sizeType: newSizeType,
+      sizes: newSizeType === 'onesize' 
+        ? [{ size: 'OS', quantity: 0 }]
+        : [
+            { size: '1', quantity: 0 },
+            { size: '2', quantity: 0 },
+            { size: '3', quantity: 0 }
+          ]
+    }));
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFormData(prev => ({
+        ...prev,
+        image: e.target.files![0]
+      }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      setIsLoading(true);
+
+      // 이미지 업로드
+      let imageUrl = '';
+      if (formData.image) {
+        imageUrl = await uploadProductImage(formData.image);
+      }
+
+      const productInput = {
+        name: formData.name,
+        price: Number(formData.price),
+        description: formData.description,
+        product_info: formData.product_info,
+        size_1: formData.sizeType === 'numbered' ? formData.size_1 : 0,
+        size_2: formData.sizeType === 'numbered' ? formData.size_2 : 0,
+        size_3: formData.sizeType === 'numbered' ? formData.size_3 : 0,
+        os: formData.sizeType === 'onesize' ? formData.os : 0,
+        image_url: imageUrl
+      };
+
+      await insertProduct(productInput);
+      
+      alert('제품이 성공적으로 추가되었습니다.');
+      
+      setFormData({
+        name: '',
+        price: 0,
+        description: '',
+        product_info: '',
+        sizeType: 'numbered',
+        size_1: 0,
+        size_2: 0,
+        size_3: 0,
+        os: 0,
+        image: undefined
+      });
+
+      onClose();
+    } catch (error) {
+      console.error('제품 추가 중 오류 발생:', error);
+      alert('제품 추가 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
-      <div className={`${styles.overlay} ${isVisible ? styles.visible : ""}`} onClick={handleClose} />
-      <div className={`${styles.modal} ${isVisible ? styles.open : ""}`}>
+      <div className={`${styles.overlay} ${isVisible ? styles.visible : ''}`} onClick={handleClose} />
+      <div className={`${styles.modal} ${isVisible ? styles.open : ''}`}>
         <div className={styles.header}>
           <h2>Add Product</h2>
           <button className={styles.closeButton} onClick={handleClose}>
-            [ close ]
+            [ x ]
           </button>
         </div>
         <div className={styles.content}>
-          {/* Add product form or content here */}
+          <form onSubmit={handleSubmit}>
+            <div className={styles.formGroup}>
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="price">Price</label>
+              <input
+                type="number"
+                id="price"
+                name="price"
+                value={formData.price}
+                onChange={handleInputChange}
+                min="0"
+                required
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="productInfo">Product Info</label>
+              <textarea
+                id="productInfo"
+                name="product_info"
+                value={formData.product_info}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="sizeType">사이즈 타입</label>
+              <select
+                id="sizeType"
+                name="sizeType"
+                value={formData.sizeType}
+                onChange={handleInputChange}
+              >
+                <option value="numbered">숫자 사이즈</option>
+                <option value="onesize">원사이즈</option>
+              </select>
+            </div>
+
+            {formData.sizeType === 'numbered' ? (
+              <div className={styles.sizesContainer}>
+                <div className={styles.sizeGroup}>
+                  <label>사이즈 1</label>
+                  <input
+                    type="number"
+                    name="size_1"
+                    value={formData.size_1}
+                    onChange={handleInputChange}
+                    min="0"
+                  />
+                </div>
+                <div className={styles.sizeGroup}>
+                  <label>사이즈 2</label>
+                  <input
+                    type="number"
+                    name="size_2"
+                    value={formData.size_2}
+                    onChange={handleInputChange}
+                    min="0"
+                  />
+                </div>
+                <div className={styles.sizeGroup}>
+                  <label>사이즈 3</label>
+                  <input
+                    type="number"
+                    name="size_3"
+                    value={formData.size_3}
+                    onChange={handleInputChange}
+                    min="0"
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className={styles.sizesContainer}>
+                <div className={styles.sizeGroup}>
+                  <label>원사이즈 수량</label>
+                  <input
+                    type="number"
+                    name="os"
+                    value={formData.os}
+                    onChange={handleInputChange}
+                    min="0"
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className={styles.formGroup}>
+              <label htmlFor="image">제품 이미지</label>
+              <input
+                type="file"
+                id="image"
+                accept="image/*"
+                onChange={handleImageChange}
+                className={styles.fileInput}
+              />
+            </div>
+
+            <button 
+              type="submit" 
+              className={styles.submitButton}
+              disabled={isLoading}
+            >
+              {isLoading ? '처리중...' : '제품 추가'}
+            </button>
+          </form>
         </div>
       </div>
     </>

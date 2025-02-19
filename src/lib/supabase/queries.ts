@@ -1,6 +1,5 @@
 import { supabase } from './config';
-import { Product } from '@/types/product';
-
+ 
 export async function getProducts(from = 0, to = 11) {
   const { data, error } = await supabase
     .from('products')
