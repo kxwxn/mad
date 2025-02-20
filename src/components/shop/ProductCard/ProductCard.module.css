@@ -11,87 +11,102 @@
   right: 0;
   z-index: 50;
   background: white;
- }
- 
- .imageSection {
+  overflow-x: hidden;
+}
+
+.imageSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
   height: 100vh;
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding: 0 2rem;
- }
- 
- .imageSection::-webkit-scrollbar {
+  padding: 0;
+}
+
+.imageSection::-webkit-scrollbar {
   display: none;
- }
- 
- .divider {
+}
+
+.divider {
   width: 1px;
   height: 100%;
   background-color: #000;
   margin: 0;
- }
- 
- .infoSection {
+}
+
+.infoSection {
   position: sticky;
   top: 0;
   height: 100vh;
   padding: 2rem;
   overflow-y: auto;
- }
- 
- .productInfo {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.productInfo {
+  width: 100%;
+  min-width: 0;
   padding: 1rem;
- }
- 
- .brand {
+}
+
+.brand {
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
   font-weight: 500;
- }
- 
- .name {
+}
+
+.name {
   font-size: 1.25rem;
   margin-bottom: 1rem;
   font-weight: 400;
- }
- 
- .priceContainer {
+}
+
+.priceContainer {
   margin-bottom: 2rem;
- }
- 
- .price {
+}
+
+.price {
   font-size: 1rem;
   margin-right: 1rem;
- }
- 
- .originalPrice {
+}
+
+.originalPrice {
   font-size: 1rem;
   text-decoration: line-through;
   color: #666;
- }
- 
- .sizeGuideBtn {
+}
+
+.sizeGuideBtn {
   background: none;
   border: none;
   cursor: pointer;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   font-size: 0.875rem;
   padding: 0;
- }
- 
- .selectBoxContainer {
+  text-decoration: none;
+  transition: text-decoration 0.2s ease;
+}
+
+.sizeGuideBtn.active {
+  text-decoration: line-through;
+}
+
+.selectBoxContainer {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
- }
- 
- .selectBoxWrapper {
+}
+
+.selectBoxWrapper {
   flex: 2;
   position: relative;
- }
- 
- .selectBox {
+}
+
+.selectBox {
   width: 100%;
   padding: 1rem;
   border: 1px solid #000;
@@ -100,13 +115,13 @@
   justify-content: space-between;
   align-items: center;
   background: white;
- }
- 
- .selectBox.active {
+}
+
+.selectBox.active {
   border-bottom: none;
- }
- 
- .optionsContainer {
+}
+
+.optionsContainer {
   position: absolute;
   top: 100%;
   left: 0;
@@ -115,28 +130,28 @@
   border-top: none;
   background: white;
   z-index: 1;
- }
- 
- .option {
+}
+
+.option {
   padding: 1rem;
   cursor: pointer;
   transition: background-color 0.2s;
- }
- 
- .option:hover {
+}
+
+.option:hover {
   background-color: #f5f5f5;
- }
- 
- .arrowDown {
+}
+
+.arrowDown {
   font-size: 0.75rem;
   transition: transform 0.2s;
- }
- 
- .active .arrowDown {
+}
+
+.active .arrowDown {
   transform: rotate(180deg);
- }
- 
- .addToCartBox {
+}
+
+.addToCartBox {
   flex: 3;
   padding: 1rem;
   border: 1px solid #000;
@@ -145,104 +160,141 @@
   align-items: center;
   cursor: pointer;
   transition: background-color 0.2s;
- }
- 
- .addToCartBox:hover {
+}
+
+.addToCartBox:hover {
   background-color: #000;
   color: white;
- }
- 
- .heartIcon {
-  border-left: 1px solid #000;
-  padding-left: 1rem;
-  margin-left: 1rem;
- }
- 
- .accordionContainer {
+}
+
+.accordionContainer {
   margin-top: 2rem;
- }
- 
- .accordionItem {
+}
+
+.accordionItem {
   border-top: 1px solid #ddd;
   padding: 1rem 0;
- }
- 
- .accordionHeader {
+}
+
+.accordionHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
   font-size: 0.875rem;
- }
- 
- .accordionContent {
-  max-height: 0;
+}
+
+.accordionHeader span:first-child {
+  text-decoration: none;
+  transition: text-decoration 0.2s ease;
+}
+
+.accordionHeader.active span:first-child {
+  text-decoration: line-through;
+}
+
+.accordionContent {
+  position: relative;
+  width: 100%;
   overflow: hidden;
-  transition: max-height 0.3s ease-out;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-out;
   font-size: 0.875rem;
   line-height: 1.5;
- }
- 
- .accordionContent.open {
-  max-height: 500px;
+}
+
+.accordionContent.open {
+  height: auto;
+  opacity: 1;
+  visibility: visible;
   padding-top: 1rem;
- }
- 
- .toggleIcon {
+}
+
+.toggleIcon {
   font-size: 0.875rem;
- }
- 
- .footerText {
+}
+
+.footerText {
   margin-top: 2rem;
   font-size: 0.75rem;
   color: #666;
- }
- 
- .sizeGuideInfo {
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: #f5f5f5;
-  border-radius: 4px;
- }
- 
- .sizeTable {
+}
+
+.sizeGuideInfo {
+  position: relative;
+  width: 100%;
+  margin-top: 0;
+  padding: 0;
+  opacity: 1;
+  visibility: visible;
+  height: auto;
+}
+
+.sizeTable {
+  position: relative;
   width: 100%;
   border-collapse: collapse;
- }
- 
- .sizeTable th,
- .sizeTable td {
+  table-layout: fixed;
+}
+
+.sizeTable th,
+.sizeTable td {
   padding: 0.5rem;
   text-align: center;
-  border: 1px solid #ddd;
- }
- 
- .sizeTable th {
-  background-color: #eee;
-  font-weight: bold;
- }
- 
- @media (max-width: 768px) {
+  border: none;
+}
+
+.sizeTable th {
+  background: none;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.sizeTable td:first-child {
+  font-weight: 600;
+}
+
+.sizeTable td:not(:first-child) {
+  font-weight: 300;
+}
+
+.productImage {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.shippingText {
+  white-space: pre-line;
+  margin: 0;
+  width: 100%;
+  position: relative;
+}
+
+@media (max-width: 768px) {
   .container {
     grid-template-columns: 1fr;
     position: relative;
   }
- 
+
   .divider {
     display: none;
   }
- 
+
   .imageSection,
   .infoSection {
     height: auto;
     position: relative;
   }
- 
+
   .selectBoxContainer {
     flex-direction: column;
   }
- 
+
   .addToCartBox {
     width: 100%;
   }
- }
+}

@@ -3,17 +3,15 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "./ProductList.module.css";
-import CartModal from "../CartModal/CartModal";
 import { createClient } from "@/utils/supabase/client";
 
 interface Product {
   id: string;
   name: string;
   price: number;
-  brand?: string;
-  image_url?: string;
+  description: string;
+  image_urls: string[];
   status?: string;
-  original_price?: number;
 }
 
 const ProductList: React.FC = () => {
@@ -49,30 +47,20 @@ const ProductList: React.FC = () => {
             <div className={styles.productCard}>
               <div className={styles.imageContainer}>
                 <img
-                  src={product.image_url || "/api/placeholder/400/400"}
+                  src={product.image_urls?.[0] || "/api/placeholder/400/400"}
                   alt={product.name}
                   className={styles.image}
                 />
               </div>
 
               <div className={styles.productInfo}>
-                <h3 className={styles.brand}>
-                  {product.brand || "Brand Name"}
-                </h3>
-
                 <h4 className={styles.name}>{product.name}</h4>
-
+                <p className={styles.description}>{product.description}</p>
                 <div className={styles.priceContainer}>
                   <span className={styles.price}>
                     ${product.price?.toLocaleString()}
                   </span>
-                  {product.original_price && (
-                    <span className={styles.originalPrice}>
-                      ${product.original_price?.toLocaleString()}
-                    </span>
-                  )}
                 </div>
-
                 {product.status === "SOLD_OUT" && (
                   <span className={styles.soldOut}>SOLD OUT</span>
                 )}

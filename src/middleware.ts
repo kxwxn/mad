@@ -8,6 +8,12 @@ export default clerkMiddleware(async (auth, req) => {
   const isAdmin = sessionClaims?.metadata?.role === 'admin';
   const path = req.nextUrl.pathname;
   
+  // 로그인 페이지에서 이미 로그인한 관리자인 경우 dashboard 페이지로 리다이렉트
+  if (userId && isAdmin && path === '/admin/sign-in') {
+    const productUrl = new URL('/admin/dashboard', req.url);
+    return NextResponse.redirect(productUrl);
+  }
+
   if (userId && !isAdmin && path === '/admin') {
     // 로그인했지만 관리자가 아닌 경우 (access-denied)로 리다이렉트
     const accessDeniedUrl = new URL('/admin/access-denied', req.url);
@@ -28,9 +34,8 @@ export default clerkMiddleware(async (auth, req) => {
 
   // 로그인한 관리자의 경우
   if (userId && isAdmin && path === '/admin') {
-    // /admin으로 접근시 dashboard로 리다이렉트
-    const dashboardUrl = new URL('/admin/dashboard', req.url);
-    return NextResponse.redirect(dashboardUrl);
+    const productUrl = new URL('/admin/dashboard', req.url);  // dashboard 
+    return NextResponse.redirect(productUrl);
   }
 
   return NextResponse.next();

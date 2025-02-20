@@ -3,7 +3,7 @@ import AddProductButton from "@/components/admin/AddProductButton/AddProductButt
 
 export default function ProductAdminPage() {
   return (
-    <div style={{ overflowX: 'hidden' }}>
+    <div style={{ margin: 0, padding: 0, overflowX: 'hidden' }}>
       <AddProductButton />
       <ProductList />
     </div>

@@ -23,7 +23,7 @@ interface ProductFormData {
   size_2: number;
   size_3: number;
   os: number;
-  image?: File;
+  images: File[];
 }
 
 const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) => {
@@ -38,7 +38,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
     size_2: 0,
     size_3: 0,
     os: 0,
-    image: undefined
+    images: []
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -89,12 +89,24 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      if (formData.images.length + newFiles.length > 5) {
+        alert('최대 5개의 이미지만 업로드할 수 있습니다.');
+        return;
+      }
       setFormData(prev => ({
         ...prev,
-        image: e.target.files![0]
+        images: [...prev.images, ...newFiles].slice(0, 5)
       }));
     }
+  };
+
+  const removeImage = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,11 +115,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
     try {
       setIsLoading(true);
 
-      // 이미지 업로드
-      let imageUrl = '';
-      if (formData.image) {
-        imageUrl = await uploadProductImage(formData.image);
-      }
+      // 여러 이미지 업로드
+      const imageUrls = await Promise.all(
+        formData.images.map(image => uploadProductImage(image))
+      );
+
+      console.log('Uploaded image URLs:', imageUrls);  // 디버깅용
 
       const productInput = {
         name: formData.name,
@@ -118,8 +131,10 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
         size_2: formData.sizeType === 'numbered' ? formData.size_2 : 0,
         size_3: formData.sizeType === 'numbered' ? formData.size_3 : 0,
         os: formData.sizeType === 'onesize' ? formData.os : 0,
-        image_url: imageUrl
+        image_urls: imageUrls  // image_url 대신 image_urls 사용
       };
+
+      console.log('Submitting product data:', productInput);
 
       await insertProduct(productInput);
       
@@ -135,7 +150,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
         size_2: 0,
         size_3: 0,
         os: 0,
-        image: undefined
+        images: []
       });
 
       onClose();
@@ -268,14 +283,35 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
             )}
 
             <div className={styles.formGroup}>
-              <label htmlFor="image">제품 이미지</label>
+              <label htmlFor="images">제품 이미지 (최대 5개)</label>
               <input
                 type="file"
-                id="image"
+                id="images"
                 accept="image/*"
+                multiple
                 onChange={handleImageChange}
                 className={styles.fileInput}
               />
+              {formData.images.length > 0 && (
+                <div className={styles.imagePreviewContainer}>
+                  {formData.images.map((file, index) => (
+                    <div key={index} className={styles.imagePreview}>
+                      <img 
+                        src={URL.createObjectURL(file)} 
+                        alt={`Preview ${index + 1}`} 
+                      />
+                      <button 
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className={styles.removeImageBtn}
+                      >
+                        ×
+                      </button>
+                      <span className={styles.imageNumber}>{index + 1}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <button 

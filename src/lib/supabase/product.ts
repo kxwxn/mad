@@ -9,11 +9,13 @@ export interface ProductInput {
   size_2: number;
   size_3: number;
   os: number;
+  image_urls: string[];
 }
 
 export async function insertProduct(productData: ProductInput) {
   try {
-    // products 테이블에 데이터 삽입
+    console.log('Inserting product with data:', productData);
+
     const { data, error } = await supabase
       .from('products')
       .insert([{
@@ -24,7 +26,8 @@ export async function insertProduct(productData: ProductInput) {
         size_1: productData.size_1,
         size_2: productData.size_2,
         size_3: productData.size_3,
-        os: productData.os
+        os: productData.os,
+        image_urls: productData.image_urls
       }])
       .select()
       .single();
@@ -34,6 +37,7 @@ export async function insertProduct(productData: ProductInput) {
       throw error;
     }
 
+    console.log('Product inserted successfully:', data);
     return data;
   } catch (error) {
     console.error('Error inserting product:', error);
