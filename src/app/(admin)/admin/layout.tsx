@@ -19,11 +19,11 @@ export default function AdminLayout({
   return (
     <ClerkProvider>
       <html lang="en" className={helvetica.className}>
-        <body className={styles.body}>
+        <body style={{ margin: 0, padding: 0 }}>
           <SignedIn>
             <AdminNav />
           </SignedIn>
-          <main className={styles.main}>
+          <main style={{ margin: 0, padding: 0 }}>
             {children}
           </main>
         </body>

@@ -1,15 +1,14 @@
-
-
 .textButton {
   background: none;
   border: none;
   cursor: pointer;
   font-size: 1rem;
   color: Black;
-  text-decoration: underline;
-  padding: 0;
-  margin: 0;
-  text-decoration:none;
+  text-decoration: none;
+  position: fixed;
+  margin-top: 15vh;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .textButton:hover {

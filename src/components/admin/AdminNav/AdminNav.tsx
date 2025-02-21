@@ -2,17 +2,10 @@
 import styles from "./AdminNav.module.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useClerk } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 
 export default function AdminNav() {
   const pathname = usePathname();
-  const { signOut } = useClerk();
-
-  const handleSignOut = () => {
-    signOut(() => {
-      window.location.href = "/admin/sign-in";
-    });
-  };
 
   return (
     <nav className={styles.nav}>
@@ -33,9 +26,19 @@ export default function AdminNav() {
         >
           PRODUCT
         </Link>
-        <button onClick={handleSignOut} className={styles.link}>
-          LOGOUT
-        </button>
+      </div>
+      <div className={styles.userButtonWrapper}>
+        <UserButton 
+          afterSignOutUrl="/admin/sign-in"
+          appearance={{
+            elements: {
+              rootBox: {
+                width: '40px',
+                height: '40px'
+              }
+            }
+          }}
+        />
       </div>
     </nav>
   );
