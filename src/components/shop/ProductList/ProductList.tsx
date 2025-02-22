@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "./ProductList.module.css";
 import { createClient } from "@/utils/supabase/client";
+import Image from 'next/image';
 
 interface Product {
   id: string;
@@ -14,9 +15,11 @@ interface Product {
   status?: string;
 }
 
+// Supabase 클라이언트를 컴포넌트 외부에서 한 번만 생성
+const supabase = createClient();
+
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const supabase = createClient();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -33,7 +36,7 @@ const ProductList: React.FC = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, []); // supabase 의존성 제거
 
   return (
     <div className={styles.container}>
@@ -46,10 +49,13 @@ const ProductList: React.FC = () => {
           >
             <div className={styles.productCard}>
               <div className={styles.imageContainer}>
-                <img
+                <Image 
                   src={product.image_urls?.[0] || "/api/placeholder/400/400"}
                   alt={product.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 33vw, 25vw"
                   className={styles.image}
+                  style={{ objectFit: 'cover' }}
                 />
               </div>
 

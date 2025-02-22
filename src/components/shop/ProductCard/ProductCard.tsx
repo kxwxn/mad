@@ -2,6 +2,7 @@
 import { useState } from "react";
 import styles from "./ProductCard.module.css";
 import { cartStorage, CartItem } from "@/utils/cart";
+import Image from 'next/image';
 
 interface Product {
   id: string;
@@ -59,10 +60,14 @@ export default function ProductCard({
     <div className={styles.container}>
       <section className={styles.imageSection}>
         {product.image_urls?.map((url, index) => (
-          <img
+          <Image 
             key={index}
             src={url || "/api/placeholder/400/400"}
             alt={`${product.name} - Image ${index + 1}`}
+            width={500}
+            height={300}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority={index === 0}
             className={styles.productImage}
           />
         ))}

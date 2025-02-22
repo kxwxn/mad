@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './CartModal.module.css';
 import { cartStorage, CartItem } from '@/utils/cart';
+import Image from 'next/image';
 
 interface CartModalProps {
   isOpen: boolean;
@@ -70,7 +71,13 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
               <div className={styles.cartItems}>
                 {cartItems.map((item) => (
                   <div key={`${item.id}-${item.selectedSize}`} className={styles.cartItem}>
-                    <img src={item.imageUrl} alt={item.name} className={styles.itemImage} />
+                    <Image 
+                      src={item.imageUrl}
+                      alt={item.name}
+                      width={100}
+                      height={100}
+                      className="rounded-lg"
+                    />
                     <div className={styles.itemInfo}>
                       <div className={styles.itemBrand}>{item.brand}</div>
                       <div className={styles.itemName}>{item.name}</div>

@@ -33,19 +33,10 @@
   padding-bottom: 100%; /* 1:1 비율 유지 */
   background-color: #f5f5f5;
   overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .image {
-  position: absolute;
-  width: 100%; /* 80%에서 100%로 변경 */
-  height: 100%; /* 80%에서 100%로 변경 */
-  object-fit: cover; /* contain에서 cover로 변경 */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: absolute !important; /* Next.js Image 컴포넌트를 위해 필요 */
   transition: transform 0.3s ease;
 }
 
@@ -118,7 +109,7 @@
 
 /* 호버 효과 수정 */
 .productLink:hover .image {
-  transform: translate(-50%, -50%) scale(1.05);
+  transform: scale(1.05);
 }
 
 .description {

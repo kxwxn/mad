@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ClerkProvider, SignedIn } from "@clerk/nextjs";
 import AdminNav from "@/components/admin/AdminNav/AdminNav";
-import styles from "./layout.module.css";
 
 export const metadata: Metadata = {
   title: "MAD Admin",

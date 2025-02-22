@@ -2,16 +2,17 @@ import React, { useState, useEffect } from 'react';
 import styles from './AddProductModal.module.css';
 import { insertProduct } from '@/lib/supabase/product';
 import { uploadProductImage } from '@/lib/supabase/storage';
+import Image from 'next/image';
 
 interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-interface SizeQuantity {
-  size: string;
-  quantity: number;
-}
+// interface SizeQuantity {
+//   size: string;
+//   quantity: number;
+// }
 
 interface ProductFormData {
   name: string;
@@ -64,29 +65,29 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
     }));
   };
 
-  const handleSizeQuantityChange = (size: string, quantity: number) => {
-    setFormData(prev => ({
-      ...prev,
-      sizes: prev.sizes.map(s => 
-        s.size === size ? { ...s, quantity } : s
-      )
-    }));
-  };
+  // const handleSizeQuantityChange = (size: string, quantity: number) => {
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     sizes: prev.sizes.map(s => 
+  //       s.size === size ? { ...s, quantity } : s
+  //     )
+  //   }));
+  // };
 
-  const handleSizeTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newSizeType = e.target.value as 'numbered' | 'onesize';
-    setFormData(prev => ({
-      ...prev,
-      sizeType: newSizeType,
-      sizes: newSizeType === 'onesize' 
-        ? [{ size: 'OS', quantity: 0 }]
-        : [
-            { size: '1', quantity: 0 },
-            { size: '2', quantity: 0 },
-            { size: '3', quantity: 0 }
-          ]
-    }));
-  };
+  // const handleSizeTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const newSizeType = e.target.value as 'numbered' | 'onesize';
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     sizeType: newSizeType,
+  //     sizes: newSizeType === 'onesize' 
+  //       ? [{ size: 'OS', quantity: 0 }]
+  //       : [
+  //           { size: '1', quantity: 0 },
+  //           { size: '2', quantity: 0 },
+  //           { size: '3', quantity: 0 }
+  //         ]
+  //   }));
+  // };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -296,9 +297,13 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
                 <div className={styles.imagePreviewContainer}>
                   {formData.images.map((file, index) => (
                     <div key={index} className={styles.imagePreview}>
-                      <img 
-                        src={URL.createObjectURL(file)} 
-                        alt={`Preview ${index + 1}`} 
+                      <Image
+                        src={URL.createObjectURL(file)}
+                        alt={`Preview ${index + 1}`}
+                        width={100}
+                        height={100}
+                        style={{ objectFit: 'cover' }}
+                        unoptimized
                       />
                       <button 
                         type="button"
