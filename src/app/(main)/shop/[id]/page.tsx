@@ -12,7 +12,7 @@ type PageProps = { params: PageParams };
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   return {
-    title: `상품 - ${id}`,
+    title: `Product - ${id}`,
   };
 }
 

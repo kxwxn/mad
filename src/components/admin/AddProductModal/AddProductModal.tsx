@@ -9,11 +9,6 @@ interface AddProductModalProps {
   onClose: () => void;
 }
 
-// interface SizeQuantity {
-//   size: string;
-//   quantity: number;
-// }
-
 interface ProductFormData {
   name: string;
   price: number;
@@ -65,35 +60,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
     }));
   };
 
-  // const handleSizeQuantityChange = (size: string, quantity: number) => {
-  //   setFormData(prev => ({
-  //     ...prev,
-  //     sizes: prev.sizes.map(s => 
-  //       s.size === size ? { ...s, quantity } : s
-  //     )
-  //   }));
-  // };
-
-  // const handleSizeTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   const newSizeType = e.target.value as 'numbered' | 'onesize';
-  //   setFormData(prev => ({
-  //     ...prev,
-  //     sizeType: newSizeType,
-  //     sizes: newSizeType === 'onesize' 
-  //       ? [{ size: 'OS', quantity: 0 }]
-  //       : [
-  //           { size: '1', quantity: 0 },
-  //           { size: '2', quantity: 0 },
-  //           { size: '3', quantity: 0 }
-  //         ]
-  //   }));
-  // };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
       if (formData.images.length + newFiles.length > 5) {
-        alert('최대 5개의 이미지만 업로드할 수 있습니다.');
+        alert('Max 5 images');
         return;
       }
       setFormData(prev => ({
@@ -121,8 +93,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
         formData.images.map(image => uploadProductImage(image))
       );
 
-      console.log('Uploaded image URLs:', imageUrls);  // 디버깅용
-
       const productInput = {
         name: formData.name,
         price: Number(formData.price),
@@ -132,7 +102,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
         size_2: formData.sizeType === 'numbered' ? formData.size_2 : 0,
         size_3: formData.sizeType === 'numbered' ? formData.size_3 : 0,
         os: formData.sizeType === 'onesize' ? formData.os : 0,
-        image_urls: imageUrls  // image_url 대신 image_urls 사용
+        image_urls: imageUrls 
       };
 
       console.log('Submitting product data:', productInput);
@@ -223,22 +193,22 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="sizeType">사이즈 타입</label>
+              <label htmlFor="sizeType">Size Type</label>
               <select
                 id="sizeType"
                 name="sizeType"
                 value={formData.sizeType}
                 onChange={handleInputChange}
               >
-                <option value="numbered">숫자 사이즈</option>
-                <option value="onesize">원사이즈</option>
+                <option value="numbered">Size</option>
+                <option value="onesize">OS</option>
               </select>
             </div>
 
             {formData.sizeType === 'numbered' ? (
               <div className={styles.sizesContainer}>
                 <div className={styles.sizeGroup}>
-                  <label>사이즈 1</label>
+                  <label>Size 1</label>
                   <input
                     type="number"
                     name="size_1"
@@ -248,7 +218,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
                   />
                 </div>
                 <div className={styles.sizeGroup}>
-                  <label>사이즈 2</label>
+                  <label>Size 2</label>
                   <input
                     type="number"
                     name="size_2"
@@ -258,7 +228,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
                   />
                 </div>
                 <div className={styles.sizeGroup}>
-                  <label>사이즈 3</label>
+                  <label>Size 3</label>
                   <input
                     type="number"
                     name="size_3"
@@ -271,7 +241,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
             ) : (
               <div className={styles.sizesContainer}>
                 <div className={styles.sizeGroup}>
-                  <label>원사이즈 수량</label>
+                  <label>OS Quantity</label>
                   <input
                     type="number"
                     name="os"
@@ -284,7 +254,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
             )}
 
             <div className={styles.formGroup}>
-              <label htmlFor="images">제품 이미지 (최대 5개)</label>
+              <label htmlFor="images">Product Images (Max 5)</label>
               <input
                 type="file"
                 id="images"
@@ -324,7 +294,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
               className={styles.submitButton}
               disabled={isLoading}
             >
-              {isLoading ? '처리중...' : '제품 추가'}
+              {isLoading ? 'Loading...' : 'ADD PRODUCT'}
             </button>
           </form>
         </div>

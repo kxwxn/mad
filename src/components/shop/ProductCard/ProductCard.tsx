@@ -35,7 +35,7 @@ export default function ProductCard({
 
   const handleAddToCart = () => {
     if (!selectedSize) {
-      alert("사이즈를 선택해주세요");
+      alert("Please select a size");
       return;
     }
 
@@ -53,7 +53,7 @@ export default function ProductCard({
 
     cartStorage.addItem(cartItem);
     onCartUpdate?.();
-    alert("장바구니에 추가되었습니다");
+    alert("Added to cart");
   };
 
   return (

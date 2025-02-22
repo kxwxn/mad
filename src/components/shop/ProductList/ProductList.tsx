@@ -36,7 +36,7 @@ const ProductList: React.FC = () => {
     };
 
     fetchProducts();
-  }, []); // supabase 의존성 제거
+  }, []);
 
   return (
     <div className={styles.container}>
