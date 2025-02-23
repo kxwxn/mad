@@ -4,6 +4,7 @@ import "@/styles/globals.css";
 import localFont from "next/font/local";
 import TopNav from "@/components/TopNav";
 import Footer from "@/components/Footer";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
   title: "MAD",
@@ -23,6 +24,7 @@ export default function RootLayout({
         <TopNav />
         {children}
         <Footer />
+        <Analytics />
       </body>
     </html>
   );

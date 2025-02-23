@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import styles from './CartModal.module.css';
-import { cartStorage, CartItem } from '@/utils/cart';
-import Image from 'next/image';
+import React, { useEffect, useState } from "react";
+import styles from "./CartModal.module.css";
+import { cartStorage, CartItem } from "@/utils/cart";
+import Image from "next/image";
 
 interface CartModalProps {
   isOpen: boolean;
@@ -37,7 +37,11 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
     setCartItems(updatedItems);
   };
 
-  const handleUpdateQuantity = (id: string, selectedSize: string, quantity: number) => {
+  const handleUpdateQuantity = (
+    id: string,
+    selectedSize: string,
+    quantity: number
+  ) => {
     if (quantity < 1) return;
     const updatedItems = cartStorage.updateQuantity(id, selectedSize, quantity);
     setCartItems(updatedItems);
@@ -45,18 +49,24 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
 
   // 가격 포맷팅을 위한 헬퍼 함수
   const formatPrice = (price: number | null | undefined) => {
-    if (price == null) return '0'; // null 또는 undefined 처리
+    if (price == null) return "0"; // null 또는 undefined 처리
     return price.toLocaleString();
   };
 
   if (!isOpen && !isVisible) return null;
 
-  const totalPrice = cartItems.reduce((sum, item) => sum + ((item.price || 0) * item.quantity), 0);
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + (item.price || 0) * item.quantity,
+    0
+  );
 
   return (
     <>
-      <div className={`${styles.overlay} ${isVisible ? styles.visible : ''}`} onClick={handleClose} />
-      <div className={`${styles.modal} ${isVisible ? styles.open : ''}`}>
+      <div
+        className={`${styles.overlay} ${isVisible ? styles.visible : ""}`}
+        onClick={handleClose}
+      />
+      <div className={`${styles.modal} ${isVisible ? styles.open : ""}`}>
         <div className={styles.header}>
           <h2>CART</h2>
           <button className={styles.closeButton} onClick={handleClose}>
@@ -70,8 +80,11 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
             <>
               <div className={styles.cartItems}>
                 {cartItems.map((item) => (
-                  <div key={`${item.id}-${item.selectedSize}`} className={styles.cartItem}>
-                    <Image 
+                  <div
+                    key={`${item.id}-${item.selectedSize}`}
+                    className={styles.cartItem}
+                  >
+                    <Image
                       src={item.imageUrl}
                       alt={item.name}
                       width={100}
@@ -81,19 +94,43 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                     <div className={styles.itemInfo}>
                       <div className={styles.itemBrand}>{item.brand}</div>
                       <div className={styles.itemName}>{item.name}</div>
-                      <div className={styles.itemSize}>Size: {item.selectedSize}</div>
+                      <div className={styles.itemSize}>
+                        Size: {item.selectedSize}
+                      </div>
                       <div className={styles.itemPrice}>
                         ${formatPrice(item.price)}
                       </div>
                       <div className={styles.quantityControl}>
-                        <button onClick={() => handleUpdateQuantity(item.id, item.selectedSize, item.quantity - 1)}>-</button>
+                        <button
+                          onClick={() =>
+                            handleUpdateQuantity(
+                              item.id,
+                              item.selectedSize,
+                              item.quantity - 1
+                            )
+                          }
+                        >
+                          -
+                        </button>
                         <span>{item.quantity}</span>
-                        <button onClick={() => handleUpdateQuantity(item.id, item.selectedSize, item.quantity + 1)}>+</button>
+                        <button
+                          onClick={() =>
+                            handleUpdateQuantity(
+                              item.id,
+                              item.selectedSize,
+                              item.quantity + 1
+                            )
+                          }
+                        >
+                          +
+                        </button>
                       </div>
                     </div>
-                    <button 
+                    <button
                       className={styles.removeButton}
-                      onClick={() => handleRemoveItem(item.id, item.selectedSize)}
+                      onClick={() =>
+                        handleRemoveItem(item.id, item.selectedSize)
+                      }
                     >
                       [ remove ]
                     </button>
@@ -104,9 +141,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                 <div className={styles.totalPrice}>
                   TOTAL: ${formatPrice(totalPrice)}
                 </div>
-                <button className={styles.checkoutButton}>
-                  CHECKOUT
-                </button>
+                <button className={styles.checkoutButton}>CHECKOUT</button>
               </div>
             </>
           )}
