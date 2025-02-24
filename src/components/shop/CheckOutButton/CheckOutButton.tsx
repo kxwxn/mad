@@ -4,7 +4,11 @@ import { loadStripe } from '@stripe/stripe-js';
 import { CartItem } from '@/utils/cart';
 import styles from './CheckOutButton.module.css';
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+// Stripe 초기화 부분 수정
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
+
+// 디버깅을 위한 콘솔 로그 추가 (나중에 제거 가능)
+console.log('Stripe Key:', process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 interface CheckoutButtonProps {
   cartItems: CartItem[];
@@ -22,6 +26,11 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ cartItems }) => {
         throw new Error('Stripe failed to initialize');
       }
 
+      // API 호출 전에 cartItems가 비어있지 않은지 확인
+      if (!cartItems.length) {
+        throw new Error('Cart is empty');
+      }
+
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -29,10 +38,17 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ cartItems }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Network response was not ok');
       }
 
       const { sessionId } = await response.json();
+      
+      // sessionId 확인
+      if (!sessionId) {
+        throw new Error('No session ID returned from the server');
+      }
+
       const result = await stripe.redirectToCheckout({ sessionId });
 
       if (result.error) {
@@ -54,7 +70,7 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ cartItems }) => {
       onClick={handleCheckout}
       disabled={isLoading || cartItems.length === 0}
     >
-      {isLoading ? '' : `CHECKOUT (${totalItems} ${totalItems === 1 ? 'ITEM' : 'ITEMS'})`}
+      {isLoading ? 'Processing...' : `CHECKOUT (${totalItems} ${totalItems === 1 ? 'ITEM' : 'ITEMS'})`}
     </button>
   );
 };
