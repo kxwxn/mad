@@ -1,10 +1,9 @@
-export default async function AdminDashboard() {
+import AdminDashboard from "../../../../components/admin/AdminDashboard/AdminDashboard";
+
+export default async function DashboardPage() {
   return (
     <>
-      <p>
-        This is the protected admin dashboard restricted to users with the
-        `admin` role.
-      </p>
+      <AdminDashboard />
     </>
   );
 }

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./CartModal.module.css";
 import { cartStorage, CartItem } from "@/utils/cart";
 import Image from "next/image";
+import CheckoutButton from '../CheckOutButton/CheckOutButton';
 
 interface CartModalProps {
   isOpen: boolean;
@@ -141,7 +142,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                 <div className={styles.totalPrice}>
                   TOTAL: ${formatPrice(totalPrice)}
                 </div>
-                <button className={styles.checkoutButton}>CHECKOUT</button>
+                <CheckoutButton cartItems={cartItems} />
               </div>
             </>
           )}

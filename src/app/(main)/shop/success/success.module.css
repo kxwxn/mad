@@ -1,0 +1,100 @@
+.container {
+      max-width: 800px;
+      padding: 40px 20px;
+      text-align: center;
+      position: fixed;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      background: transparent;
+      overflow-y: auto;
+      max-height: 90vh;
+      z-index: 1;
+    }
+    
+    .container h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    
+    .container p {
+      font-size: 1.1rem;
+      color: #666;
+      margin-bottom: 30px;
+    }
+    
+    .orderDetails {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 8px;
+      margin: 30px 0;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .orderInfo {
+      text-align: left;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .orderInfo p {
+      margin: 5px 0;
+      color: #666;
+    }
+    
+    .orderTable {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: white;
+    }
+    
+    .orderTable th,
+    .orderTable td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .orderTable th {
+      background-color: #f4f4f4;
+      font-weight: 600;
+    }
+    
+    .imageCell {
+      width: 70px;
+    }
+    
+    .productImage {
+      object-fit: cover;
+      border-radius: 4px;
+    }
+    
+    .totalLabel {
+      text-align: right;
+      font-weight: 600;
+    }
+    
+    .totalAmount {
+      font-weight: 600;
+      color: #000;
+    }
+    
+    .button {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+    }
+    
+    .button:hover {
+      background-color: #333;
+    }
