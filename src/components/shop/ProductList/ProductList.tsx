@@ -64,7 +64,7 @@ const ProductList: React.FC = () => {
                 <p className={styles.description}>{product.description}</p>
                 <div className={styles.priceContainer}>
                   <span className={styles.price}>
-                    ${product.price?.toLocaleString()}
+                    € {product.price?.toLocaleString()}
                   </span>
                 </div>
                 {product.status === "SOLD_OUT" && (

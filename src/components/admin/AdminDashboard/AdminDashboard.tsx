@@ -57,7 +57,7 @@ export default function AdminDashboard() {
         <div className={styles.statCard}>
           <h3>Total Revenue</h3>
           <p className={styles.statValue}>
-            ${data.totalRevenue.toLocaleString()}
+            € {data.totalRevenue.toLocaleString()}
           </p>
         </div>
         <div className={styles.statCard}>
@@ -92,7 +92,7 @@ export default function AdminDashboard() {
                       .map((item) => `${item.name} (${item.quantity})`)
                       .join(", ")}
                   </td>
-                  <td>${payment.amount.toLocaleString()}</td>
+                  <td>€ {payment.amount.toLocaleString()}</td>
                   <td>
                     {new Date(payment.created * 1000).toLocaleDateString()}
                   </td>

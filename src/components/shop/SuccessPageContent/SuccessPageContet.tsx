@@ -113,8 +113,8 @@ export default function SuccessPageContent() {
                     )}
                   </td>
                   <td>{item.quantity}</td>
-                  <td>${item.price.toFixed(2)}</td>
-                  <td>${(item.price * item.quantity).toFixed(2)}</td>
+                  <td>€ {item.price.toFixed(2)}</td>
+                  <td>€ {(item.price * item.quantity).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -122,7 +122,7 @@ export default function SuccessPageContent() {
               <tr>
                 <td colSpan={4} className={styles.totalLabel}>Total Amount:</td>
                 <td className={styles.totalAmount}>
-                  ${(paymentDetails.amount_total / 100).toFixed(2)}
+                  € {(paymentDetails.amount_total / 100).toFixed(2)}
                 </td>
               </tr>
             </tfoot>

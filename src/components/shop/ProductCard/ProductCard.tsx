@@ -2,14 +2,13 @@
 import { useState } from "react";
 import styles from "./ProductCard.module.css";
 import { cartStorage, CartItem } from "@/utils/cart";
-import Image from 'next/image';
+import Image from "next/image";
 
 interface Product {
   id: string;
   name: string;
   brand: string;
   price: number;
-  original_price?: number;
   description?: string;
   image_urls: string[];
   details?: string[];
@@ -60,7 +59,7 @@ export default function ProductCard({
     <div className={styles.container}>
       <section className={styles.imageSection}>
         {product.image_urls?.map((url, index) => (
-          <Image 
+          <Image
             key={index}
             src={url || "/api/placeholder/400/400"}
             alt={`${product.name} - Image ${index + 1}`}
@@ -81,17 +80,14 @@ export default function ProductCard({
           <h1 className={styles.name}>{product.name}</h1>
           <div className={styles.priceContainer}>
             <span className={styles.price}>
-              ${product.price?.toLocaleString()}
+              € {product.price?.toLocaleString()}
             </span>
-            {product.original_price && (
-              <span className={styles.originalPrice}>
-                ${product.original_price?.toLocaleString()}
-              </span>
-            )}
           </div>
 
           <button
-            className={`${styles.sizeGuideBtn} ${showSizeGuide ? styles.active : ''}`}
+            className={`${styles.sizeGuideBtn} ${
+              showSizeGuide ? styles.active : ""
+            }`}
             onClick={() => setShowSizeGuide(!showSizeGuide)}
           >
             [SIZE GUIDE]
@@ -187,7 +183,9 @@ export default function ProductCard({
           <div className={styles.accordionContainer}>
             <div className={styles.accordionItem}>
               <div
-                className={`${styles.accordionHeader} ${openInfo ? styles.active : ''}`}
+                className={`${styles.accordionHeader} ${
+                  openInfo ? styles.active : ""
+                }`}
                 onClick={() => setOpenInfo(!openInfo)}
               >
                 <span>PRODUCT INFO</span>
@@ -206,7 +204,9 @@ export default function ProductCard({
 
             <div className={styles.accordionItem}>
               <div
-                className={`${styles.accordionHeader} ${openShipping ? styles.active : ''}`}
+                className={`${styles.accordionHeader} ${
+                  openShipping ? styles.active : ""
+                }`}
                 onClick={() => setOpenShipping(!openShipping)}
               >
                 <span>SHIPPING</span>
@@ -219,7 +219,7 @@ export default function ProductCard({
                   openShipping ? styles.open : ""
                 }`}
               >
-                2-3 days in EU{'\n'}
+                2-3 days in EU{"\n"}
                 1-2 weeks in rest of the world
               </div>
             </div>

@@ -99,7 +99,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                         Size: {item.selectedSize}
                       </div>
                       <div className={styles.itemPrice}>
-                        ${formatPrice(item.price)}
+                        € {formatPrice(item.price)}
                       </div>
                       <div className={styles.quantityControl}>
                         <button
@@ -140,7 +140,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
               </div>
               <div className={styles.cartFooter}>
                 <div className={styles.totalPrice}>
-                  TOTAL: ${formatPrice(totalPrice)}
+                  TOTAL: € {formatPrice(totalPrice)}
                 </div>
                 <CheckoutButton cartItems={cartItems} />
               </div>
