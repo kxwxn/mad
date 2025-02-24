@@ -2,8 +2,12 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16'
+  apiVersion: '2025-01-27.acacia'
 });
+
+interface StripeProduct {
+  images?: string[];
+}
 
 export async function GET(request: Request) {
   try {
@@ -32,7 +36,7 @@ export async function GET(request: Request) {
         name: item.description,
         quantity: item.quantity,
         price: item.amount_total ? item.amount_total / 100 : 0,
-        image: item.price?.product?.images?.[0] || '/placeholder-image.jpg' // 기본 이미지 추가
+        image: (item.price?.product as StripeProduct)?.images?.[0] || '/placeholder-image.jpg'
       })) || []
     };
 
