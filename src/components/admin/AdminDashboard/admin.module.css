@@ -1,7 +1,6 @@
 .container {
-      padding: 6rem 2rem 2rem 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
+      padding: 6rem 0 2rem 0;
+      width: 100%;
     }
     
     .title {
@@ -11,6 +10,7 @@
     }
     
     .statsGrid {
+      padding: 0 2rem;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1.5rem;
@@ -37,10 +37,7 @@
     }
     
     .tableWrapper {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      overflow-x: auto;
+      width: 100%;
     }
     
     .table {
@@ -48,17 +45,22 @@
       border-collapse: collapse;
     }
     
-    .table th,
-    .table td {
-      padding: 1rem;
+    .table th {
+      padding: 1rem 2rem;
       text-align: left;
-      border-bottom: 1px solid #eee;
+      font-weight: 500;
+      border-bottom: 1px solid #000;
+      background: white;
     }
     
-    .table th {
-      background: #f8f9fa;
-      font-weight: 600;
-      color: #666;
+    .table td {
+      padding: 1rem 2rem;
+      text-align: left;
+      border-bottom: 1px solid #000;
+    }
+    
+    .table tr:last-child td {
+      border-bottom: 1px solid #000;
     }
     
     .status {
@@ -138,4 +140,137 @@
       border-radius: 8px;
       color: #d32f2f;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stripeButton {
+      background-color: #635bff;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.2s;
+      white-space: nowrap;
+    }
+    
+    .stripeButton:hover {
+      background-color: #4b45c6;
+    }
+    
+    .stripeButton:disabled {
+      background-color: #a8a8a8;
+      cursor: not-allowed;
+    }
+    
+    /* 상태에 따른 스타일 */
+    .succeeded {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+    
+    .processing {
+      background-color: #fff3e0;
+      color: #f57c00;
+    }
+    
+    .requires_payment_method {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+    
+    .itemsList {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .itemRow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .itemImage {
+      border-radius: 4px;
+      object-fit: cover;
+      min-width: 40px;
+    }
+    
+    .itemName {
+      font-size: 0.9rem;
+      color: #333;
+    }
+    
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 1rem 2rem;  /* 좌우 패딩을 테이블과 동일하게 */
+      box-sizing: border-box;  /* 패딩을 너비에 포함 */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 14px;
+      color: #000;
+      font-weight: 400;
+    }
+    
+    .pageNumbers {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    
+    .pageNumber {
+      cursor: pointer;
+      color: inherit;
+      transition: opacity 0.2s;
+      font-weight: 400;
+    }
+    
+    .pageNumber:hover:not(.active) {
+      opacity: 0.6;
+    }
+    
+    .pageNumber.active {
+      text-decoration: line-through;
+      text-decoration-thickness: 1px;
+    }
+    
+    .pageControl {
+      cursor: pointer;
+      color: inherit;
+      transition: opacity 0.2s;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+    }
+    
+    .pageControl:hover:not(.disabled) {
+      opacity: 0.6;
+    }
+    
+    .pageControl.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    
+    .ellipsis {
+      color: inherit;
+      margin: 0 0.25rem;
+      font-weight: 400;
+    }
+    
+    .recentPayments {
+      width: 100%;
+    }
+    
+    .recentPayments h2 {
+      padding: 0 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stripeDashboard {
+      padding: 2rem;
     }

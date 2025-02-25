@@ -7,59 +7,92 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function GET() {
   try {
-    // 최근 결제 내역 조회 (최근 30일)
-    const thirtyDaysAgo = Math.floor(Date.now() / 1000) - (30 * 24 * 60 * 60);
-    
-    const [payments, totalRevenue] = await Promise.all([
-      stripe.paymentIntents.list({
-        limit: 10,
-        created: { gte: thirtyDaysAgo },
-        expand: ['data.customer', 'data.payment_method']
-      }),
-      stripe.paymentIntents.list({
-        created: { gte: thirtyDaysAgo },
-        limit: 100
-      })
-    ]);
+    // 모든 결제 목록을 가져오기 위한 재귀 함수
+    async function getAllPayments(): Promise<Stripe.PaymentIntent[]> {
+      const payments: Stripe.PaymentIntent[] = [];
+      let hasMore = true;
+      let lastPaymentId: string | undefined;
+
+      while (hasMore) {
+        const response = await stripe.paymentIntents.list({
+          limit: 100,
+          starting_after: lastPaymentId,
+        });
+
+        payments.push(...response.data);
+        hasMore = response.has_more;
+        lastPaymentId = response.data[response.data.length - 1]?.id;
+      }
+
+      return payments;
+    }
+
+    const allPayments = await getAllPayments();
 
     const recentPayments = await Promise.all(
-      payments.data.map(async (payment) => {
-        // 관련 Checkout Session 조회
-        const sessions = await stripe.checkout.sessions.list({
-          payment_intent: payment.id
-        });
-        const session = sessions.data[0];
+      allPayments.map(async (payment) => {
+        try {
+          const sessions = await stripe.checkout.sessions.list({
+            payment_intent: payment.id,
+            expand: ['data.line_items']
+          });
+          
+          const session = sessions.data[0];
+          const items = await Promise.all(
+            (session?.line_items?.data || [])
+              .filter(item => item.price !== null)
+              .map(async (item) => {
+                const product = await stripe.products.retrieve(
+                  item.price!.product as string
+                );
 
-        return {
-          id: payment.id,
-          amount: payment.amount / 100,
-          customerEmail: session?.customer_details?.email || 'N/A',
-          status: payment.status,
-          created: payment.created,
-          items: session?.line_items?.data.map(item => ({
-            name: item.description || '',
-            quantity: item.quantity || 0,
-            price: (item.amount_total || 0) / 100
-          })) || []
-        };
+                return {
+                  name: item.description || '',
+                  quantity: item.quantity || 0,
+                  price: (item.amount_total || 0) / 100,
+                  image: product.images?.[0] || '/api/placeholder/400/400'
+                };
+              })
+          );
+
+          return {
+            id: payment.id,
+            amount: payment.amount / 100,
+            customerEmail: session?.customer_details?.email || 'N/A',
+            status: payment.status,
+            created: payment.created,
+            items: items
+          };
+        } catch (error) {
+          console.error('Error processing payment:', error);
+          return {
+            id: payment.id,
+            amount: payment.amount / 100,
+            customerEmail: 'N/A',
+            status: payment.status,
+            created: payment.created,
+            items: []
+          };
+        }
       })
     );
 
-    const totalAmount = totalRevenue.data.reduce(
-      (sum, payment) => sum + payment.amount,
-      0
-    ) / 100;
-
     return NextResponse.json({
-      totalRevenue: totalAmount,
-      totalOrders: totalRevenue.data.length,
+      totalRevenue: allPayments.reduce((sum, payment) => sum + payment.amount, 0) / 100,
+      totalOrders: allPayments.length,
       recentPayments
     });
 
   } catch (error) {
-    console.error('Error fetching dashboard data:', error);
+    console.error('Dashboard data fetch error:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch dashboard data' },
+      { 
+        error: 'Failed to fetch dashboard data',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        totalRevenue: 0,
+        totalOrders: 0,
+        recentPayments: []
+      },
       { status: 500 }
     );
   }

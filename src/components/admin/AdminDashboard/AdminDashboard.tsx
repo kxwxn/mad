@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 import styles from "./admin.module.css";
+import Image from "next/image";
 
 interface DashboardData {
   totalRevenue: number;
   totalOrders: number;
+  totalPages: number;
+  currentPage: number;
   recentPayments: Array<{
     id: string;
     amount: number;
@@ -16,6 +19,7 @@ interface DashboardData {
       name: string;
       quantity: number;
       price: number;
+      image: string;
     }>;
   }>;
 }
@@ -23,11 +27,13 @@ interface DashboardData {
 export default function AdminDashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch("/api/admin/dashboard");
+        const response = await fetch('/api/admin/dashboard');
         const dashboardData = await response.json();
         setData(dashboardData);
       } catch (error) {
@@ -38,26 +44,19 @@ export default function AdminDashboard() {
     };
 
     fetchDashboardData();
-    // 5분마다 데이터 새로고침
-    const interval = setInterval(fetchDashboardData, 300000);
-    return () => clearInterval(interval);
-  }, []);
+  }, []);  // currentPage 의존성 제거
 
-  if (isLoading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loadingSpinner}>Loading...</div>
-      </div>
-    );
-  }
+  const handleViewInStripe = (paymentId: string) => {
+    window.open(`https://dashboard.stripe.com/payments/${paymentId}`, '_blank');
+  };
 
-  if (!data) {
-    return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.error}>Failed to load dashboard data</div>
-      </div>
-    );
-  }
+  if (isLoading || !data) return <div>Loading...</div>;
+
+  // 페이지네이션 계산
+  const totalPages = Math.ceil(data.recentPayments.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPagePayments = data.recentPayments.slice(startIndex, endIndex);
 
   return (
     <div className={styles.container}>
@@ -88,33 +87,114 @@ export default function AdminDashboard() {
                 <th>Amount</th>
                 <th>Date</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {data.recentPayments.map((payment) => (
+              {currentPagePayments.map((payment) => (
                 <tr key={payment.id}>
                   <td>{payment.id.slice(-6)}</td>
                   <td>{payment.customerEmail}</td>
                   <td>
-                    {payment.items
-                      .map((item) => `${item.name} (${item.quantity})`)
-                      .join(", ")}
+                    <div className={styles.itemsList}>
+                      {payment.items?.map((item, index) => (
+                        <div key={index} className={styles.itemRow}>
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            width={40}
+                            height={40}
+                            className={styles.itemImage}
+                          />
+                          <span className={styles.itemName}>{item.name} (×{item.quantity})</span>
+                        </div>
+                      ))}
+                    </div>
                   </td>
                   <td>€ {payment.amount.toLocaleString()}</td>
+                  <td>{new Date(payment.created * 1000).toLocaleDateString()}</td>
                   <td>
-                    {new Date(payment.created * 1000).toLocaleDateString()}
-                  </td>
-                  <td>
-                    <span
-                      className={`${styles.status} ${styles[payment.status]}`}
-                    >
+                    <span className={`${styles.status} ${styles[payment.status]}`}>
                       {payment.status}
                     </span>
+                  </td>
+                  <td>
+                    <button 
+                      onClick={() => handleViewInStripe(payment.id)}
+                      className={styles.stripeButton}
+                    >
+                      View in Stripe
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* 페이지네이션 컨트롤 */}
+        <div className={styles.pagination}>
+          <span
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            className={`${styles.pageControl} ${currentPage === 1 ? styles.disabled : ''}`}
+          >
+            ← PREVIOUS
+          </span>
+          
+          <div className={styles.pageNumbers}>
+            {[...Array(totalPages)].map((_, index) => {
+              const pageNum = index + 1;
+              
+              if (pageNum === 1) {
+                return (
+                  <span
+                    key={`page-${pageNum}`}
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`${styles.pageNumber} ${currentPage === pageNum ? styles.active : ''}`}
+                  >
+                    {pageNum},
+                  </span>
+                );
+              }
+              
+              if (pageNum === totalPages) {
+                return (
+                  <span
+                    key={`page-${pageNum}`}
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`${styles.pageNumber} ${currentPage === pageNum ? styles.active : ''}`}
+                  >
+                    {pageNum}.
+                  </span>
+                );
+              }
+              
+              if (pageNum === 3 && totalPages > 6) {
+                return <span key="ellipsis" className={styles.ellipsis}>...</span>;
+              }
+              
+              if (pageNum < 3 || pageNum === totalPages) {
+                return (
+                  <span
+                    key={`page-${pageNum}`}
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`${styles.pageNumber} ${currentPage === pageNum ? styles.active : ''}`}
+                  >
+                    {pageNum},
+                  </span>
+                );
+              }
+              
+              return null;
+            })}
+          </div>
+
+          <span
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            className={`${styles.pageControl} ${currentPage === totalPages ? styles.disabled : ''}`}
+          >
+            NEXT →
+          </span>
         </div>
       </div>
 
