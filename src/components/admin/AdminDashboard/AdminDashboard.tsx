@@ -44,11 +44,19 @@ export default function AdminDashboard() {
   }, []);
 
   if (isLoading) {
-    return <div className={styles.loading}>Loading...</div>;
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.loadingSpinner}>Loading...</div>
+      </div>
+    );
   }
 
   if (!data) {
-    return <div className={styles.error}>Failed to load dashboard data</div>;
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.error}>Failed to load dashboard data</div>
+      </div>
+    );
   }
 
   return (

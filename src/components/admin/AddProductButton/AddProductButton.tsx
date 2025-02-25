@@ -7,20 +7,15 @@ import styles from "./AddProductButton.module.css";
 export default function AddProductButton() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
   return (
-    <div>
-      <button onClick={handleOpenModal} className={styles.textButton}>
+    <>
+      <button onClick={() => setIsModalOpen(true)} className={styles.addButton}>
         [ + ]
       </button>
-      <AddProductModal isOpen={isModalOpen} onClose={handleCloseModal} />
-    </div>
+      <AddProductModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </>
   );
 }

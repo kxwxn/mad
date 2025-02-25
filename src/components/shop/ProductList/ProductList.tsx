@@ -5,37 +5,50 @@ import Link from "next/link";
 import styles from "./ProductList.module.css";
 import { createClient } from "@/utils/supabase/client";
 import Image from 'next/image';
+import { Product } from '@/types/product.types';
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  image_urls: string[];
-  status?: string;
-}
-
-// Supabase 클라이언트를 컴포넌트 외부에서 한 번만 생성
 const supabase = createClient();
 
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
+  const fetchProducts = async () => {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error("Error fetching products:", error);
+      return;
+    }
+
+    if (data) {
+      setProducts(data);
+    }
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      const { data, error } = await supabase.from("products").select("*");
-
-      if (error) {
-        console.error("Error fetching products:", error);
-        return;
-      }
-
-      if (data) {
-        setProducts(data);
-      }
-    };
-
     fetchProducts();
+
+    const channel = supabase
+      .channel('products_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'products'
+        },
+        () => {
+          fetchProducts();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   return (

@@ -24,6 +24,8 @@ interface ProductFormData {
 
 const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [formData, setFormData] = useState<ProductFormData>({
     name: '',
     price: 0,
@@ -36,30 +38,19 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
     os: 0,
     images: []
   });
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
     } else {
-      setTimeout(() => {
-        setIsVisible(false);
-      }, 300);
+      setTimeout(() => setIsVisible(false), 300);
     }
   }, [isOpen]);
 
-  const handleClose = () => {
-    onClose();
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
-
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -68,6 +59,11 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
         alert('Max 5 images');
         return;
       }
+      
+      imageUrls.forEach(url => URL.revokeObjectURL(url));
+      const newUrls = newFiles.map(file => URL.createObjectURL(file));
+      setImageUrls(newUrls);
+      
       setFormData(prev => ({
         ...prev,
         images: [...prev.images, ...newFiles].slice(0, 5)
@@ -76,6 +72,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
   };
 
   const removeImage = (index: number) => {
+    URL.revokeObjectURL(imageUrls[index]);
+    setImageUrls(prev => prev.filter((_, i) => i !== index));
     setFormData(prev => ({
       ...prev,
       images: prev.images.filter((_, i) => i !== index)
@@ -88,7 +86,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
     try {
       setIsLoading(true);
 
-      // 여러 이미지 업로드
       const imageUrls = await Promise.all(
         formData.images.map(image => uploadProductImage(image))
       );
@@ -102,14 +99,14 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
         size_2: formData.sizeType === 'numbered' ? formData.size_2 : 0,
         size_3: formData.sizeType === 'numbered' ? formData.size_3 : 0,
         os: formData.sizeType === 'onesize' ? formData.os : 0,
-        image_urls: imageUrls 
+        image_urls: imageUrls,
+        status: 'AVAILABLE'
       };
 
-      console.log('Submitting product data:', productInput);
+      const { error } = await insertProduct(productInput);
+      if (error) throw error;
 
-      await insertProduct(productInput);
-      
-      alert('제품이 성공적으로 추가되었습니다.');
+      alert('Product added successfully.');
       
       setFormData({
         name: '',
@@ -124,29 +121,38 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
         images: []
       });
 
+      imageUrls.forEach(url => URL.revokeObjectURL(url));
+      setImageUrls([]);
       onClose();
     } catch (error) {
-      console.error('제품 추가 중 오류 발생:', error);
-      alert('제품 추가 중 오류가 발생했습니다.');
+      console.error('Error adding product:', error);
+      alert('An error occurred while adding the product.');
     } finally {
       setIsLoading(false);
     }
   };
 
+  useEffect(() => {
+    return () => {
+      imageUrls.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [imageUrls]);
+
   return (
     <>
-      <div className={`${styles.overlay} ${isVisible ? styles.visible : ''}`} onClick={handleClose} />
+      <div 
+        className={`${styles.overlay} ${isVisible ? styles.visible : ''}`} 
+        onClick={onClose} 
+      />
       <div className={`${styles.modal} ${isVisible ? styles.open : ''}`}>
         <div className={styles.header}>
           <h2>Add Product</h2>
-          <button className={styles.closeButton} onClick={handleClose}>
-            [ x ]
-          </button>
+          <button className={styles.closeButton} onClick={onClose}>[ x ]</button>
         </div>
         <div className={styles.content}>
           <form onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name">Product Name</label>
               <input
                 type="text"
                 id="name"
@@ -158,7 +164,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="price">Price</label>
+              <label htmlFor="price">Price (€)</label>
               <input
                 type="number"
                 id="price"
@@ -171,7 +177,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="description">Description</label>
+              <label htmlFor="description">Short Description</label>
               <textarea
                 id="description"
                 name="description"
@@ -182,7 +188,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="productInfo">Product Info</label>
+              <label htmlFor="productInfo">Detailed Information</label>
               <textarea
                 id="productInfo"
                 name="product_info"
@@ -200,61 +206,65 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
                 value={formData.sizeType}
                 onChange={handleInputChange}
               >
-                <option value="numbered">Size</option>
-                <option value="onesize">OS</option>
+                <option value="numbered">Numbered Sizes</option>
+                <option value="onesize">One Size</option>
               </select>
             </div>
 
             {formData.sizeType === 'numbered' ? (
               <div className={styles.sizesContainer}>
                 <div className={styles.sizeGroup}>
-                  <label>Size 1</label>
+                  <label>Size 1 Quantity</label>
                   <input
-                    type="number"
+                    type="text"
                     name="size_1"
                     value={formData.size_1}
                     onChange={handleInputChange}
-                    min="0"
+                    pattern="[0-9]*"
+                    inputMode="numeric"
                   />
                 </div>
                 <div className={styles.sizeGroup}>
-                  <label>Size 2</label>
+                  <label>Size 2 Quantity</label>
                   <input
-                    type="number"
+                    type="text"
                     name="size_2"
                     value={formData.size_2}
                     onChange={handleInputChange}
-                    min="0"
+                    pattern="[0-9]*"
+                    inputMode="numeric"
                   />
                 </div>
                 <div className={styles.sizeGroup}>
-                  <label>Size 3</label>
+                  <label>Size 3 Quantity</label>
                   <input
-                    type="number"
+                    type="text"
                     name="size_3"
                     value={formData.size_3}
                     onChange={handleInputChange}
-                    min="0"
+                    pattern="[0-9]*"
+                    inputMode="numeric"
                   />
                 </div>
               </div>
             ) : (
               <div className={styles.sizesContainer}>
                 <div className={styles.sizeGroup}>
-                  <label>OS Quantity</label>
+                  <label>One Size Quantity</label>
                   <input
-                    type="number"
+                    type="text"
                     name="os"
                     value={formData.os}
                     onChange={handleInputChange}
-                    min="0"
+                    pattern="[0-9]*"
+                    inputMode="numeric"
                   />
                 </div>
               </div>
             )}
 
             <div className={styles.formGroup}>
-              <label htmlFor="images">Product Images (Max 5)</label>
+              <label htmlFor="images">Product Images (Maximum 5)</label>
               <input
                 type="file"
                 id="images"
@@ -268,7 +278,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
                   {formData.images.map((file, index) => (
                     <div key={index} className={styles.imagePreview}>
                       <Image
-                        src={URL.createObjectURL(file)}
+                        src={imageUrls[index]}
                         alt={`Preview ${index + 1}`}
                         width={100}
                         height={100}
@@ -294,7 +304,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose }) =>
               className={styles.submitButton}
               disabled={isLoading}
             >
-              {isLoading ? 'Loading...' : 'ADD PRODUCT'}
+              {isLoading ? 'Processing...' : 'ADD PRODUCT'}
             </button>
           </form>
         </div>

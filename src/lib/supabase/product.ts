@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { createClient } from '@/utils/supabase/client';
 
 export interface ProductInput {
   name: string;
@@ -10,37 +10,35 @@ export interface ProductInput {
   size_3: number;
   os: number;
   image_urls: string[];
+  status: string;
+  [key: string]: string | number | string[];
 }
 
 export async function insertProduct(productData: ProductInput) {
   try {
-    console.log('Inserting product with data:', productData);
+    const supabase = createClient();
+
+    // 숫자 필드 검증
+    const numberFields = ['price', 'size_1', 'size_2', 'size_3', 'os'];
+    numberFields.forEach(field => {
+      if (typeof productData[field] !== 'number') {
+        productData[field] = Number(productData[field]);
+      }
+    });
 
     const { data, error } = await supabase
       .from('products')
       .insert([{
-        name: productData.name,
-        price: productData.price,
-        description: productData.description,
-        product_info: productData.product_info,
-        size_1: productData.size_1,
-        size_2: productData.size_2,
-        size_3: productData.size_3,
-        os: productData.os,
-        image_urls: productData.image_urls
+        ...productData,
+        created_at: new Date().toISOString()
       }])
       .select()
       .single();
 
-    if (error) {
-      console.error('Product insertion error:', error);
-      throw error;
-    }
+    if (error) throw error;
 
-    console.log('Product inserted successfully:', data);
-    return data;
+    return { data, error: null };
   } catch (error) {
-    console.error('Error inserting product:', error);
-    throw error;
+    return { data: null, error };
   }
 }
