@@ -1,55 +1,23 @@
 .checkoutButton {
-      width: 100%;
-      height: 60px;
-      padding: 0;
-      background-color: #0066FF;
-      color: #fff;
-      border: none;
-      border-radius: 0;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 400;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      transition: all 0.2s ease;
-      margin: 0;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      z-index: 1000;
-    }
-    
-    .checkoutButton:hover {
-      background-color: #0052CC;
-    }
-    
-    .checkoutButton:disabled {
-      background-color: #99C2FF;
-      cursor: not-allowed;
-    }
-    
-    /* 로딩 상태를 위한 스타일 (선택사항) */
-    .checkoutButton.loading {
-      position: fixed;
-      color: transparent;
-    }
-    
-    .checkoutButton.loading::after {
-      content: '';
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 20px;
-      height: 20px;
-      border: 2px solid #fff;
-      border-radius: 50%;
-      border-top-color: transparent;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      to {
-        transform: translate(-50%, -50%) rotate(360deg);
-      }
-    }
+  width: 100%;
+  height: 60px;
+  background: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 20px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 400;
+}
+
+.checkoutButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.checkoutButton.loading {
+  opacity: 0.7;
+}

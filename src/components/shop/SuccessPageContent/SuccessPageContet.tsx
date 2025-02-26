@@ -113,8 +113,8 @@ export default function SuccessPageContent() {
                     )}
                   </td>
                   <td>{item.quantity}</td>
+                  <td>€ {(item.price / item.quantity).toFixed(2)}</td>
                   <td>€ {item.price.toFixed(2)}</td>
-                  <td>€ {(item.price * item.quantity).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>

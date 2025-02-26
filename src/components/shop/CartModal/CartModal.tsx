@@ -2,9 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "./CartModal.module.css";
-import { cartStorage, CartItem } from "@/utils/cart";
+import { cartStorage } from "@/utils/cart/storage";
+import type { CartItem } from "@/utils/cart/types";
 import Image from "next/image";
-import CheckoutButton from '../CheckOutButton/CheckOutButton';
+import CheckoutButton from "../CheckOutButton/CheckOutButton";
+import Link from "next/link";
 
 interface CartModalProps {
   isOpen: boolean;
@@ -33,11 +35,6 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
     }, 300);
   };
 
-  const handleRemoveItem = (id: string, selectedSize: string) => {
-    const updatedItems = cartStorage.removeItem(id, selectedSize);
-    setCartItems(updatedItems);
-  };
-
   const handleUpdateQuantity = (
     id: string,
     selectedSize: string,
@@ -46,12 +43,6 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
     if (quantity < 1) return;
     const updatedItems = cartStorage.updateQuantity(id, selectedSize, quantity);
     setCartItems(updatedItems);
-  };
-
-  // 가격 포맷팅을 위한 헬퍼 함수
-  const formatPrice = (price: number | null | undefined) => {
-    if (price == null) return "0"; // null 또는 undefined 처리
-    return price.toLocaleString();
   };
 
   if (!isOpen && !isVisible) return null;
@@ -69,10 +60,12 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
       />
       <div className={`${styles.modal} ${isVisible ? styles.open : ""}`}>
         <div className={styles.header}>
-          <h2>CART</h2>
           <button className={styles.closeButton} onClick={handleClose}>
-            [ close ]
+            [ X CLOSE ]
           </button>
+          <Link href="/shop" className={styles.shopButton}>
+            [ <span>→</span> SHOP ]
+          </Link>
         </div>
         <div className={styles.content}>
           {cartItems.length === 0 ? (
@@ -85,62 +78,37 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                     key={`${item.id}-${item.selectedSize}`}
                     className={styles.cartItem}
                   >
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.name}
-                      width={100}
-                      height={100}
-                      className="rounded-lg"
-                    />
-                    <div className={styles.itemInfo}>
-                      <div className={styles.itemBrand}>{item.brand}</div>
-                      <div className={styles.itemName}>{item.name}</div>
-                      <div className={styles.itemSize}>
-                        Size: {item.selectedSize}
-                      </div>
-                      <div className={styles.itemPrice}>
-                        € {formatPrice(item.price)}
-                      </div>
+                    <div className={styles.itemDetails}>
+                      <div className={styles.name}>{item.name}</div>
+                      <div className={styles.size}>SIZE: {item.selectedSize}</div>
                       <div className={styles.quantityControl}>
-                        <button
-                          onClick={() =>
-                            handleUpdateQuantity(
-                              item.id,
-                              item.selectedSize,
-                              item.quantity - 1
-                            )
-                          }
-                        >
-                          -
-                        </button>
+                        <button onClick={() => handleUpdateQuantity(item.id, item.selectedSize, item.quantity - 1)}>—</button>
                         <span>{item.quantity}</span>
-                        <button
-                          onClick={() =>
-                            handleUpdateQuantity(
-                              item.id,
-                              item.selectedSize,
-                              item.quantity + 1
-                            )
-                          }
-                        >
-                          +
-                        </button>
+                        <button onClick={() => handleUpdateQuantity(item.id, item.selectedSize, item.quantity + 1)}>+</button>
                       </div>
                     </div>
-                    <button
-                      className={styles.removeButton}
-                      onClick={() =>
-                        handleRemoveItem(item.id, item.selectedSize)
-                      }
-                    >
-                      [ remove ]
-                    </button>
+                    <div className={styles.itemImageContainer}>
+                      <div className={styles.itemPrice}>
+                        € {item.price?.toLocaleString()}
+                      </div>
+                      <Image
+                        src={item.imageUrl}
+                        alt={item.name}
+                        width={100}
+                        height={100}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
               <div className={styles.cartFooter}>
+                <div className={styles.totalText}>
+                  TOTAL
+                  <span>(Shipping calculated at checkout)</span>
+                </div>
                 <div className={styles.totalPrice}>
-                  TOTAL: € {formatPrice(totalPrice)}
+                  €{totalPrice.toLocaleString()}
+                  <span>(Excl. VAT)</span>
                 </div>
                 <CheckoutButton cartItems={cartItems} />
               </div>

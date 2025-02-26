@@ -1,13 +1,15 @@
 "use client";
 import { useState } from "react";
 import styles from "./ProductCard.module.css";
-import { cartStorage, CartItem } from "@/utils/cart";
+import { cartStorage } from "@/utils/cart/storage";
+import type { CartItem } from "@/utils/cart/types";
 import Image from "next/image";
+import CartModal from "@/components/shop/CartModal/CartModal";
+import Link from "next/link";
 
 interface Product {
   id: string;
   name: string;
-  brand: string;
   price: number;
   description?: string;
   image_urls: string[];
@@ -31,28 +33,33 @@ export default function ProductCard({
   const [openShipping, setOpenShipping] = useState(false);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState("");
+  const [isCartModalOpen, setIsCartModalOpen] = useState(false);
+  const [showSizeAlert, setShowSizeAlert] = useState(false);
 
   const handleAddToCart = () => {
     if (!selectedSize) {
-      alert("Please select a size");
+      setShowSizeAlert(true);
       return;
     }
 
     const imageUrl = product.image_urls?.[0] || "/api/placeholder/400/400";
-
     const cartItem: CartItem = {
       id: product.id,
       name: product.name,
-      brand: product.brand,
       price: product.price,
       selectedSize,
       quantity: 1,
       imageUrl: imageUrl,
     };
 
-    cartStorage.addItem(cartItem);
-    onCartUpdate?.();
-    alert("Added to cart");
+    try {
+      cartStorage.addItem(cartItem);
+      onCartUpdate?.();
+      setIsCartModalOpen(true);
+      setShowSizeAlert(false);
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+    }
   };
 
   return (
@@ -76,8 +83,17 @@ export default function ProductCard({
 
       <section className={styles.infoSection}>
         <div className={styles.productInfo}>
-          <div className={styles.brand}>{product.brand}</div>
-          <h1 className={styles.name}>{product.name}</h1>
+          <div className={styles.headerSection}>
+            <h1 className={styles.name}>{product.name}</h1>
+            <div className={styles.buttonGroup}>
+              <Link href="/shop" className={styles.shopButton}>
+                [ <span>→</span> SHOP ]
+              </Link>
+              <button className={styles.cartButton} onClick={() => setIsCartModalOpen(true)}>
+                [ CART ]
+              </button>
+            </div>
+          </div>
           <div className={styles.priceContainer}>
             <span className={styles.price}>
               € {product.price?.toLocaleString()}
@@ -230,6 +246,19 @@ export default function ProductCard({
           </div>
         </div>
       </section>
+
+      {showSizeAlert && (
+        <div className={styles.alertOverlay} onClick={() => setShowSizeAlert(false)}>
+          <div className={styles.alertBox} onClick={(e) => e.stopPropagation()}>
+            Please select a size
+          </div>
+        </div>
+      )}
+
+      <CartModal
+        isOpen={isCartModalOpen}
+        onClose={() => setIsCartModalOpen(false)}
+      />
     </div>
   );
 }

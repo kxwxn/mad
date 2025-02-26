@@ -50,7 +50,9 @@ export default function AdminDashboard() {
     window.open(`https://dashboard.stripe.com/payments/${paymentId}`, '_blank');
   };
 
-  if (isLoading || !data) return <div>Loading...</div>;
+  if (isLoading || !data) return (
+    <div className={styles.loadingContainer}>Loading...</div>
+  );
 
   // 페이지네이션 계산
   const totalPages = Math.ceil(data.recentPayments.length / itemsPerPage);

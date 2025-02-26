@@ -4,104 +4,165 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  max-height: 65vh;
+  overflow-y: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Chrome, Safari and Opera */
+.cartItems::-webkit-scrollbar {
+  display: none;
 }
 
 .cartItem {
   display: flex;
-  padding: 15px;
-  border-bottom: 1px solid #eee;
-  position: relative;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 20px;
 }
 
-.itemImage {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  margin-right: 15px;
-}
-
-.itemInfo {
+.itemDetails {
   flex: 1;
 }
 
-.itemBrand {
-  font-size: 0.9rem;
+.name {
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #000;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.size {
+  font-size: 14px;
+  margin-bottom: 5px;
   color: #666;
 }
 
-.itemName {
-  font-weight: bold;
-  margin: 5px 0;
+.price {
+  font-size: 14px;
+  margin-bottom: 15px;
 }
 
-.itemSize {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 5px 0;
+.itemImageContainer {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  background: #f5f5f5;
+  margin-top: 25px;
 }
 
 .itemPrice {
-  font-weight: bold;
-  margin: 5px 0;
+  position: absolute;
+  top: -25px;
+  right: 0;
+  font-size: 14px;
+  z-index: 1;
+  font-weight: 300;
+  color: #000;
+  letter-spacing: 0.5px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .quantityControl {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 10px;
+  border: 1px solid #000;
+  width: fit-content;
+  margin-top: 20px;
 }
 
 .quantityControl button {
+  width: 60px;
+  height: 40px;
+  border: none;
   background: none;
-  border: 1px solid #ddd;
-  padding: 2px 8px;
   cursor: pointer;
+  padding: 0;
+  font-size: 20px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.quantityControl button:hover {
+.quantityControl button:first-child {
+  border-right: 1px solid #000;
+}
+
+.quantityControl button:last-child {
+  border-left: 1px solid #000;
+  font-size: 24px;
+  padding-bottom: 3px;
+}
+
+.quantityControl span {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  padding: 0 30px;
+  min-width: 40px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 300;
+  color: #000;
+}
+
+.itemImage {
+  width: 100px;
+  height: 100px;
   background: #f5f5f5;
 }
 
-.removeButton {
+.actions {
+  margin: 20px 0;
+  font-size: 14px;
+}
+
+.actions button {
   background: none;
   border: none;
   cursor: pointer;
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  padding: 5px;
+  padding: 0;
+  font-size: 14px;
 }
 
-.removeButton:hover {
-  opacity: 0.7;
-}
-
-.cartFooter {
-  position: sticky;
-  bottom: 0;
-  background: white;
+.total {
+  border: 1px solid #000;
   padding: 20px;
-  border-top: 1px solid #eee;
+  margin-top: 20px;
+}
+
+.totalText {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.totalText span {
+  color: #666;
+  font-size: 12px;
 }
 
 .totalPrice {
-  font-weight: bold;
-  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.checkoutButton {
-  width: 100%;
-  padding: 15px;
-  background: black;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
+.totalPrice span {
+  color: #666;
+  font-size: 12px;
 }
 
-.checkoutButton:hover {
-  opacity: 0.9;
+.cartFooter {
+  border: 1px solid #000;
+  padding: 20px;
+  margin-top: auto;
 }
 
 .overlay {
@@ -110,57 +171,118 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0);
-  z-index: 100;
-  transition: background-color 0.3s ease-in-out;
-  pointer-events: none;
+  background-color: rgba(255, 255, 255, 0.8);
+  opacity: 0;
   visibility: hidden;
+  transition: all 0.3s;
+  z-index: 999;
 }
 
 .overlay.visible {
-  background-color: rgba(0, 0, 0, 0.3);
-  pointer-events: auto;
+  opacity: 1;
   visibility: visible;
 }
 
 .modal {
   position: fixed;
   top: 0;
-  right: 0;
-  width: 400px;
+  right: -400px;
   height: 100vh;
-  background-color: white;
-  z-index: 101;
-  transition: transform 0.3s ease-in-out;
-  padding: 20px;
-  transform: translateX(100%);
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  background: white;
+  border-left: 1px solid #000;
+  z-index: 1000;
+  transition: right 0.3s ease-in-out;
 }
 
 .modal.open {
-  transform: translateX(0);
+  right: 0;
 }
 
 .header {
+  padding: 20px;
+  border-bottom: 1px solid #000;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
 }
 
-.closeButton {
+.closeButton, .shopButton {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1rem;
-  padding: 5px;
+  font-size: 14px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 350;
+  text-decoration: none;
+  color: #000;
+  line-height: 1;
 }
 
-.closeButton:hover {
-  opacity: 0.7;
+.shopButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 350;
+  text-decoration: none;
+  color: #000;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.shopButton span {
+  display: inline-block;
+  transform: translateY(-1px);
 }
 
 .content {
-  height: calc(100% - 60px);
-  overflow-y: auto;
+  padding: 20px;
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.confirmDialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #000;
+  box-shadow: none;
+  z-index: 1000;
+  width: 300px;
+}
+
+.confirmContent {
+  text-align: center;
+}
+
+.confirmContent p {
+  margin-bottom: 20px;
+}
+
+.confirmButtons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.confirmButtons button {
+  padding: 8px 16px;
+  border: 1px solid #000;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.confirmButtons button:hover {
+  background-color: #000;
+  color: white;
 }

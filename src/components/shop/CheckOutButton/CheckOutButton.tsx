@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { CartItem } from '@/utils/cart';
+import { CartItem } from '@/utils/cart/types';
 import styles from './CheckOutButton.module.css';
 
 // Stripe 초기화 부분 수정

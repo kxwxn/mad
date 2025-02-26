@@ -53,16 +53,10 @@
   padding: 1rem;
 }
 
-.brand {
-  font-size: 0.875rem;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
 .name {
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
-  font-weight: 400;
+  font-size: 2rem;
+  font-weight: 100;
+  letter-spacing: 0.5px;
 }
 
 .priceContainer {
@@ -297,4 +291,60 @@
   .addToCartBox {
     width: 100%;
   }
+}
+
+.headerSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.shopButton, .cartButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 300;
+  text-decoration: none;
+  color: #000;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.shopButton span {
+  display: inline-block;
+  transform: translateY(-1px);
+}
+
+.alertOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.alertBox {
+  background: white;
+  border: 1px solid black;
+  padding: 20px 40px;
+  font-size: 14px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
 }
