@@ -1,52 +1,54 @@
-import { NextResponse } from 'next/server';
-import Stripe from 'stripe';
+import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-01-27.acacia'
+// Stripe 초기화
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+  apiVersion: "2025-01-27.acacia",
 });
 
-interface StripeProduct {
-  images?: string[];
-}
-
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
+    // URL에서 session_id 파라미터 가져오기
     const { searchParams } = new URL(request.url);
-    const sessionId = searchParams.get('session_id');
+    const sessionId = searchParams.get("session_id");
 
     if (!sessionId) {
       return NextResponse.json(
-        { error: 'Session ID is required' },
+        { error: "Session ID is required" },
         { status: 400 }
       );
     }
 
+    // Stripe에서 세션 정보 가져오기
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ['line_items.data.price.product']
+      expand: ["line_items", "line_items.data.price.product"],
     });
 
-    // 현재 시간을 타임스탬프로 사용 (session.created가 없을 경우)
-    const orderDate = new Date().getTime();
-
+    // 결제 정보 구성
     const paymentDetails = {
-      amount_total: session.amount_total,
-      created: orderDate,
-      payment_intent: sessionId.slice(-8).toUpperCase(), // 간단한 주문번호
-      items: session.line_items?.data.map(item => ({
-        name: item.description,
-        quantity: item.quantity,
-        price: item.amount_total ? item.amount_total / 100 : 0,
-        image: (item.price?.product as StripeProduct)?.images?.[0] || '/placeholder-image.jpg'
-      })) || []
+      amount_total: session.amount_total || 0,
+      created: session.created * 1000, // Unix 타임스탬프를 밀리초로 변환
+      payment_intent:
+        typeof session.payment_intent === "string"
+          ? session.payment_intent
+          : session.payment_intent?.id || sessionId,
+      items:
+        session.line_items?.data.map((item) => {
+          const product = item.price?.product as Stripe.Product;
+          return {
+            name: product.name || item.description || "",
+            quantity: item.quantity || 0,
+            price: (item.amount_total || 0) / 100, // 센트 단위를 달러/유로 단위로 변환
+            image: product.images?.[0] || undefined,
+          };
+        }) || [],
     };
 
-    console.log('Payment Details:', paymentDetails); // 디버깅용 로그
-
     return NextResponse.json(paymentDetails);
-  } catch (error) {
-    console.error('Error fetching payment details:', error);
+  } catch (error: unknown) {
+    console.error("Error fetching payment details:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch payment details' },
+      { error: error instanceof Error ? error.message : "Failed to fetch payment details" },
       { status: 500 }
     );
   }

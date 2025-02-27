@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './success.module.css';
-import { cartStorage } from '@/utils/cart';
+import { useCartStore } from '@/store/cartStore';
+import { useQuery } from '@tanstack/react-query';
 
 interface PaymentDetails {
   amount_total: number;
@@ -19,34 +20,38 @@ interface PaymentDetails {
   }>;
 }
 
+// 결제 정보를 가져오는 함수
+const fetchPaymentDetails = async (sessionId: string | null) => {
+  if (!sessionId) {
+    throw new Error('Session ID is missing');
+  }
+  
+  const response = await fetch(`/api/payment-details?session_id=${sessionId}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch payment details');
+  }
+  
+  return response.json();
+};
+
 export default function SuccessPageContent() {
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
-  const [paymentDetails, setPaymentDetails] = useState<PaymentDetails | null>(null);
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
-
+  const clearCart = useCartStore(state => state.clearCart);
+  
+  // React Query를 사용하여 결제 정보 가져오기
+  const { data: paymentDetails, isLoading, isError } = useQuery<PaymentDetails>({
+    queryKey: ['payment-details', sessionId],
+    queryFn: () => fetchPaymentDetails(sessionId),
+    enabled: !!sessionId,
+  });
+  
+  // 결제 성공 시 장바구니 비우기
   useEffect(() => {
-    if (!sessionId) {
-      setStatus('error');
-      return;
+    if (paymentDetails) {
+      clearCart();
     }
-
-    const fetchPaymentDetails = async () => {
-      try {
-        const response = await fetch(`/api/payment-details?session_id=${sessionId}`);
-        if (!response.ok) throw new Error('Failed to fetch payment details');
-        const details = await response.json();
-        setPaymentDetails(details);
-        setStatus('success');
-      } catch (error) {
-        console.error('Error fetching payment details:', error);
-        setStatus('error');
-      }
-    };
-
-    fetchPaymentDetails();
-    cartStorage.clearCart();
-  }, [sessionId]);
+  }, [paymentDetails, clearCart]);
 
   const formatDate = (timestamp: number) => {
     const date = new Date(timestamp);
@@ -59,11 +64,11 @@ export default function SuccessPageContent() {
     });
   };
 
-  if (status === 'loading') {
+  if (isLoading) {
     return <div className={styles.container}>Verifying payment...</div>;
   }
 
-  if (status === 'error') {
+  if (isError || !sessionId) {
     return (
       <div className={styles.container}>
         <h1>An error occurred</h1>

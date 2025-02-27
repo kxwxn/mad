@@ -1,21 +1,21 @@
 "use client";
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { CartItem } from '@/utils/cart/types';
 import styles from './CheckOutButton.module.css';
+import { useCartStore } from '@/store/cartStore';
 
-// Stripe 초기화 부분 수정
+// Stripe 초기화
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
 
 // 디버깅을 위한 콘솔 로그 추가 (나중에 제거 가능)
 console.log('Stripe Key:', process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
-interface CheckoutButtonProps {
-  cartItems: CartItem[];
-}
-
-const CheckoutButton: React.FC<CheckoutButtonProps> = ({ cartItems }) => {
+const CheckoutButton: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Zustand store에서 장바구니 아이템 가져오기
+  const cartItems = useCartStore(state => state.items);
+  const totalItems = useCartStore(state => state.getTotalItems());
 
   const handleCheckout = async () => {
     try {
@@ -61,8 +61,6 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ cartItems }) => {
       setIsLoading(false);
     }
   };
-
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <button 

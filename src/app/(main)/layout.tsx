@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import TopNav from "@/components/TopNav";
 import Footer from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/react";
+import { ReactQueryProvider } from '@/components/providers/ReactQueryProvider';
 
 export const metadata: Metadata = {
   title: "MAD",
@@ -21,10 +22,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={helvetica.className}>
       <body>
-        <TopNav />
-        {children}
-        <Footer />
-        <Analytics />
+        <ReactQueryProvider>
+          <TopNav />
+          {children}
+          <Footer />
+          {process.env.NODE_ENV === 'production' && <Analytics />}
+        </ReactQueryProvider>
       </body>
     </html>
   );

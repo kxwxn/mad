@@ -11,4 +11,28 @@
       width: 100%;
       padding: 10px 20px 10px 0;
       min-height: fit-content;
+      position: relative;
+      z-index: 10;
+    }
+
+    .headerButtons {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .wishlistIconWrapper {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wishlistIcon {
+      font-size: 24px;
+      color: #000;
     }

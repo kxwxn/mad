@@ -1,0 +1,28 @@
+.wishlistButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+  color: #333;
+}
+
+.wishlistButton:hover {
+  transform: scale(1.1);
+}
+
+.heartIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.filled {
+  color: #ff3e3e;
+}
+
+.filled .heartIcon {
+  fill: #ff3e3e;
+} 

@@ -286,3 +286,21 @@
   background-color: #000;
   color: white;
 }
+
+.removeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 350;
+  padding: 0;
+  margin-top: 10px;
+  color: #000;
+  letter-spacing: 0.5px;
+  transition: opacity 0.2s;
+}
+
+.removeButton:hover {
+  opacity: 0.7;
+}

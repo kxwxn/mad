@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { ClerkProvider, SignedIn } from "@clerk/nextjs";
 import AdminNav from "@/components/admin/AdminNav/AdminNav";
 import styles from './layout.module.css';
+import { ReactQueryProvider } from '@/components/providers/ReactQueryProvider';
 
 export const metadata: Metadata = {
   title: "MAD Admin",
@@ -21,10 +22,12 @@ export default function AdminLayout({
       <html lang="en" className={helvetica.className}>
         <body className={styles.body}>
           <SignedIn>
-            <AdminNav />
-            <main className={styles.main}>
-              {children}
-            </main>
+            <ReactQueryProvider>
+              <AdminNav />
+              <main className={styles.main}>
+                {children}
+              </main>
+            </ReactQueryProvider>
           </SignedIn>
         </body>
       </html>
