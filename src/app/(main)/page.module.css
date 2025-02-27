@@ -84,3 +84,14 @@
 
       }
     }
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* 마지막 섹션에 마진 추가 */
+    .splitSection:last-of-type {
+      margin-bottom: 0;
+    }

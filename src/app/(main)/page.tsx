@@ -1,6 +1,8 @@
 // app/page.tsx
 import Image from "next/image";
 import styles from "./page.module.css";
+import Footer from "@/components/Footer";
+import Contact from "@/components/Contact";
 
 export default function Home() {
   return (
@@ -79,6 +81,8 @@ export default function Home() {
           />
         </div>
       </section>
+      <Contact />
+      <Footer />  
     </main>
   );
 }
