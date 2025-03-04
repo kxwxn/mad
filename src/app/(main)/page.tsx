@@ -16,10 +16,8 @@ export default function Home() {
           playsInline 
           className={styles.heroVideo}
           preload="auto"
-          controls={false}
-          poster="/Videos/poster.jpg"
         >
-          <source src="/Videos/Video1.mp4" type="video/mp4; codecs='avc1.42E01E, mp4a.40.2'" />
+          <source src="/Videos/Video1.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </section>
@@ -90,10 +88,9 @@ export default function Home() {
               muted 
               playsInline 
               className={styles.video}
-              controls={false}
-              poster="/Videos/poster.jpg"
+              preload="auto"
             >
-              <source src="/Videos/Video2.mp4" type="video/mp4; codecs='avc1.42E01E, mp4a.40.2'" />
+              <source src="/Videos/Video2.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
@@ -104,10 +101,9 @@ export default function Home() {
               muted 
               playsInline 
               className={styles.video}
-              controls={false}
-              poster="/Videos/poster.jpg"
+              preload="auto"
             >
-              <source src="/Videos/Video2.mp4" type="video/mp4; codecs='avc1.42E01E, mp4a.40.2'" />
+              <source src="/Videos/Video2.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
@@ -118,10 +114,9 @@ export default function Home() {
               muted 
               playsInline 
               className={styles.video}
-              controls={false}
-              poster="/Videos/poster.jpg"
+              preload="auto"
             >
-              <source src="/Videos/Video2.mp4" type="video/mp4; codecs='avc1.42E01E, mp4a.40.2'" />
+              <source src="/Videos/Video2.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
