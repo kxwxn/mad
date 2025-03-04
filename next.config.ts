@@ -20,10 +20,25 @@ const nextConfig: NextConfig = {
         options: {
           publicPath: '/_next/static/videos/',
           outputPath: 'static/videos/',
+          name: '[name].[ext]',
+          mimetype: 'video/mp4'
         },
       },
     });
     return config;
+  },
+  async headers() {
+    return [
+      {
+        source: '/Videos/:path*',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'video/mp4',
+          },
+        ],
+      },
+    ];
   },
 };
 
