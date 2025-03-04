@@ -2,87 +2,177 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import Footer from "@/components/Footer";
-import Contact from "@/components/Contact";
+import TopNav from "@/components/TopNav";
 
 export default function Home() {
   return (
     <main className={styles.main}>
-
+      <TopNav />
       <section className={styles.fullscreenSection}>
-        <Image
-          src="/Images/002.jpg"
-          alt="Hero Image"
-          fill
-          sizes="100vw"
-          priority
-          quality={100}
-          className={styles.heroImage}
-          loading="eager"
-        />
-      </section>
-
-
-      <section className={styles.textSection}>
-        <p className={styles.descriptionTop}>Material Alternative Design</p>
-        <p className={styles.descriptionBtm}>
-          Transforming the sports industry with mycelium-based alternatives to
-          plastics
-        </p>
-      </section>
-
-
-      <section className={styles.splitSection}>
-        <div className={styles.imageContainer}>
-          <Image
-            src="/Images/003.jpg"
-            alt="Left Split Image 1"
-            fill
-            sizes="50vw"
-            quality={100}
-            className={styles.splitImage}
-          />
-        </div>
-        <div className={styles.imageContainer}>
-          <Image
-            src="/Images/004.jpg"
-            alt="Right Split Image 1"
-            fill
-            sizes="50vw"
-            quality={100}
-            className={styles.splitImage}
-          />
-        </div>
-      </section>
-
-
-      <section className={styles.videoSection}>
-        <video autoPlay loop muted playsInline className={styles.video}>
-          <source src="/Videos/MAD_Reel.mp4" type="video/mp4" />
+        <video autoPlay loop muted playsInline className={styles.heroVideo}>
+          <source src="/Videos/Video 1.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </section>
 
+      <section className={styles.textSection}>
+        <h1 className={styles.titleText}>TEXT A</h1>
+        <p className={styles.descriptionText}>XXXXXXXXXX</p>
+        <p className={styles.descriptionText}>XXXXXXXXXXXX</p>
+      </section>
 
       <section className={styles.splitSection}>
         <div className={styles.imageContainer}>
           <Image
-            src="/Images/Poster.png"
-            alt="Left Split Image 2"
+            src="/Images/pendingFoto/01.jpg"
+            alt="Image 1"
             fill
+            sizes="33vw"
+            quality={100}
             className={styles.splitImage}
           />
         </div>
         <div className={styles.imageContainer}>
           <Image
-            src="/Images/Poster_flashyfinal.jpg"
-            alt="Right Split Image 2"
+            src="/Images/pendingFoto/01.jpg"
+            alt="Image 2"
             fill
+            sizes="33vw"
+            quality={100}
+            className={styles.splitImage}
+          />
+        </div>
+        <div className={styles.imageContainer}>
+          <Image
+            src="/Images/pendingFoto/01.jpg"
+            alt="Image 3"
+            fill
+            sizes="33vw"
+            quality={100}
             className={styles.splitImage}
           />
         </div>
       </section>
-      <Contact />
-      <Footer />  
+      
+      <section className={styles.secondTextSection}>
+        <h1 className={styles.secondTitle}>TEXT B</h1>
+        <p className={styles.secondDescription}>XXXXXXXXXX</p>
+        <p className={styles.secondDescription}>XXXXXXXXXXXX</p>
+      </section>
+      <section className={styles.fullImageSection}>
+        <div className={styles.fullImageContainer}>
+          <Image
+            src="/Images/Foto 4.jpg"
+            alt="Image 1"
+            fill
+            sizes="200vw"
+            quality={100}
+            className={styles.fullImage}
+          />
+        </div>
+      </section>
+
+      <section className={styles.videoSection}>
+        <div className={styles.videoContainer}>
+          <div className={styles.videoWrapper}>
+            <video autoPlay loop muted playsInline className={styles.video}>
+              <source src="/Videos/Video 2.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div className={styles.videoWrapper}>
+            <video autoPlay loop muted playsInline className={styles.video}>
+              <source src="/Videos/Video 2.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div className={styles.videoWrapper}>
+            <video autoPlay loop muted playsInline className={styles.video}>
+              <source src="/Videos/Video 2.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.thirdTextSection}>
+        <h1 className={styles.thirdTitle}>TEXT C</h1>
+        <p className={styles.thirdDescription}>XXXXXXXXXX</p>
+        <p className={styles.thirdDescription}>XXXXXXXXXXXX</p>
+      </section>
+
+      <section className={styles.sixImageSection}>
+        <div className={styles.imageRow}>
+          <div className={styles.imageWrapper}>
+            <Image
+              src="/Images/Fotos A-F/A.jpg"
+              alt="Image A"
+              fill
+              sizes="33vw"
+              quality={100}
+              className={styles.sixImage}
+            />
+          </div>
+          <div className={styles.imageWrapper}>
+            <Image
+              src="/Images/Fotos A-F/B.jpg"
+              alt="Image B"
+              fill
+              sizes="33vw"
+              quality={100}
+              className={styles.sixImage}
+            />
+          </div>
+          <div className={styles.imageWrapper}>
+            <Image
+              src="/Images/Fotos A-F/C.jpg"
+              alt="Image C"
+              fill
+              sizes="33vw"
+              quality={100}
+              className={styles.sixImage}
+            />
+          </div>
+        </div>
+        <div className={styles.imageRow}>
+          <div className={styles.imageWrapper}>
+            <Image
+              src="/Images/Fotos A-F/D.jpg"
+              alt="Image D"
+              fill
+              sizes="33vw"
+              quality={100}
+              className={styles.sixImage}
+            />
+          </div>
+          <div className={styles.imageWrapper}>
+            <Image
+              src="/Images/Fotos A-F/E.jpg"
+              alt="Image E"
+              fill
+              sizes="33vw"
+              quality={100}
+              className={styles.sixImage}
+            />
+          </div>
+          <div className={styles.imageWrapper}>
+            <Image
+              src="/Images/Fotos A-F/F.jpg"
+              alt="Image F"
+              fill
+              sizes="33vw"
+              quality={100}
+              className={styles.sixImage}
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.fourthTextSection}>
+        <h1 className={styles.fourthTitle}>MADE{'\n'}IN BERLIN{'\n'}WITH{'\n'}MUSHROOMS</h1>
+      </section>
+
+      <Footer />
     </main>
   );
 }

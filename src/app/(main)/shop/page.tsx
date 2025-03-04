@@ -1,9 +1,13 @@
 import ShopContainer from "@/components/shop/ShopContainer/ShopContainer";
+import ShopNav from '@/components/ShopNav';
 
-export default async function ShopPage() {
+export default function Shop() {
   return (
-    <main className="container mx-auto px-4 py-8">
-      <ShopContainer />
-    </main>
+    <>
+      <ShopNav />
+      <main className="container mx-auto px-4 py-8">
+        <ShopContainer />
+      </main>
+    </>
   );
 }

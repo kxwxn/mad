@@ -1,0 +1,13 @@
+.main {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  width: 100%;
+  padding: 2rem;
+  margin-top: 0; /* 네비게이션과 겹치도록 여백 제거 */
+} 

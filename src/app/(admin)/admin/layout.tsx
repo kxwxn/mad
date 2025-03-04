@@ -21,14 +21,14 @@ export default function AdminLayout({
     <ClerkProvider>
       <html lang="en" className={helvetica.className}>
         <body className={styles.body}>
-          <SignedIn>
-            <ReactQueryProvider>
+          <ReactQueryProvider>
+            <SignedIn>
               <AdminNav />
-              <main className={styles.main}>
-                {children}
-              </main>
-            </ReactQueryProvider>
-          </SignedIn>
+            </SignedIn>
+            <main className={styles.main}>
+              {children}
+            </main>
+          </ReactQueryProvider>
         </body>
       </html>
     </ClerkProvider>
