@@ -1,8 +1,12 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-01-27.acacia'
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('Missing Stripe secret key');
+}
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2025-02-24.acacia'
 });
 
 export async function GET() {
@@ -63,8 +67,8 @@ export async function GET() {
             created: payment.created,
             items: items
           };
-        } catch (error) {
-          console.error('Error processing payment:', error);
+        } catch {
+          console.error('Error processing payment data');
           return {
             id: payment.id,
             amount: payment.amount / 100,
@@ -83,12 +87,11 @@ export async function GET() {
       recentPayments
     });
 
-  } catch (error) {
-    console.error('Dashboard data fetch error:', error);
+  } catch {
+    console.error('Dashboard data fetch error occurred');
     return NextResponse.json(
       { 
         error: 'Failed to fetch dashboard data',
-        message: error instanceof Error ? error.message : 'Unknown error',
         totalRevenue: 0,
         totalOrders: 0,
         recentPayments: []

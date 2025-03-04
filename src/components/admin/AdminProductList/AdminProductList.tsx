@@ -2,55 +2,41 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { createClient } from '@/utils/supabase/client';
+import { supabase } from '@/lib/supabase/config';
 import styles from './AdminProductList.module.css';
 import { Product } from '@/types/product.types';
-
-const supabase = createClient();
 
 interface AdminProductListProps {
   onProductClick: (product: Product) => void;
 }
 
-export default function AdminProductList({ onProductClick }: AdminProductListProps) {
+const AdminProductList: React.FC<AdminProductListProps> = ({ onProductClick }) => {
   const [products, setProducts] = useState<Product[]>([]);
-
-  const fetchProducts = async () => {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching products:', error);
-      return;
-    }
-
-    setProducts(data || []);
-  };
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchProducts();
+    const fetchProducts = async () => {
+      try {
+        const { data, error } = await supabase()
+          .from('products')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-    const channel = supabase
-      .channel('products_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'products'
-        },
-        () => {
-          fetchProducts();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
+        if (error) throw error;
+        setProducts(data || []);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch products');
+      } finally {
+        setLoading(false);
+      }
     };
+
+    fetchProducts();
   }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className={styles.container}>
@@ -70,6 +56,9 @@ export default function AdminProductList({ onProductClick }: AdminProductListPro
                 className={styles.image}
                 style={{ objectFit: 'cover' }}
               />
+              <span className={`${styles.status} ${product.status === 'SOLD_OUT' ? styles.soldOut : ''}`}>
+                {product.status}
+              </span>
             </div>
             <div className={styles.productInfo}>
               <h4 className={styles.name}>{product.name}</h4>
@@ -83,4 +72,6 @@ export default function AdminProductList({ onProductClick }: AdminProductListPro
       </div>
     </div>
   );
-}
+};
+
+export default AdminProductList;

@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './WishlistModal.module.css';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useWishlistStore } from '@/store/wishlistStore';
 import { useCartStore } from '@/store/cartStore';
 
@@ -80,9 +79,6 @@ const WishlistModal: React.FC<WishlistModalProps> = ({ isOpen, onClose, openCart
           <button className={styles.closeButton} onClick={handleClose}>
             [ X CLOSE ]
           </button>
-          <Link href="/shop" className={styles.shopButton}>
-            [ <span>→</span> SHOP ]
-          </Link>
         </div>
         <div className={styles.content}>
           {wishlistItems.length === 0 ? (

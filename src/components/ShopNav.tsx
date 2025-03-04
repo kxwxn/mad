@@ -32,9 +32,9 @@ export default function ShopNav() {
     <nav className={`${styles.nav} ${isVisible ? styles.visible : styles.hidden}`}>
       <div className={styles.container}>
         <div className={styles.topRow}>
-          <Link href="/" className={styles.mad}>
+          <div className={styles.mad}>
             MAD
-          </Link>
+          </div>
         </div>
         <div className={styles.middleRow}>
           <div className={styles.infoHidden}>

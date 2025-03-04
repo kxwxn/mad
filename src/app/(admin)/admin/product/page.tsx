@@ -15,11 +15,8 @@ export default function ProductAdminPage() {
     setSelectedProduct(product);
   };
 
-  const handleClose = () => {
-    setSelectedProduct(null);
-  };
-
   const handleProductUpdate = () => {
+    setSelectedProduct(null);
     setRefreshTrigger((prev) => prev + 1);
   };
 
@@ -34,7 +31,7 @@ export default function ProductAdminPage() {
       />
       <EditProductPanel
         product={selectedProduct}
-        onClose={handleClose}
+        onClose={() => setSelectedProduct(null)}
         onProductUpdate={handleProductUpdate}
       />
     </div>

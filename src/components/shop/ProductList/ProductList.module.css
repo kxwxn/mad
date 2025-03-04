@@ -5,6 +5,14 @@
   margin-top: calc(13vw * 0.9); /* TopNav의 높이만큼 여백 추가 */
 }
 
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - calc(13vw * 0.9));
+  width: 100%;
+}
+
 .productGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -26,7 +34,15 @@
   overflow: hidden;
 }
 
-/* 나머지 스타일은 동일하게 유지 */
+.productLink:hover .image {
+  transform: scale(1.05);
+  opacity: 0.7;
+}
+
+.productLink:hover .status {
+  opacity: 1;
+}
+
 .imageContainer {
   position: relative;
   width: 100%;
@@ -37,7 +53,29 @@
 
 .image {
   position: absolute !important; /* Next.js Image 컴포넌트를 위해 필요 */
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.status {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+.available {
+  color: #000;
+}
+
+.soldOut {
+  color: #000;
+  text-decoration: line-through;
 }
 
 .productInfo {
@@ -86,12 +124,6 @@
   color: #666;
 }
 
-.soldOut {
-  font-size: 12px;
-  color: #666;
-  margin-top: 4px;
-}
-
 .productLink {
   text-decoration: none;
   color: inherit;
@@ -105,11 +137,6 @@
 
 .productLink:hover {
   transform: translateY(-5px);
-}
-
-/* 호버 효과 수정 */
-.productLink:hover .image {
-  transform: scale(1.05);
 }
 
 .description {
@@ -152,4 +179,19 @@
   .productGrid {
     grid-template-columns: 1fr;
   }
+}
+
+.loadingTrigger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  width: 100%;
+}
+
+.loadingMore {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
 }

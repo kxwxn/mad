@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./CartModal.module.css";
 import Image from "next/image";
 import CheckoutButton from "../CheckOutButton/CheckOutButton";
-import Link from "next/link";
 import { useCartStore } from "@/store/cartStore";
 
 interface CartModalProps {
@@ -64,9 +63,6 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
           <button className={styles.closeButton} onClick={handleClose}>
             [ X CLOSE ]
           </button>
-          <Link href="/shop" className={styles.shopButton}>
-            [ <span>→</span> SHOP ]
-          </Link>
         </div>
         <div className={styles.content}>
           {cartItems.length === 0 ? (

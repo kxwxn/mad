@@ -1,32 +1,17 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { createClient } from "@/utils/supabase/client";
 import Image from 'next/image';
 import { uploadProductImage } from '@/lib/supabase/storage';
 import styles from './EditProductPanel.module.css';
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  product_info: string;
-  image_urls: string[];
-  sizeType: 'numbered' | 'onesize';
-  size_1: number;
-  size_2: number;
-  size_3: number;
-  os: number;
-}
+import { Product, SizeType } from '@/types/product.types';
+import { useProductMutations } from '@/hooks/queries/useProducts';
 
 interface EditProductPanelProps {
   product: Product | null;
   onClose: () => void;
   onProductUpdate: () => void;
 }
-
-const supabase = createClient();
 
 export default function EditProductPanel({ 
   product, 
@@ -37,14 +22,15 @@ export default function EditProductPanel({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [newImages, setNewImages] = useState<File[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const { updateProduct, deleteProduct, isLoading } = useProductMutations();
 
   useEffect(() => {
     if (product) {
+      const sizeType: SizeType = product.os > 0 ? 'onesize' : 'numbered';
       setFormData({
         ...product,
-        sizeType: product.os > 0 ? 'onesize' : 'numbered'
+        sizeType
       });
       setIsClosing(false);
       setNewImages([]);
@@ -70,7 +56,7 @@ export default function EditProductPanel({
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev!,
-      [name]: name === 'price' || name.startsWith('size') ? Number(value) : value
+      [name]: name === 'price' || name.startsWith('size') || name === 'os' ? Number(value) : value
     }));
   };
 
@@ -101,8 +87,6 @@ export default function EditProductPanel({
     if (!formData) return;
 
     try {
-      setIsLoading(true);
-
       // 새 이미지 업로드
       let updatedImageUrls = [...formData.image_urls];
       if (newImages.length > 0) {
@@ -125,39 +109,23 @@ export default function EditProductPanel({
       };
 
       // 데이터 업데이트
-      const { error } = await supabase
-        .from('products')
-        .update(updateData)
-        .eq('id', formData.id);
-
-      if (error) throw error;
-
+      await updateProduct({ id: formData.id, updates: updateData });
       onProductUpdate();
       handleClose();
     } catch (error) {
       console.error('Update error:', error);
       alert('Failed to update product');
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const handleDelete = async () => {
     try {
-      setIsLoading(true);
-      const { error } = await supabase
-        .from('products')
-        .delete()
-        .eq('id', formData!.id);
-
-      if (error) throw error;
+      await deleteProduct(formData!.id);
       onProductUpdate();
       handleClose();
     } catch (error) {
       console.error('Delete error:', error);
       alert('Failed to delete product');
-    } finally {
-      setIsLoading(false);
     }
   };
 

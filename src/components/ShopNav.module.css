@@ -5,11 +5,12 @@
   left: 0;
   right: 0;
   background-color: transparent;
-  z-index: 1000;
+  z-index: 1;
   padding: 1rem;
   transition: transform 0.3s ease-in-out;
   will-change: transform;
   transform: translateY(0);
+  pointer-events: none;
 }
 
 .container {
@@ -23,6 +24,7 @@
   padding: 0 1rem;
   box-sizing: border-box;
   gap: 1.5rem;
+  pointer-events: auto;
 }
 
 .topRow,

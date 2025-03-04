@@ -1,95 +1,107 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { memo } from "react";
 import Link from "next/link";
 import styles from "./ProductList.module.css";
-import { createClient } from "@/utils/supabase/client";
 import Image from 'next/image';
+import { useInfiniteProducts } from '@/hooks/queries/useProducts';
+import { useRealtimeProducts } from '@/hooks/useRealtimeProducts';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { useInView } from 'react-intersection-observer';
 import { Product } from '@/types/product.types';
 
-const supabase = createClient();
+// ProductCard 컴포넌트를 분리하여 메모이제이션
+const ProductCard = memo(({ product, index }: { product: Product; index: number }) => {
+  const { id, name, price, image_urls, status, description } = product;
+  const imageUrl = image_urls?.[0] || '/images/placeholder.png';
+
+  return (
+    <Link href={`/shop/${id}`} className={styles.productCard}>
+      <div className={styles.imageContainer}>
+        <Image 
+          src={imageUrl}
+          alt={name}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 33vw, 25vw"
+          className={styles.image}
+          style={{ objectFit: 'cover' }}
+          priority={index < 4} // 처음 4개 이미지만 priority 적용
+        />
+        <span className={`${styles.status} ${status === 'SOLD_OUT' ? styles.soldOut : ''}`}>
+          {status}
+        </span>
+      </div>
+      <div className={styles.productInfo}>
+        <h4 className={styles.name}>{name}</h4>
+        <p className={styles.description}>{description}</p>
+        <span className={styles.price}>
+          € {price?.toLocaleString()}
+        </span>
+      </div>
+    </Link>
+  );
+});
+
+ProductCard.displayName = 'ProductCard';
 
 const ProductList: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  // 실시간 업데이트 활성화
+  useRealtimeProducts();
 
-  const fetchProducts = async () => {
-    const { data, error } = await supabase
-      .from("products")
-      .select("*")
-      .order('created_at', { ascending: false });
+  const { ref, inView } = useInView();
 
-    if (error) {
-      console.error("Error fetching products:", error);
-      return;
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteProducts();
+
+  // 스크롤이 하단에 도달하면 다음 페이지 로드
+  React.useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-    if (data) {
-      setProducts(data);
-    }
-  };
+  if (status === 'pending') {
+    return <div className={styles.loading}>로딩 중...</div>;
+  }
 
-  useEffect(() => {
-    fetchProducts();
+  if (status === 'error') {
+    return <div className={styles.error}>상품 목록을 불러오는데 실패했습니다.</div>;
+  }
 
-    const channel = supabase
-      .channel('products_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'products'
-        },
-        () => {
-          fetchProducts();
-        }
-      )
-      .subscribe();
+  const products = data?.pages.flat() || [];
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
+  if (!products.length) {
+    return (
+      <div className={styles.emptyContainer}>
+        <h2>No products available</h2>
+        <p>Please check back later</p>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles.productGrid}>
-        {products?.map((product) => (
-          <Link
-            href={`/shop/${product.id}`}
-            key={product.id}
-            className={styles.productLink}
-          >
-            <div className={styles.productCard}>
-              <div className={styles.imageContainer}>
-                <Image 
-                  src={product.image_urls?.[0] || "/api/placeholder/400/400"}
-                  alt={product.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 33vw, 25vw"
-                  className={styles.image}
-                  style={{ objectFit: 'cover' }}
-                />
-              </div>
-
-              <div className={styles.productInfo}>
-                <h4 className={styles.name}>{product.name}</h4>
-                <p className={styles.description}>{product.description}</p>
-                <div className={styles.priceContainer}>
-                  <span className={styles.price}>
-                    € {product.price?.toLocaleString()}
-                  </span>
-                </div>
-                {product.status === "SOLD_OUT" && (
-                  <span className={styles.soldOut}>SOLD OUT</span>
-                )}
-              </div>
-            </div>
-          </Link>
+        {products.map((product, index) => (
+          <ProductCard key={`${product.id}-${index}`} product={product} index={index} />
         ))}
+      </div>
+      
+      {/* 로딩 트리거 요소 */}
+      <div ref={ref} className={styles.loadingTrigger}>
+        {isFetchingNextPage && (
+          <div className={styles.loadingMore}>
+            <LoadingSpinner size="medium" />
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default ProductList;
+export default memo(ProductList);

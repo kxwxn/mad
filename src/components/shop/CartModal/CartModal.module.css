@@ -175,7 +175,7 @@
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s;
-  z-index: 999;
+  z-index: 1002;
 }
 
 .overlay.visible {
@@ -191,7 +191,7 @@
   width: 400px;
   background: white;
   border-left: 1px solid #000;
-  z-index: 1000;
+  z-index: 1003;
   transition: right 0.3s ease-in-out;
 }
 
@@ -234,10 +234,6 @@
   vertical-align: middle;
 }
 
-.shopButton span {
-  display: inline-block;
-  transform: translateY(-1px);
-}
 
 .content {
   padding: 20px;

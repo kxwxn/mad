@@ -35,7 +35,7 @@ export default function ShopContainer() {
       <WishlistModal 
         isOpen={isWishlistOpen} 
         onClose={() => setIsWishlistOpen(false)} 
-        openCartModal={openCartModal} // 카트 모달을 여는 함수 전달
+        openCartModal={openCartModal}
       />
     </div>
   );

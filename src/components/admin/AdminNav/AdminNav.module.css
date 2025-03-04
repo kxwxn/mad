@@ -13,10 +13,11 @@
       top: 0;
       left: 0;
       width: 100%;
-      padding: 0;
+      height: 8vw;
       z-index: 50;
       display: flex;
       justify-content: center;
+      align-items: flex-start;
     }
     
     .container {
@@ -26,8 +27,7 @@
       gap: 0;
       flex-wrap: nowrap;
       padding: 0;
-      box-sizing: border-box;
-      position: relative;
+      height: 100%;
     }
     
     .link {
@@ -35,20 +35,20 @@
       color: #0000ff;
       text-decoration: none;
       font-weight: 800;
-      line-height: 0.9;
+      line-height: 1;
       white-space: nowrap;
       transition: opacity 0.3s ease;
-      position: relative;
       background: none;
       border: none;
       cursor: pointer;
       padding: 0 1vw;
-      z-index: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
     }
     
     .active {
       position: relative;
-      display: inline-block;
     }
     
     .active::before {
@@ -115,7 +115,7 @@
 
     .userButtonWrapper {
       position: fixed;
-      left: 0.17vw;
-      top: 2vw;
+      left: 1rem;
+      top: calc(8vw + 0.25rem);
       z-index: 100;
     }

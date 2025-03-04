@@ -13,7 +13,7 @@
       min-height: fit-content;
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 1001;
     }
 
     .headerButtons {
@@ -21,6 +21,8 @@
       flex-direction: row;
       align-items: center;
       gap: 15px;
+      position: relative;
+      z-index: 1001;
     }
 
     .wishlistIconWrapper {

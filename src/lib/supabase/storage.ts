@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabase } from './config';
 
 export async function uploadProductImage(file: File) {
   try {
@@ -30,8 +30,8 @@ export async function uploadProductImage(file: File) {
     });
 
     // 파일 업로드
-    const { data, error: uploadError } = await supabase.storage
-      .from('product-images')  // 버킷 이름이 정확한지 확인
+    const { data, error: uploadError } = await supabase().storage
+      .from('product-images')
       .upload(filePath, file, {
         cacheControl: '3600',
         upsert: false
@@ -47,7 +47,7 @@ export async function uploadProductImage(file: File) {
     }
 
     // 업로드된 파일의 공개 URL 가져오기
-    const { data: { publicUrl } } = supabase.storage
+    const { data: { publicUrl } } = supabase().storage
       .from('product-images')
       .getPublicUrl(filePath);
 

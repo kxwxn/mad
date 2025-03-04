@@ -6,7 +6,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2025-01-27.acacia'
+  apiVersion: '2025-02-24.acacia'
 });
 
 interface CartItem {
@@ -49,8 +49,8 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ sessionId: session.id });
-  } catch (error) {
-    console.error('Stripe checkout error:', error);
+  } catch {
+    console.error('Checkout error occurred');
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

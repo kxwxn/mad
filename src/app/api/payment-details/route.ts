@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-// Stripe 초기화
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: "2025-01-27.acacia",
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('Missing Stripe secret key');
+}
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2025-02-24.acacia",
 });
 
 export async function GET(request: NextRequest) {
@@ -45,10 +48,10 @@ export async function GET(request: NextRequest) {
     };
 
     return NextResponse.json(paymentDetails);
-  } catch (error: unknown) {
-    console.error("Error fetching payment details:", error);
+  } catch {
+    console.error('Error fetching payment details');
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Failed to fetch payment details" },
+      { error: 'Failed to fetch payment details' },
       { status: 500 }
     );
   }

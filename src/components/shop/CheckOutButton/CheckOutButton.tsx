@@ -7,9 +7,6 @@ import { useCartStore } from '@/store/cartStore';
 // Stripe 초기화
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
 
-// 디버깅을 위한 콘솔 로그 추가 (나중에 제거 가능)
-console.log('Stripe Key:', process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
-
 const CheckoutButton: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   

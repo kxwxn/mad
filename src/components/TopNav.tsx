@@ -52,12 +52,9 @@ export default function TopNav() {
       >
         <div className={styles.container}>
           <div className={styles.topRow}>
-            <Link
-              href="/"
-              className={styles.mad}
-            >
+            <div className={styles.mad}>
               MAD
-            </Link>
+            </div>
           </div>
           <div className={styles.middleRow}>
             <Link
