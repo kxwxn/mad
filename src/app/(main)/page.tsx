@@ -16,8 +16,10 @@ export default function Home() {
           playsInline 
           className={styles.heroVideo}
           preload="auto"
+          controls={false}
+          poster="/Videos/poster.jpg"
         >
-          <source src="/Videos/Video1.mp4" type="video/mp4" />
+          <source src="/Videos/Video1.mp4" type="video/mp4; codecs='avc1.42E01E, mp4a.40.2'" />
           Your browser does not support the video tag.
         </video>
       </section>
@@ -82,20 +84,44 @@ export default function Home() {
       <section className={styles.videoSection}>
         <div className={styles.videoContainer}>
           <div className={styles.videoWrapper}>
-            <video autoPlay loop muted playsInline className={styles.video}>
-              <source src="/Videos/Video2.mp4" type="video/mp4" />
+            <video 
+              autoPlay 
+              loop 
+              muted 
+              playsInline 
+              className={styles.video}
+              controls={false}
+              poster="/Videos/poster.jpg"
+            >
+              <source src="/Videos/Video2.mp4" type="video/mp4; codecs='avc1.42E01E, mp4a.40.2'" />
               Your browser does not support the video tag.
             </video>
           </div>
           <div className={styles.videoWrapper}>
-            <video autoPlay loop muted playsInline className={styles.video}>
-              <source src="/Videos/Video2.mp4" type="video/mp4" />
+            <video 
+              autoPlay 
+              loop 
+              muted 
+              playsInline 
+              className={styles.video}
+              controls={false}
+              poster="/Videos/poster.jpg"
+            >
+              <source src="/Videos/Video2.mp4" type="video/mp4; codecs='avc1.42E01E, mp4a.40.2'" />
               Your browser does not support the video tag.
             </video>
           </div>
           <div className={styles.videoWrapper}>
-            <video autoPlay loop muted playsInline className={styles.video}>
-              <source src="/Videos/Video2.mp4" type="video/mp4" />
+            <video 
+              autoPlay 
+              loop 
+              muted 
+              playsInline 
+              className={styles.video}
+              controls={false}
+              poster="/Videos/poster.jpg"
+            >
+              <source src="/Videos/Video2.mp4" type="video/mp4; codecs='avc1.42E01E, mp4a.40.2'" />
               Your browser does not support the video tag.
             </video>
           </div>
