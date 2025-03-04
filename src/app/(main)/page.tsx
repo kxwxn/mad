@@ -9,8 +9,15 @@ export default function Home() {
     <main className={styles.main}>
       <TopNav />
       <section className={styles.fullscreenSection}>
-        <video autoPlay loop muted playsInline className={styles.heroVideo}>
-          <source src="/Videos/Video 1.mp4" type="video/mp4" />
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+          className={styles.heroVideo}
+          preload="auto"
+        >
+          <source src="/Videos/Video1.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </section>
@@ -62,7 +69,7 @@ export default function Home() {
       <section className={styles.fullImageSection}>
         <div className={styles.fullImageContainer}>
           <Image
-            src="/Images/Foto 4.jpg"
+            src="/Images/Foto4.jpg"
             alt="Image 1"
             fill
             sizes="200vw"
@@ -76,19 +83,19 @@ export default function Home() {
         <div className={styles.videoContainer}>
           <div className={styles.videoWrapper}>
             <video autoPlay loop muted playsInline className={styles.video}>
-              <source src="/Videos/Video 2.mp4" type="video/mp4" />
+              <source src="/Videos/Video2.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
           <div className={styles.videoWrapper}>
             <video autoPlay loop muted playsInline className={styles.video}>
-              <source src="/Videos/Video 2.mp4" type="video/mp4" />
+              <source src="/Videos/Video2.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
           <div className={styles.videoWrapper}>
             <video autoPlay loop muted playsInline className={styles.video}>
-              <source src="/Videos/Video 2.mp4" type="video/mp4" />
+              <source src="/Videos/Video2.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
@@ -105,7 +112,7 @@ export default function Home() {
         <div className={styles.imageRow}>
           <div className={styles.imageWrapper}>
             <Image
-              src="/Images/Fotos A-F/A.jpg"
+              src="/Images/FotosAF/A.jpg"
               alt="Image A"
               fill
               sizes="33vw"
@@ -115,7 +122,7 @@ export default function Home() {
           </div>
           <div className={styles.imageWrapper}>
             <Image
-              src="/Images/Fotos A-F/B.jpg"
+              src="/Images/FotosAF/B.jpg"
               alt="Image B"
               fill
               sizes="33vw"
@@ -125,7 +132,7 @@ export default function Home() {
           </div>
           <div className={styles.imageWrapper}>
             <Image
-              src="/Images/Fotos A-F/C.jpg"
+              src="/Images/FotosAF/C.jpg"
               alt="Image C"
               fill
               sizes="33vw"
@@ -137,7 +144,7 @@ export default function Home() {
         <div className={styles.imageRow}>
           <div className={styles.imageWrapper}>
             <Image
-              src="/Images/Fotos A-F/D.jpg"
+              src="/Images/FotosAF/D.jpg"
               alt="Image D"
               fill
               sizes="33vw"
@@ -147,7 +154,7 @@ export default function Home() {
           </div>
           <div className={styles.imageWrapper}>
             <Image
-              src="/Images/Fotos A-F/E.jpg"
+              src="/Images/FotosAF/E.jpg"
               alt="Image E"
               fill
               sizes="33vw"
@@ -157,7 +164,7 @@ export default function Home() {
           </div>
           <div className={styles.imageWrapper}>
             <Image
-              src="/Images/Fotos A-F/F.jpg"
+              src="/Images/FotosAF/F.jpg"
               alt="Image F"
               fill
               sizes="33vw"
