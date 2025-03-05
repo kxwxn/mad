@@ -20,10 +20,7 @@ export interface Product {
   l: number;
   os: number;
   product_type: ProductType;
-  colors?: Array<{
-    color: string;
-    quantity: number;
-  }>;
+  colors?: ColorVariant[];
 }
 
 export const getProducts = async (from?: number, to?: number) => {
