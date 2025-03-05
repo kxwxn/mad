@@ -1,22 +1,63 @@
 "use client";
 
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import Link from "next/link";
 import styles from "./ProductList.module.css";
 import Image from 'next/image';
 import { useInfiniteProducts } from '@/hooks/queries/useProducts';
-import { useRealtimeProducts } from '@/hooks/useRealtimeProducts';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { useInView } from 'react-intersection-observer';
-import { Product } from '@/types/product.types';
+import { Product } from "@/lib/supabase/product";
 
-// ProductCard 컴포넌트를 분리하여 메모이제이션
 const ProductCard = memo(({ product, index }: { product: Product; index: number }) => {
-  const { id, name, price, image_urls, status, description } = product;
+  const [isHovered, setIsHovered] = useState(false);
+  const { id, name, price, image_urls, description, product_type, s, m, l, os, colors } = product;
   const imageUrl = image_urls?.[0] || '/images/placeholder.png';
 
+  const renderSizeInfo = () => {
+    if (product_type === 'Miscellaneous') {
+      return <div className={styles.sizeInfo}>{os > 0 ? 'AVAILABLE' : 'SOLD OUT'}</div>;
+    }
+    
+    if (product_type === 'T-shirts' || product_type === 'Hoodie') {
+      if (s === 0 && m === 0 && l === 0) {
+        return <div className={styles.sizeInfo}>SOLD OUT</div>;
+      }
+
+      return (
+        <div className={styles.sizeInfo}>
+          <span className={s === 0 ? styles.soldOut : ''}>{s === 0 ? 'S' : 'S'}</span>
+          <span className={m === 0 ? styles.soldOut : ''}>{m === 0 ? 'M' : 'M'}</span>
+          <span className={l === 0 ? styles.soldOut : ''}>{l === 0 ? 'L' : 'L'}</span>
+        </div>
+      );
+    }
+
+    if (product_type === 'Earrings') {
+      if (!colors || colors.length === 0) {
+        return <div className={styles.sizeInfo}>SOLD OUT</div>;
+      }
+      return (
+        <div className={styles.sizeInfo}>
+          {colors.map((colorVariant, index) => (
+            <span key={index} className={colorVariant.quantity === 0 ? styles.soldOut : ''}>
+              {colorVariant.color}
+            </span>
+          ))}
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
-    <Link href={`/shop/${id}`} className={styles.productCard}>
+    <Link 
+      href={`/shop/${id}`} 
+      className={styles.productCard}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div className={styles.imageContainer}>
         <Image 
           src={imageUrl}
@@ -24,12 +65,14 @@ const ProductCard = memo(({ product, index }: { product: Product; index: number 
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 33vw, 25vw"
           className={styles.image}
-          style={{ objectFit: 'cover' }}
+          style={{ objectFit: 'cover' }} 
           priority={index < 4} // 처음 4개 이미지만 priority 적용
         />
-        <span className={`${styles.status} ${status === 'SOLD_OUT' ? styles.soldOut : ''}`}>
-          {status}
-        </span>
+        {isHovered && (
+          <div className={styles.sizeOverlay}>
+            {renderSizeInfo()}
+          </div>
+        )}
       </div>
       <div className={styles.productInfo}>
         <h4 className={styles.name}>{name}</h4>
@@ -45,9 +88,6 @@ const ProductCard = memo(({ product, index }: { product: Product; index: number 
 ProductCard.displayName = 'ProductCard';
 
 const ProductList: React.FC = () => {
-  // 실시간 업데이트 활성화
-  useRealtimeProducts();
-
   const { ref, inView } = useInView();
 
   const {
@@ -66,7 +106,11 @@ const ProductList: React.FC = () => {
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (status === 'pending') {
-    return <div className={styles.loading}>로딩 중...</div>;
+    return (
+      <div className={styles.loadingContainer}>
+        <LoadingSpinner size="large" />
+      </div>
+    );
   }
 
   if (status === 'error') {

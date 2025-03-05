@@ -34,15 +34,6 @@
   overflow: hidden;
 }
 
-.productLink:hover .image {
-  transform: scale(1.05);
-  opacity: 0.7;
-}
-
-.productLink:hover .status {
-  opacity: 1;
-}
-
 .imageContainer {
   position: relative;
   width: 100%;
@@ -52,8 +43,12 @@
 }
 
 .image {
-  position: absolute !important; /* Next.js Image 컴포넌트를 위해 필요 */
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  position: absolute !important;
+  transition: transform 0.3s ease;
+}
+
+.productCard:hover .image {
+  transform: scale(1.05);
 }
 
 .status {
@@ -75,7 +70,7 @@
 
 .soldOut {
   color: #000;
-  text-decoration: line-through;
+  text-decoration: line-through !important;
 }
 
 .productInfo {
@@ -128,15 +123,10 @@
   text-decoration: none;
   color: inherit;
   display: block;
-  transition: transform 0.2s ease;
 }
 
 .productLink:visited {
   color: inherit;
-}
-
-.productLink:hover {
-  transform: translateY(-5px);
 }
 
 .description {
@@ -194,4 +184,41 @@
   justify-content: center;
   align-items: center;
   padding: 0.5rem;
+}
+
+.sizeOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  background-color: rgba(255, 255, 255, 0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.productCard:hover .sizeOverlay {
+  opacity: 1;
+}
+
+.sizeInfo {
+  display: flex;
+  gap: 2rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #000000;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+.sizeInfo span {
+  color: #000000;
+  text-decoration: none;
+  margin: 0.3rem 0;
 }
