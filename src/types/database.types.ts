@@ -6,6 +6,11 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+export interface ColorVariant {
+  color: string;
+  quantity: number;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -26,6 +31,8 @@ export interface Database {
           size_3: number
           os: number
           updated_at: string
+          product_type: 'T-shirts' | 'Hoodie' | 'Earrings' | 'Miscellaneous'
+          colors: ColorVariant[]
         }
         Insert: Omit<Database['public']['Tables']['products']['Row'], 'id' | 'created_at' | 'updated_at'>
         Update: Partial<Database['public']['Tables']['products']['Insert']>
