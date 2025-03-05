@@ -17,9 +17,14 @@ export interface Database {
           description: string
           price: number
           image_urls: string[]
-          status: 'IN_STOCK' | 'SOLD_OUT'
-          category: string
-          sizes: string[]
+          image_url: string | null
+          status: 'AVAILABLE' | 'SOLD_OUT'
+          product_info: string
+          sizeType: 'numbered' | 'onesize'
+          size_1: number
+          size_2: number
+          size_3: number
+          os: number
           updated_at: string
         }
         Insert: Omit<Database['public']['Tables']['products']['Row'], 'id' | 'created_at' | 'updated_at'>
@@ -36,4 +41,4 @@ export interface Database {
       [_ in never]: never
     }
   }
-} 
+}
