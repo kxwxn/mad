@@ -15,6 +15,7 @@ interface CartItem {
   selectedSize: string;
   price: number;
   quantity: number;
+  id: string;
 }
 
 export async function POST(req: Request) {
@@ -38,6 +39,10 @@ export async function POST(req: Request) {
           product_data: {
             name: item.name,
             images: item.imageUrl ? [item.imageUrl] : [],
+            metadata: {
+              productId: item.id,
+              selectedSize: item.selectedSize || 'OS',
+            },
           },
           unit_amount: Math.round(item.price * 100), // Stripe는 센트 단위 사용
         },

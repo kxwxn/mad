@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import { Product } from "@/lib/supabase/product";
 
 // 1. 명확한 타입 정의
 type PageProps = {
@@ -33,5 +34,15 @@ export default async function ProductPage({ params }: PageProps) {
     notFound();
   }
 
-  return <ProductCard product={product} />;
+  // Product 타입으로 변환
+  const productData: Product = {
+    ...product,
+    s: product.s || 0,
+    m: product.m || 0,
+    l: product.l || 0,
+    os: product.os || 0,
+    colors: product.colors || [],
+  };
+
+  return <ProductCard product={productData} />;
 }

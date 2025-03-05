@@ -13,10 +13,12 @@ interface PaymentDetails {
   created: number;
   payment_intent: string;
   items: Array<{
+    id: string;
     name: string;
     quantity: number;
     price: number;
     image?: string;
+    selectedSize: string;
   }>;
 }
 
@@ -46,9 +48,29 @@ export default function SuccessPageContent() {
     enabled: !!sessionId,
   });
   
-  // 결제 성공 시 장바구니 비우기
+  // 결제 성공 시 재고 업데이트 및 장바구니 비우기
   useEffect(() => {
     if (paymentDetails) {
+      // 재고 업데이트 API 호출
+      const updateStock = async () => {
+        try {
+          const response = await fetch('/api/update-stock', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ items: paymentDetails.items }),
+          });
+
+          if (!response.ok) {
+            console.error('Failed to update stock');
+          }
+        } catch (error) {
+          console.error('Error updating stock:', error);
+        }
+      };
+
+      updateStock();
       clearCart();
     }
   }, [paymentDetails, clearCart]);

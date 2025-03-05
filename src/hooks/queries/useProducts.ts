@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getProducts, createProduct, updateProduct, deleteProduct, getProduct } from '@/lib/supabase/queries';
-import { Product } from '@/types/product.types';
+import { getProducts, getProduct, insertProduct as createProduct, updateProduct, deleteProduct } from '@/lib/supabase/product';
+import { Product } from '@/lib/supabase/product';
 
 const ITEMS_PER_PAGE = 8;
 

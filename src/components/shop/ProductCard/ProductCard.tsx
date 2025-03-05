@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import styles from "./ProductCard.module.css";
 import Image from "next/image";
 import CartModal from "@/components/shop/CartModal/CartModal";
@@ -8,18 +8,7 @@ import Link from "next/link";
 import { useCartStore } from "@/store/cartStore";
 import { useWishlistStore } from "@/store/wishlistStore";
 import WishlistIcon from "../WishlistIcon/WishlistIcon";
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  description?: string;
-  image_urls: string[];
-  details?: string[];
-  size_guide?: string;
-  shipping?: string;
-  product_info?: string;
-}
+import { Product } from "@/lib/supabase/product";
 
 interface ProductCardProps {
   product: Product;
@@ -30,45 +19,56 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [openInfo, setOpenInfo] = useState(false);
   const [openShipping, setOpenShipping] = useState(false);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
-  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [quantity, setQuantity] = useState(1);
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
-  const [showSizeAlert, setShowSizeAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   
-  // 위시리스트 관련 상태와 함수
   const isInWishlist = useWishlistStore(state => state.isInWishlist(product.id));
   const addToWishlist = useWishlistStore(state => state.addItem);
   const removeFromWishlist = useWishlistStore(state => state.removeItem);
+  const addToCart = useCartStore(state => state.addItem);
 
   const handleAddToCart = () => {
-    if (!selectedSize) {
-      setError("Please select a size");
-      setShowSizeAlert(true);
+    if (isSoldOut) return;
+
+    if (product.product_type === 'T-shirts' || product.product_type === 'Hoodie') {
+      if (!selectedSize) {
+        setError("Please select a size");
+        setShowAlert(true);
+        return;
+      }
+    }
+
+    if (product.product_type === 'Earrings' && !selectedColor) {
+      setError("Please select a color");
+      setShowAlert(true);
       return;
     }
 
     try {
-      useCartStore.getState().addItem({
+      const cartItem = {
         id: product.id,
         name: product.name,
         price: product.price,
         imageUrl: product.image_urls[0],
-        quantity: 1,
-        selectedSize,
-      });
-
+        selectedSize: selectedSize || 'OS',
+        selectedColor,
+        quantity
+      };
+      
+      addToCart(cartItem);
       setSuccessMessage("Added to cart");
       setTimeout(() => setSuccessMessage(""), 3000);
-      
       setIsCartModalOpen(true);
-      
-      console.log("Cart items:", useCartStore.getState().items);
     } catch (err) {
       console.error("Error adding to cart:", err);
       setError("Failed to add to cart");
-      setShowSizeAlert(true);
+      setShowAlert(true);
     }
   };
   
@@ -85,7 +85,9 @@ export default function ProductCard({ product }: ProductCardProps) {
           name: product.name,
           price: product.price,
           imageUrl: product.image_urls[0],
-          sizes: ["1", "2", "3"]  // availableSizes를 sizes로 변경
+          sizes: product.product_type === 'T-shirts' || product.product_type === 'Hoodie' 
+            ? ['S', 'M', 'L'] 
+            : ['OS']
         };
         
         addToWishlist(wishlistItem);
@@ -94,11 +96,153 @@ export default function ProductCard({ product }: ProductCardProps) {
       }
     }
   };
-  
-  // 위시리스트 모달 열기 함수 수정
-  const openWishlistModal = () => {
-    setIsWishlistModalOpen(true);
+
+  const renderSizeOptions = () => {
+    if (product.product_type !== 'T-shirts' && product.product_type !== 'Hoodie') {
+      return null;
+    }
+
+    return (
+      <div className={styles.selectBoxContainer}>
+        <div className={styles.selectBoxWrapper}>
+          <div
+            className={`${styles.selectBox} ${isSelectOpen ? styles.active : ""}`}
+            onClick={() => setIsSelectOpen(!isSelectOpen)}
+          >
+            <span>{selectedSize || "SELECT SIZE"}</span>
+            <span className={styles.arrowDown}>▼</span>
+          </div>
+          {isSelectOpen && (
+            <div className={styles.optionsContainer}>
+              <div
+                className={styles.option}
+                onClick={() => {
+                  if (product.s > 0) {
+                    setSelectedSize("S");
+                    setIsSelectOpen(false);
+                  }
+                }}
+                style={{
+                  cursor: product.s > 0 ? 'pointer' : 'not-allowed',
+                  color: product.s > 0 ? '#000' : '#999',
+                  textDecoration: product.s === 0 ? 'line-through' : 'none'
+                }}
+              >
+                S
+              </div>
+              <div
+                className={styles.option}
+                onClick={() => {
+                  if (product.m > 0) {
+                    setSelectedSize("M");
+                    setIsSelectOpen(false);
+                  }
+                }}
+                style={{
+                  cursor: product.m > 0 ? 'pointer' : 'not-allowed',
+                  color: product.m > 0 ? '#000' : '#999',
+                  textDecoration: product.m === 0 ? 'line-through' : 'none'
+                }}
+              >
+                M
+              </div>
+              <div
+                className={styles.option}
+                onClick={() => {
+                  if (product.l > 0) {
+                    setSelectedSize("L");
+                    setIsSelectOpen(false);
+                  }
+                }}
+                style={{
+                  cursor: product.l > 0 ? 'pointer' : 'not-allowed',
+                  color: product.l > 0 ? '#000' : '#999',
+                  textDecoration: product.l === 0 ? 'line-through' : 'none'
+                }}
+              >
+                L
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   };
+
+  const renderColorOptions = () => {
+    if (product.product_type !== 'Earrings' || !product.colors?.length) {
+      return null;
+    }
+
+    return (
+      <div className={styles.selectBoxContainer}>
+        <div className={styles.selectBoxWrapper}>
+          <div
+            className={`${styles.selectBox} ${isSelectOpen ? styles.active : ""}`}
+            onClick={() => setIsSelectOpen(!isSelectOpen)}
+          >
+            <span>{selectedColor || "SELECT COLOR"}</span>
+            <span className={styles.arrowDown}>▼</span>
+          </div>
+          {isSelectOpen && (
+            <div className={styles.optionsContainer}>
+              {product.colors.map((colorVariant, index) => (
+                <div
+                  key={index}
+                  className={styles.option}
+                  onClick={() => {
+                    if (colorVariant.quantity > 0) {
+                      setSelectedColor(colorVariant.color);
+                      setIsSelectOpen(false);
+                    }
+                  }}
+                  style={{
+                    cursor: colorVariant.quantity > 0 ? 'pointer' : 'not-allowed',
+                    color: colorVariant.quantity > 0 ? '#000' : '#999',
+                    textDecoration: colorVariant.quantity === 0 ? 'line-through' : 'none'
+                  }}
+                >
+                  {colorVariant.color}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const renderQuantitySelector = () => {
+    return (
+      <div className={styles.quantitySelector}>
+        <button 
+          className={styles.quantityButton}
+          onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
+          type="button"
+        >
+          -
+        </button>
+        <span className={styles.quantityValue}>{quantity}</span>
+        <button 
+          className={styles.quantityButton}
+          onClick={() => setQuantity(prev => prev + 1)}
+          type="button"
+        >
+          +
+        </button>
+      </div>
+    );
+  };
+
+  const isSoldOut = useMemo(() => {
+    if (product.product_type === 'T-shirts' || product.product_type === 'Hoodie') {
+      return product.s === 0 && product.m === 0 && product.l === 0;
+    }
+    if (product.product_type === 'Earrings') {
+      return !product.colors || product.colors.length === 0 || product.colors.every(c => c.quantity === 0);
+    }
+    return product.os === 0;
+  }, [product]);
 
   return (
     <div className={styles.container}>
@@ -106,7 +250,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {product.image_urls?.map((url, index) => (
           <Image
             key={index}
-            src={url || "/api/placeholder/400/400"}
+            src={url}
             alt={`${product.name} - Image ${index + 1}`}
             width={500}
             height={300}
@@ -136,14 +280,14 @@ export default function ProductCard({ product }: ProductCardProps) {
               </button>
               <button 
                 className={styles.wishlistModalButton} 
-                onClick={openWishlistModal}
+                onClick={() => setIsWishlistModalOpen(true)}
                 type="button"
                 aria-label="Open wishlist"
               >
                 <WishlistIcon 
                   productId=""
                   filled={false}
-                  onClick={openWishlistModal}
+                  onClick={() => setIsWishlistModalOpen(true)}
                   className={styles.headerWishlistIcon}
                 />
               </button>
@@ -178,21 +322,21 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </thead>
                 <tbody>
                   <tr>
-                    <td>1</td>
+                    <td>S</td>
                     <td>42cm</td>
                     <td>96cm</td>
                     <td>61cm</td>
                     <td>65cm</td>
                   </tr>
                   <tr>
-                    <td>2</td>
+                    <td>M</td>
                     <td>44cm</td>
                     <td>100cm</td>
                     <td>62cm</td>
                     <td>67cm</td>
                   </tr>
                   <tr>
-                    <td>3</td>
+                    <td>L</td>
                     <td>46cm</td>
                     <td>104cm</td>
                     <td>63cm</td>
@@ -203,69 +347,33 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
 
-          <div className={styles.selectBoxContainer}>
-            <div className={styles.selectBoxWrapper}>
-              <div
-                className={`${styles.selectBox} ${
-                  isSelectOpen ? styles.active : ""
-                }`}
-                onClick={() => setIsSelectOpen(!isSelectOpen)}
-              >
-                <span>{selectedSize || "SELECT SIZE"}</span>
-                <span className={styles.arrowDown}>▼</span>
-              </div>
-              {isSelectOpen && (
-                <div className={styles.optionsContainer}>
-                  <div
-                    className={styles.option}
-                    onClick={() => {
-                      setSelectedSize("1");
-                      setIsSelectOpen(false);
-                    }}
-                  >
-                    1
-                  </div>
-                  <div
-                    className={styles.option}
-                    onClick={() => {
-                      setSelectedSize("2");
-                      setIsSelectOpen(false);
-                    }}
-                  >
-                    2
-                  </div>
-                  <div
-                    className={styles.option}
-                    onClick={() => {
-                      setSelectedSize("3");
-                      setIsSelectOpen(false);
-                    }}
-                  >
-                    3
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className={styles.addToCartBox}>
-              <button 
-                className={styles.addToCartButton} 
-                onClick={handleAddToCart}
-                type="button"
-              >
-                ADD TO CART
-              </button>
-              <button 
-                className={styles.wishlistButton} 
-                onClick={handleWishlistToggle}
-                type="button"
-              >
-                <WishlistIcon 
-                  productId={product.id}
-                  product={product}
-                  className={styles.wishlistIconInButton}
-                />
-              </button>
-            </div>
+          {renderSizeOptions()}
+          {renderColorOptions()}
+
+          <div className={styles.addToCartBox}>
+            <button
+              className={`${styles.addToCartButton} ${isSoldOut ? styles.soldOut : ''}`}
+              onClick={handleAddToCart}
+              type="button"
+              disabled={isSoldOut}
+            >
+              {isSoldOut ? 'SOLD OUT' : 'ADD TO CART'}
+            </button>
+            <button 
+              className={styles.wishlistButton} 
+              onClick={handleWishlistToggle}
+              type="button"
+            >
+              <WishlistIcon 
+                productId={product.id}
+                product={product}
+                className={styles.wishlistIconInButton}
+              />
+            </button>
+          </div>
+
+          <div className={styles.quantitySelectorContainer}>
+            {renderQuantitySelector()}
           </div>
 
           <div className={styles.accordionContainer}>
@@ -319,8 +427,8 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
       </section>
 
-      {showSizeAlert && (
-        <div className={styles.alertOverlay} onClick={() => setShowSizeAlert(false)}>
+      {showAlert && (
+        <div className={styles.alertOverlay} onClick={() => setShowAlert(false)}>
           <div className={styles.alertBox} onClick={(e) => e.stopPropagation()}>
             {error}
           </div>

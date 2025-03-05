@@ -1,27 +1,7 @@
 import { getClient } from './client';
+import { Product, ProductInput, ProductType, ColorVariant } from '@/types/product.types';
 
-export type ProductType = 'T-shirts' | 'Hoodie' | 'Earrings' | 'Miscellaneous';
-
-export interface ColorVariant {
-  color: string;
-  quantity: number;
-}
-
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  product_info: string;
-  image_urls: string[];
-  created_at?: string;
-  s: number;
-  m: number;
-  l: number;
-  os: number;
-  product_type: ProductType;
-  colors?: ColorVariant[];
-}
+export type { Product, ProductInput, ProductType, ColorVariant };
 
 export const getProducts = async (from?: number, to?: number) => {
   const supabase = getClient();
@@ -51,20 +31,6 @@ export const getProduct = async (id: string) => {
   if (error) throw error;
   return data as Product;
 };
-
-export interface ProductInput {
-  name: string;
-  description: string;
-  price: number;
-  image_urls: string[];
-  product_type: ProductType;
-  s: number;
-  m: number;
-  l: number;
-  os: number;
-  colors: ColorVariant[];
-  product_info: string;
-}
 
 export async function insertProduct(productData: ProductInput): Promise<Product> {
   try {

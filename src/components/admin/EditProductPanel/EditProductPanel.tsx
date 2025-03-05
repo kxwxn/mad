@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { uploadProductImage } from '@/lib/supabase/storage';
 import styles from './EditProductPanel.module.css';
-import { Product, SizeType } from '@/types/product.types';
+import { Product, SizeType, ProductType } from '@/types/product.types';
 import { useProductMutations } from '@/hooks/queries/useProducts';
 
 interface EditProductPanelProps {
@@ -22,7 +22,7 @@ export default function EditProductPanel({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [newImages, setNewImages] = useState<File[]>([]);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const { updateProduct, deleteProduct, isLoading } = useProductMutations();
 
   useEffect(() => {
@@ -30,7 +30,8 @@ export default function EditProductPanel({
       const sizeType: SizeType = product.os > 0 ? 'onesize' : 'numbered';
       setFormData({
         ...product,
-        sizeType
+        sizeType,
+        product_type: product.product_type || 'T-shirts'
       });
       setIsClosing(false);
       setNewImages([]);
@@ -52,30 +53,42 @@ export default function EditProductPanel({
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (!formData) return;
+    
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev!,
-      [name]: name === 'price' || name.startsWith('size') || name === 'os' ? Number(value) : value
-    }));
+    setFormData(prev => {
+      if (!prev) return null;
+      return { ...prev, [name]: value };
+    });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const newFiles = Array.from(e.target.files);
-      if (formData!.image_urls.length + newImages.length + newFiles.length > 5) {
-        alert('Maximum 5 images allowed');
-        return;
-      }
-      setNewImages(prev => [...prev, ...newFiles].slice(0, 5 - formData!.image_urls.length));
+  const handleStockChange = (size: 's' | 'm' | 'l' | 'os', value: string) => {
+    if (!formData) return;
+    
+    const numValue = parseInt(value) || 0;
+    setFormData(prev => {
+      if (!prev) return null;
+      return { ...prev, [size]: numValue };
+    });
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      setNewImages(prev => [...prev, ...Array.from(files)]);
     }
   };
 
-  const removeExistingImage = (index: number) => {
-    setFormData(prev => ({
-      ...prev!,
-      image_urls: prev!.image_urls.filter((_, i) => i !== index)
-    }));
+  const removeImage = (index: number) => {
+    if (!formData) return;
+    
+    const newImageUrls = [...formData.image_urls];
+    newImageUrls.splice(index, 1);
+    setFormData(prev => {
+      if (!prev) return null;
+      return { ...prev, image_urls: newImageUrls };
+    });
   };
 
   const removeNewImage = (index: number) => {
@@ -87,7 +100,6 @@ export default function EditProductPanel({
     if (!formData) return;
 
     try {
-      // 새 이미지 업로드
       let updatedImageUrls = [...formData.image_urls];
       if (newImages.length > 0) {
         const uploadPromises = newImages.map(file => uploadProductImage(file));
@@ -95,20 +107,20 @@ export default function EditProductPanel({
         updatedImageUrls = [...updatedImageUrls, ...newImageUrls];
       }
 
-      // 업데이트할 데이터 준비
-      const updateData = {
+      const updateData: Partial<Product> = {
         name: formData.name,
         price: Number(formData.price),
         description: formData.description,
         product_info: formData.product_info,
         image_urls: updatedImageUrls,
-        size_1: formData.sizeType === 'numbered' ? Number(formData.size_1) : 0,
-        size_2: formData.sizeType === 'numbered' ? Number(formData.size_2) : 0,
-        size_3: formData.sizeType === 'numbered' ? Number(formData.size_3) : 0,
-        os: formData.sizeType === 'onesize' ? Number(formData.os) : 0
+        s: formData.s,
+        m: formData.m,
+        l: formData.l,
+        os: formData.os,
+        product_type: formData.product_type as ProductType,
+        status: formData.status
       };
 
-      // 데이터 업데이트
       await updateProduct({ id: formData.id, updates: updateData });
       onProductUpdate();
       handleClose();
@@ -193,118 +205,125 @@ export default function EditProductPanel({
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="sizeType">Size Type</label>
+                <label htmlFor="productType">Product Type</label>
                 <select
-                  id="sizeType"
-                  name="sizeType"
-                  value={formData.sizeType}
-                  onChange={handleInputChange}
+                  id="productType"
+                  name="product_type"
+                  value={formData?.product_type || 'T-shirts'}
+                  onChange={(e) => {
+                    const newType = e.target.value as ProductType;
+                    setFormData(prev => prev ? {...prev, product_type: newType} : null);
+                  }}
+                  required
                 >
-                  <option value="numbered">Size</option>
-                  <option value="onesize">OS</option>
+                  <option value="T-shirts">T-shirts</option>
+                  <option value="Hoodie">Hoodie</option>
+                  <option value="Earrings">Earrings</option>
+                  <option value="Miscellaneous">Miscellaneous</option>
                 </select>
               </div>
 
-              {formData.sizeType === 'numbered' ? (
-                <div className={styles.sizesContainer}>
-                  <div className={styles.sizeGroup}>
-                    <label>Size 1</label>
-                    <input
-                      type="number"
-                      name="size_1"
-                      value={formData.size_1}
-                      onChange={handleInputChange}
-                      min="0"
-                    />
-                  </div>
-                  <div className={styles.sizeGroup}>
-                    <label>Size 2</label>
-                    <input
-                      type="number"
-                      name="size_2"
-                      value={formData.size_2}
-                      onChange={handleInputChange}
-                      min="0"
-                    />
-                  </div>
-                  <div className={styles.sizeGroup}>
-                    <label>Size 3</label>
-                    <input
-                      type="number"
-                      name="size_3"
-                      value={formData.size_3}
-                      onChange={handleInputChange}
-                      min="0"
-                    />
+              {formData.product_type === 'T-shirts' || formData.product_type === 'Hoodie' ? (
+                <div className={styles.stockGroup}>
+                  <h3>Size Stock</h3>
+                  <div className={styles.sizeInputs}>
+                    <div>
+                      <label>S</label>
+                      <input
+                        type="number"
+                        name="s"
+                        value={formData.s}
+                        onChange={(e) => handleStockChange('s', e.target.value)}
+                        min="0"
+                      />
+                    </div>
+                    <div>
+                      <label>M</label>
+                      <input
+                        type="number"
+                        name="m"
+                        value={formData.m}
+                        onChange={(e) => handleStockChange('m', e.target.value)}
+                        min="0"
+                      />
+                    </div>
+                    <div>
+                      <label>L</label>
+                      <input
+                        type="number"
+                        name="l"
+                        value={formData.l}
+                        onChange={(e) => handleStockChange('l', e.target.value)}
+                        min="0"
+                      />
+                    </div>
                   </div>
                 </div>
               ) : (
-                <div className={styles.sizesContainer}>
-                  <div className={styles.sizeGroup}>
-                    <label>OS Quantity</label>
-                    <input
-                      type="number"
-                      name="os"
-                      value={formData.os}
-                      onChange={handleInputChange}
-                      min="0"
-                    />
+                <div className={styles.stockGroup}>
+                  <h3>Stock</h3>
+                  <div className={styles.sizeInputs}>
+                    <div>
+                      <label>Quantity</label>
+                      <input
+                        type="number"
+                        name="os"
+                        value={formData.os}
+                        onChange={(e) => handleStockChange('os', e.target.value)}
+                        min="0"
+                      />
+                    </div>
                   </div>
                 </div>
               )}
 
               <div className={styles.formGroup}>
                 <label>Product Images (Max 5)</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handleImageChange}
-                  className={styles.fileInput}
-                />
-                <div className={styles.imagePreviewContainer}>
+                <div className={styles.imageGrid}>
                   {formData.image_urls.map((url, index) => (
-                    <div key={`existing-${index}`} className={styles.imagePreview}>
+                    <div key={`existing-${index}`} className={styles.imageContainer}>
                       <Image
                         src={url}
                         alt={`Product ${index + 1}`}
                         width={100}
                         height={100}
-                        style={{ objectFit: 'cover' }}
+                        className={styles.image}
                       />
                       <button 
                         type="button"
-                        onClick={() => removeExistingImage(index)}
-                        className={styles.removeImageBtn}
+                        onClick={() => removeImage(index)}
+                        className={styles.removeImage}
                       >
                         ×
                       </button>
-                      <span className={styles.imageNumber}>{index + 1}</span>
                     </div>
                   ))}
                   {newImages.map((file, index) => (
-                    <div key={`new-${index}`} className={styles.imagePreview}>
+                    <div key={`new-${index}`} className={styles.imageContainer}>
                       <Image
                         src={URL.createObjectURL(file)}
                         alt={`New ${index + 1}`}
                         width={100}
                         height={100}
-                        style={{ objectFit: 'cover' }}
-                        unoptimized
+                        className={styles.image}
                       />
                       <button 
                         type="button"
                         onClick={() => removeNewImage(index)}
-                        className={styles.removeImageBtn}
+                        className={styles.removeImage}
                       >
                         ×
                       </button>
-                      <span className={styles.imageNumber}>
-                        {formData.image_urls.length + index + 1}
-                      </span>
                     </div>
                   ))}
                 </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageUpload}
+                  className={styles.fileInput}
+                />
               </div>
 
               <div className={styles.buttonGroup}>

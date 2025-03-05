@@ -1,5 +1,11 @@
 export type ProductStatus = 'AVAILABLE' | 'SOLD_OUT';
 export type SizeType = 'numbered' | 'onesize';
+export type ProductType = 'T-shirts' | 'Hoodie' | 'Earrings' | 'Miscellaneous';
+
+export interface ColorVariant {
+  color: string;
+  quantity: number;
+}
 
 export interface Product {
   id: string;
@@ -11,12 +17,28 @@ export interface Product {
   status: ProductStatus;
   product_info: string;
   sizeType: SizeType;
-  size_1: number;
-  size_2: number;
-  size_3: number;
+  s: number;
+  m: number;
+  l: number;
   os: number;
+  product_type: ProductType;
   created_at: string;
   updated_at: string;
+  colors?: ColorVariant[];
 }
 
-export type ProductInput = Omit<Product, 'id' | 'created_at' | 'updated_at'>;
+export interface ProductInput {
+  name: string;
+  description: string;
+  price: number;
+  image_urls: string[];
+  product_type: ProductType;
+  s: number;
+  m: number;
+  l: number;
+  os: number;
+  colors: ColorVariant[];
+  product_info: string;
+}
+
+export type ProductUpdateInput = Partial<ProductInput>;

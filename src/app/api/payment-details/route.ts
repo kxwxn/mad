@@ -38,11 +38,14 @@ export async function GET(request: NextRequest) {
       items:
         session.line_items?.data.map((item) => {
           const product = item.price?.product as Stripe.Product;
+          const metadata = product.metadata || {};
           return {
+            id: metadata.productId || '',
             name: product.name || item.description || "",
             quantity: item.quantity || 0,
             price: (item.amount_total || 0) / 100, // 센트 단위를 달러/유로 단위로 변환
             image: product.images?.[0] || undefined,
+            selectedSize: metadata.selectedSize || 'OS',
           };
         }) || [],
     };
