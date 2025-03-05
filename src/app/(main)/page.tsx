@@ -17,7 +17,7 @@ export default function Home() {
           className={styles.heroVideo}
           preload="auto"
         >
-          <source src="/Videos/Video1.mp4" type="video/mp4" />
+          <source src={process.env.NEXT_PUBLIC_VIDEO1_URL} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </section>
@@ -90,7 +90,7 @@ export default function Home() {
               className={styles.video}
               preload="auto"
             >
-              <source src="/Videos/Video2.mp4" type="video/mp4" />
+              <source src={process.env.NEXT_PUBLIC_VIDEO2_URL} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
@@ -103,7 +103,7 @@ export default function Home() {
               className={styles.video}
               preload="auto"
             >
-              <source src="/Videos/Video2.mp4" type="video/mp4" />
+              <source src={process.env.NEXT_PUBLIC_VIDEO2_URL} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
@@ -116,7 +116,7 @@ export default function Home() {
               className={styles.video}
               preload="auto"
             >
-              <source src="/Videos/Video2.mp4" type="video/mp4" />
+              <source src={process.env.NEXT_PUBLIC_VIDEO2_URL} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
