@@ -1,26 +1,43 @@
 import { getClient } from './client';
 
+export type ProductType = 'T-shirts' | 'Hoodie' | 'Earrings' | 'Miscellaneous';
+
+export interface ColorVariant {
+  color: string;
+  quantity: number;
+}
+
 export interface Product {
   id: string;
   name: string;
   price: number;
   description: string;
   product_info: string;
-  size_1: number;
-  size_2: number;
-  size_3: number;
-  os: number;
   image_urls: string[];
-  status: string;
-  created_at: string;
+  created_at?: string;
+  s: number;
+  m: number;
+  l: number;
+  os: number;
+  product_type: ProductType;
+  colors?: Array<{
+    color: string;
+    quantity: number;
+  }>;
 }
 
-export const getProducts = async () => {
+export const getProducts = async (from?: number, to?: number) => {
   const supabase = getClient();
-  const { data, error } = await supabase
+  const query = supabase
     .from('products')
     .select('*')
     .order('created_at', { ascending: false });
+
+  if (typeof from === 'number' && typeof to === 'number') {
+    query.range(from, to);
+  }
+
+  const { data, error } = await query;
 
   if (error) throw error;
   return data as Product[];
@@ -40,27 +57,28 @@ export const getProduct = async (id: string) => {
 
 export interface ProductInput {
   name: string;
-  price: number;
   description: string;
-  product_info: string;
-  size_1: number;
-  size_2: number;
-  size_3: number;
-  os: number;
+  price: number;
   image_urls: string[];
-  status: string;
-  [key: string]: string | number | string[];
+  product_type: ProductType;
+  s: number;
+  m: number;
+  l: number;
+  os: number;
+  colors: ColorVariant[];
+  product_info: string;
 }
 
-export async function insertProduct(productData: ProductInput) {
+export async function insertProduct(productData: ProductInput): Promise<Product> {
   try {
     const supabase = getClient();
 
     // 숫자 필드 검증
-    const numberFields = ['price', 'size_1', 'size_2', 'size_3', 'os'];
+    const numberFields = ['price', 's', 'm', 'l', 'os'] as const;
     numberFields.forEach(field => {
-      if (typeof productData[field] !== 'number') {
-        productData[field] = Number(productData[field]);
+      const value = productData[field];
+      if (typeof value !== 'number') {
+        (productData[field] as number) = Number(value);
       }
     });
 
@@ -74,10 +92,9 @@ export async function insertProduct(productData: ProductInput) {
       .single();
 
     if (error) throw error;
-
-    return { data, error: null };
+    return data as Product;
   } catch (error) {
-    return { data: null, error };
+    throw error;
   }
 }
 
