@@ -85,6 +85,11 @@
       color: #c62828;
     }
     
+    .refunded {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+    
     .stripeLink {
       display: inline-block;
       margin-top: 2rem;

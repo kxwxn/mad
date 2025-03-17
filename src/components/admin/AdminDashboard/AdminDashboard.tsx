@@ -33,7 +33,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch('/api/admin/dashboard');
+        const response = await fetch(`/api/admin/dashboard?page=${currentPage}&limit=${itemsPerPage}`);
         const dashboardData = await response.json();
         setData(dashboardData);
       } catch (error) {
@@ -44,7 +44,7 @@ export default function AdminDashboard() {
     };
 
     fetchDashboardData();
-  }, []);  // currentPage 의존성 제거
+  }, [currentPage]);
 
   const handleViewInStripe = (paymentId: string) => {
     window.open(`https://dashboard.stripe.com/payments/${paymentId}`, '_blank');
@@ -53,12 +53,6 @@ export default function AdminDashboard() {
   if (isLoading || !data) return (
     <div className={styles.loadingContainer}>Loading...</div>
   );
-
-  // 페이지네이션 계산
-  const totalPages = Math.ceil(data.recentPayments.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentPagePayments = data.recentPayments.slice(startIndex, endIndex);
 
   return (
     <div className={styles.container}>
@@ -93,7 +87,7 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              {currentPagePayments.map((payment) => (
+              {data.recentPayments.map((payment) => (
                 <tr key={payment.id}>
                   <td>{payment.id.slice(-6)}</td>
                   <td>{payment.customerEmail}</td>
@@ -144,7 +138,7 @@ export default function AdminDashboard() {
           </span>
           
           <div className={styles.pageNumbers}>
-            {[...Array(totalPages)].map((_, index) => {
+            {[...Array(data.totalPages)].map((_, index) => {
               const pageNum = index + 1;
               
               if (pageNum === 1) {
@@ -159,7 +153,7 @@ export default function AdminDashboard() {
                 );
               }
               
-              if (pageNum === totalPages) {
+              if (pageNum === data.totalPages) {
                 return (
                   <span
                     key={`page-${pageNum}`}
@@ -171,11 +165,11 @@ export default function AdminDashboard() {
                 );
               }
               
-              if (pageNum === 3 && totalPages > 6) {
+              if (pageNum === 3 && data.totalPages > 6) {
                 return <span key="ellipsis" className={styles.ellipsis}>...</span>;
               }
               
-              if (pageNum < 3 || pageNum === totalPages) {
+              if (pageNum < 3 || pageNum === data.totalPages) {
                 return (
                   <span
                     key={`page-${pageNum}`}
@@ -192,8 +186,8 @@ export default function AdminDashboard() {
           </div>
 
           <span
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-            className={`${styles.pageControl} ${currentPage === totalPages ? styles.disabled : ''}`}
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, data.totalPages))}
+            className={`${styles.pageControl} ${currentPage === data.totalPages ? styles.disabled : ''}`}
           >
             NEXT →
           </span>
