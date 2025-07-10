@@ -18,16 +18,36 @@ interface CartItem {
   id: string;
 }
 
+function isValidCartItem(item: any): item is CartItem {
+  return (
+    typeof item.name === 'string' &&
+    typeof item.imageUrl === 'string' &&
+    typeof item.selectedSize === 'string' &&
+    typeof item.price === 'number' && item.price > 0 &&
+    typeof item.quantity === 'number' && item.quantity > 0 && Number.isInteger(item.quantity) &&
+    typeof item.id === 'string'
+  );
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { items } = body;
 
-    if (!items || items.length === 0) {
+    if (!items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json(
-        { error: 'No items provided' },
+        { error: 'No items provided or invalid items format' },
         { status: 400 }
       );
+    }
+
+    for (const item of items) {
+      if (!isValidCartItem(item)) {
+        return NextResponse.json(
+          { error: 'Invalid cart item data' },
+          { status: 400 }
+        );
+      }
     }
 
     // Stripe checkout session 생성
@@ -54,11 +74,22 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ sessionId: session.id });
-  } catch {
-    console.error('Checkout error occurred');
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+  } catch (error: any) {
+    if (error.type === 'StripeCardError') {
+      console.error('Stripe card error:', error.message);
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    } else if (error.type === 'StripeInvalidRequestError') {
+      console.error('Stripe invalid request error:', error.message);
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    } else if (error.type === 'StripeAPIError') {
+      console.error('Stripe API error:', error.message);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    } else {
+      console.error('Checkout error occurred:', error);
+      return NextResponse.json(
+        { error: 'Internal server error' },
+        { status: 500 }
+      );
+    }
   }
 }

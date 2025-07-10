@@ -89,62 +89,23 @@
   text-decoration: line-through;
 }
 
-.selectBoxContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 2rem;
-}
 
-.selectBoxWrapper {
-  width: 100%;
-  position: relative;
-}
 
-.selectBox {
-  width: 100%;
-  padding: 1rem;
-  border: 1px solid #000;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-}
 
-.selectBox.active {
-  border-bottom: none;
-}
 
-.optionsContainer {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  border: 1px solid #000;
-  border-top: none;
-  background: white;
-  z-index: 1;
-}
 
-.option {
-  padding: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
 
-.option:hover {
-  background-color: #f5f5f5;
-}
 
-.arrowDown {
-  font-size: 0.75rem;
-  transition: transform 0.2s;
-}
 
-.active .arrowDown {
-  transform: rotate(180deg);
-}
+
+
+
+
+
+
+
+
+
 
 .addToCartBox {
   display: flex;
@@ -205,54 +166,7 @@
   color: #ff3e3e;
 }
 
-.accordionContainer {
-  margin-top: 2rem;
-}
 
-.accordionItem {
-  border-top: 1px solid #ddd;
-  padding: 1rem 0;
-}
-
-.accordionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  font-size: 0.875rem;
-}
-
-.accordionHeader span:first-child {
-  text-decoration: none;
-  transition: text-decoration 0.2s ease;
-}
-
-.accordionHeader.active span:first-child {
-  text-decoration: line-through;
-}
-
-.accordionContent {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  height: 0;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease-out;
-  font-size: 0.875rem;
-  line-height: 1.5;
-}
-
-.accordionContent.open {
-  height: auto;
-  opacity: 1;
-  visibility: visible;
-  padding-top: 1rem;
-}
-
-.toggleIcon {
-  font-size: 0.875rem;
-}
 
 .footerText {
   margin-top: 2rem;
@@ -370,28 +284,7 @@
   transform: translateY(-1px);
 }
 
-.alertOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
 
-.alertBox {
-  background: white;
-  border: 1px solid black;
-  padding: 20px 40px;
-  font-size: 14px;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.5px;
-}
 
 .wishlistModalButton {
   background: none;
@@ -409,76 +302,11 @@
 }
 
 /* 수량 선택기 스타일 */
-.quantitySelectorContainer {
-  margin-top: 1rem;
-}
 
-.quantitySelector {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border: 1px solid #000;
-  padding: 0;
-  height: 45px;
-}
 
-.quantityButton {
-  background: none;
-  border: none;
-  border-right: 1px solid #000;
-  border-left: 1px solid #000;
-  cursor: pointer;
-  font-size: 1.2rem;
-  padding: 0;
-  color: #000;
-  width: 180px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
-}
 
-.quantityButton:hover {
-  background-color: #f5f5f5;
-}
 
-.quantityButton:first-child {
-  border-left: none;
-}
 
-.quantityButton:last-child {
-  border-right: none;
-}
 
-.quantityValue {
-  flex: 1;
-  font-size: 1rem;
-  text-align: center;
-  min-width: 50px;
-}
 
-.colorOption {
-  padding: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
 
-.colorOption:hover {
-  background-color: #f5f5f5;
-}
-
-.colorBox {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.colorQuantity {
-  margin-left: auto;
-  color: #666;
-}
