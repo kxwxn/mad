@@ -2,33 +2,12 @@
 
 import useDashboardData from "@/hooks/useDashboardData/useDashboardData";
 import styles from "./admin.module.css";
-import Image from "next/image";
 import DashboardStats from "./DashboardStats/DashboardStats";
 import RecentOrdersTable from "./RecentOrdersTable/RecentOrdersTable";
 import PaginationControls from "./PaginationControls/PaginationControls";
 
-interface DashboardData {
-  totalRevenue: number;
-  totalOrders: number;
-  totalPages: number;
-  currentPage: number;
-  recentPayments: Array<{
-    id: string;
-    amount: number;
-    customerEmail: string;
-    status: string;
-    created: number;
-    items: Array<{
-      name: string;
-      quantity: number;
-      price: number;
-      image: string;
-    }>;
-  }>;
-}
-
 export default function AdminDashboard() {
-  const { data, isLoading, currentPage, setCurrentPage, itemsPerPage } = useDashboardData();
+  const { data, isLoading, currentPage, setCurrentPage } = useDashboardData();
 
   const handleViewInStripe = (paymentId: string) => {
     window.open(`https://dashboard.stripe.com/payments/${paymentId}`, '_blank');

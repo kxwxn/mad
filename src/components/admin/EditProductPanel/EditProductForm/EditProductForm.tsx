@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import styles from "./EditProductForm.module.css";
-import { Product, ProductType } from "@/types/product.types";
+import { Product } from "@/types/product.types";
 
 interface EditProductFormProps {
   formData: Product;
@@ -77,10 +77,9 @@ export default function EditProductForm({
           id="productType"
           name="product_type"
           value={formData?.product_type || 'T-shirts'}
-          onChange={(e) => {
-            const newType = e.target.value as ProductType;
+          onChange={(_e) => {
             // This part needs to be handled in the parent component (EditProductPanel)
-            // setFormData(prev => prev ? {...prev, product_type: newType} : null);
+            // setFormData(prev => prev ? {...prev, product_type: e.target.value as ProductType} : null);
           }}
           required
         >

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import styles from "./ProductOptions.module.css";
-import { Product, ColorVariant } from "@/types/product.types";
+import { Product } from "@/types/product.types";
 
 interface ProductOptionsProps {
   product: Product;
