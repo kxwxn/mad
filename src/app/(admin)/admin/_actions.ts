@@ -28,9 +28,10 @@ export async function setRole(formData: FormData): Promise<void> {
         publicMetadata: { role: role },
       }
     );
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Error setting user role:", err);
-    throw new Error(`Failed to set user role: ${err.message || "Unknown error"}`);
+    const message = err instanceof Error ? err.message : "Unknown error";
+    throw new Error(`Failed to set user role: ${message}`);
   }
 }
 
@@ -55,8 +56,9 @@ export async function removeRole(formData: FormData): Promise<void> {
         publicMetadata: { role: null },
       }
     );
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Error removing user role:", err);
-    throw new Error(`Failed to remove user role: ${err.message || "Unknown error"}`);
+    const message = err instanceof Error ? err.message : "Unknown error";
+    throw new Error(`Failed to remove user role: ${message}`);
   }
 }

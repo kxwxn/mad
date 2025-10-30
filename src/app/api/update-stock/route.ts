@@ -47,8 +47,9 @@ export async function POST(request: NextRequest) {
           errors.push(`Failed to update stock for product ${id} (size: ${sizeField}, qty: ${quantity}): ${rpcError.message}`);
           console.error(`RPC Error for product ${id}:`, rpcError);
         }
-      } catch (rpcEx: any) {
-        errors.push(`Exception during stock update for product ${id}: ${rpcEx.message}`);
+      } catch (rpcEx: unknown) {
+        const message = rpcEx instanceof Error ? rpcEx.message : 'Unknown error';
+        errors.push(`Exception during stock update for product ${id}: ${message}`);
         console.error(`RPC Exception for product ${id}:`, rpcEx);
       }
     }

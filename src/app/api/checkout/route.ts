@@ -18,14 +18,14 @@ interface CartItem {
   id: string;
 }
 
-function isValidCartItem(item: any): item is CartItem {
+function isValidCartItem(item: unknown): item is CartItem {
   return (
-    typeof item.name === 'string' &&
-    typeof item.imageUrl === 'string' &&
-    typeof item.selectedSize === 'string' &&
-    typeof item.price === 'number' && item.price > 0 &&
-    typeof item.quantity === 'number' && item.quantity > 0 && Number.isInteger(item.quantity) &&
-    typeof item.id === 'string'
+    typeof (item as Record<string, unknown>)?.name === 'string' &&
+    typeof (item as Record<string, unknown>)?.imageUrl === 'string' &&
+    typeof (item as Record<string, unknown>)?.selectedSize === 'string' &&
+    typeof (item as Record<string, unknown>)?.price === 'number' && (item as Record<string, unknown>).price as number > 0 &&
+    typeof (item as Record<string, unknown>)?.quantity === 'number' && (item as Record<string, unknown>).quantity as number > 0 && Number.isInteger((item as Record<string, unknown>).quantity as number) &&
+    typeof (item as Record<string, unknown>)?.id === 'string'
   );
 }
 
@@ -74,22 +74,22 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ sessionId: session.id });
-  } catch (error: any) {
-    if (error.type === 'StripeCardError') {
-      console.error('Stripe card error:', error.message);
-      return NextResponse.json({ error: error.message }, { status: 400 });
-    } else if (error.type === 'StripeInvalidRequestError') {
-      console.error('Stripe invalid request error:', error.message);
-      return NextResponse.json({ error: error.message }, { status: 400 });
-    } else if (error.type === 'StripeAPIError') {
-      console.error('Stripe API error:', error.message);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    } else {
-      console.error('Checkout error occurred:', error);
-      return NextResponse.json(
-        { error: 'Internal server error' },
-        { status: 500 }
-      );
+  } catch (error: unknown) {
+    const err = error as { type?: string; message?: string } | undefined;
+    if (err?.type === 'StripeCardError') {
+      console.error('Stripe card error:', err.message);
+      return NextResponse.json({ error: err.message }, { status: 400 });
+    } else if (err?.type === 'StripeInvalidRequestError') {
+      console.error('Stripe invalid request error:', err.message);
+      return NextResponse.json({ error: err.message }, { status: 400 });
+    } else if (err?.type === 'StripeAPIError') {
+      console.error('Stripe API error:', err.message);
+      return NextResponse.json({ error: err.message }, { status: 500 });
     }
+    console.error('Checkout error occurred:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
