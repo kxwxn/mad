@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import ProductList from "../ProductList/ProductList";
+import dynamic from 'next/dynamic';
 import CartButton from "../CartButton/CartButton";
 import WishlistIcon from "../WishlistIcon/WishlistIcon";
-import CartModal from "../CartModal/CartModal";
-import WishlistModal from "../WishlistModal/WishlistModal";
 import styles from "./ShopContainer.module.css";
+
+const ProductList = dynamic(() => import("../ProductList/ProductList"), { ssr: false });
+const CartModal = dynamic(() => import("../CartModal/CartModal"), { ssr: false });
+const WishlistModal = dynamic(() => import("../WishlistModal/WishlistModal"), { ssr: false });
 
 export default function ShopContainer() {
   const [isCartOpen, setIsCartOpen] = useState(false);

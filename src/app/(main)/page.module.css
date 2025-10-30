@@ -1,270 +1,474 @@
-    /* 첫 번째 섹션: 전체 화면 이미지 */
-    .fullscreenSection {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      overflow: hidden;
-    }
-    
-    .heroVideo {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
-    }
-    
-    /* 텍스트 섹션 */
-    .textSection {
-      width: 100%;
-      padding: 2rem;
-      margin: 0;
-      background-color: white;
-    }
-    
-    .titleText {
-      font-size: 3rem;
-      font-weight: bold;
-      color: black;
-      margin-bottom: 1rem;
-    }
+/* 첫 번째 섹션: 전체 화면 이미지 */
+.fullscreenSection {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
 
-    .descriptionText {
-      font-size: 1.5rem;
-      color: #0000FF;
-      margin-bottom: 0.5rem;
-      line-height: 1.2;
-    }
+.heroVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
 
-    /* 두 번째 텍스트 섹션 */
-    .secondTextSection {
-      width: 100%;
-      padding: 2rem;
-      margin: 0;
-      background-color: #000000;
-      position: relative;
-    }
-    
-    .secondTitle {
-      font-size: 3rem;
-      font-weight: bold;
-      color: #ffffff;
-      margin-bottom: 1rem;
-    }
+/* 텍스트 섹션 */
+.textSection {
+  width: 100%;
+  padding: 2rem;
+  margin: 0;
+  background-color: blue;
+}
 
-    .secondDescription {
-      font-size: 1.5rem;
-      color: #ffffff;
-      margin-bottom: 0.5rem;
-      line-height: 1.2;
-    }
+.titleText {
+  font-size: 4rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1rem;
+}
 
-    /* 세 번째 텍스트 섹션 */
-    .thirdTextSection {
-      width: 100%;
-      min-height: auto;
-      padding: 4rem 2rem;
-      margin: 0;
-      background-color: #000000;
-      position: relative;
-    }
-    
-    .thirdTitle {
-      font-size: 3rem;
-      font-weight: bold;
-      color: #ffffff;
-      margin-bottom: 1rem;
-    }
+.descriptionText {
+  font-size: 1.5rem;
+  color: #0000FF;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
 
-    .thirdDescription {
-      font-size: 1.5rem;
-      color: #ffffff;
-      margin-bottom: 0.5rem;
-      line-height: 1.2;
-    }
+/* 두 번째 텍스트 섹션 */
+.secondTextSection {
+  width: 100%;
+  padding: 2rem;
+  margin: 0;
+  background-color: white;
+  position: relative;
+}
 
-    /* 네 번째 텍스트 섹션 */
-    .fourthTextSection {
-      width: 100%;
-      padding: 2rem;
-      margin: 0;
-      background-color: #0000FF;
-      position: relative;
-    }
+.secondTitle {
+  font-size: 5rem;
+  font-weight: bold;
+  color: blue;
+  margin-bottom: 1rem;
+}
 
-    .fourthTitle {
-      font-size: 3rem;
-      font-weight: bold;
-      color: #ffffff;
-      margin-bottom: 1rem;
-      white-space: pre-line;
-    }
+/* 한 줄 강제 타이틀 (줄바꿈 방지) */
+.secondTitleNowrap {
+  font-size: 3rem;
+  font-weight: bold;
+  color: blue;
+  margin-bottom: 1rem;
+  white-space: nowrap;
+}
 
-    .fourthDescription {
-      font-size: 1.5rem;
-      color: #ffffff;
-      margin-bottom: 0.5rem;
-      line-height: 1.2;
-    }
+.secondDescription {
+  font-size: 1.5rem;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
 
-    /* 6개 이미지 섹션 */
-    .sixImageSection {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
+/* 세 번째 텍스트 섹션 */
+.thirdTextSection {
+  width: 100%;
+  min-height: auto;
+  padding: 4rem 2rem;
+  margin: 0;
+  background-color: #ffffff;
+  position: relative;
+}
 
-    .imageRow {
-      width: 100%;
-      height: 50vh;
-      display: flex;
-      gap: 0;
-    }
+.thirdTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 1rem;
+}
 
-    .imageWrapper {
-      position: relative;
-      flex: 1;
-      height: 100%;
-      overflow: hidden;
-    }
+.thirdDescription {
+  font-size: 1.5rem;
+  color: #000;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
 
-    .sixImage {
-      object-fit: cover;
-      object-position: center;
-    }
+.thirdDescription1 {
+  font-size: 2rem; /* description1 크기 (조정 가능) */
+  color: #000;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  font-weight: 600; /* description1을 더 강조하려면 */
+}
 
-    /* 전체 이미지 섹션 */
-    .fullImageSection {
-      position: relative;
-      width: 100%;
-      height: 150vh;
-      overflow: hidden;
-    }
+.thirdDescription2 {
+  font-size: 1.5rem; /* description2 크기 (조정 가능) */
+  color: #000;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
 
-    .fullImageContainer {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      transform: scale(1.2);
-    }
+/* Typography utilities (shared) */
+.typo-title-2rem { font-size: 2rem; font-weight: 700; }
+.typo-subtitle-3_5rem { font-size: 3.5rem; font-weight: 600; }
+.typo-body-2rem { font-size: 2rem; }
 
-    .fullImage {
-      object-fit: cover;
-      object-position: center;
-      transform: scale(1.2);
-      transition: transform 0.3s ease-out;
-    }
-    
-    /* 이미지 섹션 */
-    .splitSection {
-      position: relative;
-      display: flex;
-      width: 100%;
-      height: 100vh;
-      margin: 0;
-      padding: 0;
-      gap: 0;
-    }
-    
-    .imageContainer {
-      position: relative;
-      flex: 1;
-      height: 100%;
-      overflow: hidden;
-    }
-    
-    .splitImage {
-      object-fit: cover;
-      object-position: center;
-    }
-    
-    /* 비디오 섹션 */
-    .videoSection {
-      width: 100%;
-      height: 100vh;
-      position: relative;
-      background: #000;
-      overflow: hidden;
-    }
-    
-    .videoContainer {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0;
-    }
-    
-    .videoWrapper {
-      flex: 1;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    /* 반응형 스타일 */
-    @media (max-width: 768px) {
-      .splitSection {
-        flex-direction: column;
-        height: auto;
-      }
-    
-      .imageContainer {
-        height: 33.333vh;
-        width: 100%;
-      }
-    
-      .splitImage {
-        position: relative !important;
-        height: 100% !important;
-        width: 100% !important;
-      }
-    
-      .textSection {
-        padding: 2rem 1rem;
-      }
+/* 네 번째 텍스트 섹션 */
+.fourthTextSection {
+  width: 100%;
+  padding: 4rem 2rem;
+  margin: 0;
+  background-color: #ffffff;
+  position: relative;
+  min-height: 40vh;
+  color: #000;
+}
 
-      .titleText {
-        font-size: 3rem;
-      }
+.fourthTitle {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  white-space: pre-line;
+}
 
-      .descriptionText {
-        font-size: 1.5rem;
-      }
-    
-      .fullscreenSection {
-        height: 70vh;
-      }
-    
-      .videoContainer {
-        flex-direction: column;
-      }
-    
-      .videoWrapper {
-        width: 100%;
-        height: 33.333vh;
-      }
-    
-      .videoSection {
-        height: auto;
-      }
-    }
+.fourthDescription {
+  font-size: 1.5rem;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
 
-    .main {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      position: relative;
-      overflow-x: hidden;
-    }
+/* 배너 전용 텍스트 섹션 (독립) */
+.bannerTextSection {
+  width: 100%;
+  padding: 4rem 2rem;
+  margin: 0;
+  background-color: #0022ff;
+  position: relative;
+  min-height: 40vh;
+}
+
+.bannerTextSection .bannerLeftBlock {
+  max-width: 40rem;
+}
+
+.bannerTextSection .bannerRightBlock {
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  text-align: right;
+  color: #ffffff;
+}
+
+.bannerTextSection .bannerRightTitle { font-weight: 800; }
+.bannerTextSection .bannerRightText { font-weight: 700; }
+
+/* Banner layout blocks for fourthTextSection */
+
+/* 배너 레이아웃은 네 번째 섹션에만 적용 */
+.fourthTextSection .bannerLeftBlock {
+  /* max-width: 40rem; */
+}
+
+.fourthTextSection .bannerRightBlock {
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  text-align: right;
+  color: #ffffff;
+}
+
+.fourthTextSection .bannerRightTitle {
+  font-weight: 800;
+}
+
+.fourthTextSection .bannerRightText {
+  font-weight: 700;
+}
+
+/* 6개 이미지 섹션 */
+.sixImageSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.imageRow {
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  gap: 0;
+}
+
+.imageWrapper {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sixImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* 전체 이미지 섹션 */
+.fullImageSection {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  left: 0;
+  right: 0;
+}
+
+.fullImageContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transform: scale(1.2);
+  transform-origin: center center;
+}
+
+.fullImage {
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.3s ease-out;
+}
+
+.fullImageOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+  padding: 4rem 2rem 2rem;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.fullImageText {
+  color: #ffffff;
+  font-size: 3rem;
+  line-height: 1.6;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* 상단 오버레이 스타일 */
+.fullImageOverlayTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+  padding: 2rem 2rem 4rem;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.fullImageTextTop {
+  color: #ffffff;
+  font-size: 3rem;
+  line-height: 1.6;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  white-space: pre-line; /* 줄바꿈 지원 */
+}
+
+/* 구조화된 텍스트 컨테이너 */
+.fullImageStructuredText {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* 대제목 스타일 */
+.fullImageTitle,
+.fullImageTitleTop {
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.fullImageTitleTop {
+  font-size: 2rem;
+}
+
+/* 소제목 스타일 */
+.fullImageSubtitle,
+.fullImageSubtitleTop {
+  color: #ffffff;
+  font-size: 3.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.fullImageSubtitleTop {
+  font-size: 3.5rem;
+}
+
+/* 내용 스타일 */
+.fullImageDescription,
+.fullImageDescriptionTop {
+  color: #ffffff;
+  font-size: 2rem;
+  line-height: 1.6;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.fullImageDescriptionTop {
+  font-size: 2em;
+}
+
+/* 이미지 섹션 - 3장용 */
+.splitSection {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: auto; /* 이미지 높이에 맞춤 */
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+.imageContainer {
+  position: relative;
+  flex: 1;
+  aspect-ratio: 3 / 4; /* 세로형 이미지에 맞춘 기본 비율 (필요시 조정) */
+  overflow: hidden;
+}
+
+/* 이미지 섹션 - 4장용 */
+.splitSectionFour {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: auto; /* 이미지 높이에 맞춤 */
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+.imageContainerFour {
+  position: relative;
+  flex: 1;
+  aspect-ratio: 3 / 4; /* 세로형 이미지에 맞춘 기본 비율 (필요시 조정) */
+  overflow: hidden;
+  min-width: 0; /* flexbox에서 이미지가 잘리는 문제 방지 */
+}
+
+.splitImage {
+  object-fit: contain; /* 이미지 전체가 보이도록 */
+  object-position: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: scale(1.4); /* 이미지를 약간 확대하여 크기 차이를 숨김 */
+  transition: transform 0.2s ease;
+}
+
+/* 비디오 섹션 */
+.videoSection {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  background: #000;
+  overflow: hidden;
+}
+
+.videoContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+}
+
+.videoWrapper {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.main {
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .splitSection,
+  .splitSectionFour {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .imageContainer,
+  .imageContainerFour {
+    height: 25vh;
+    width: 100%;
+  }
+
+  .splitImage {
+    position: relative !important;
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  .textSection {
+    padding: 2rem 1rem;
+  }
+
+  .titleText {
+    font-size: 3rem;
+  }
+
+  .descriptionText {
+    font-size: 1.5rem;
+  }
+
+  .fullscreenSection {
+    height: 70vh;
+  }
+
+  .videoContainer {
+    flex-direction: column;
+  }
+
+  .videoWrapper {
+    width: 100%;
+    height: 33.333vh;
+  }
+
+  .videoSection {
+    height: auto;
+  }
+}

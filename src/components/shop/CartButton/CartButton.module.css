@@ -14,3 +14,18 @@
 .cartButton:hover {
   opacity: 0.7;
 }
+
+.cartIcon {
+  font-size: 1.5rem;
+}
+
+.cartCount {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}

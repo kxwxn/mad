@@ -1,5 +1,5 @@
 import ShopContainer from "@/components/shop/ShopContainer/ShopContainer";
-import ShopNav from '@/components/ShopNav';
+import ShopNav from '@/components/layout/ShopNav';
 
 export default function Shop() {
   return (

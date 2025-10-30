@@ -1,4 +1,4 @@
-import InfoNav from "@/components/InfoNav";
+import InfoNav from "@/components/layout/InfoNav";
 import styles from "./page.module.css";
 
 export default function Page() {

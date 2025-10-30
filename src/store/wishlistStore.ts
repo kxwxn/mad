@@ -1,13 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export interface WishlistItem {
-  id: string;
-  name: string;
-  price: number;
-  imageUrl: string;
-  sizes: string[];
-}
+import { WishlistItem } from '@/types/wishlist.types';
 
 interface WishlistStore {
   items: WishlistItem[];
