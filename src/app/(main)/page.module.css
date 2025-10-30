@@ -121,7 +121,8 @@
   margin: 0;
   background-color: #ffffff;
   position: relative;
-  min-height: 40vh;
+  display: flex;
+  align-items: center;
   color: #000;
 }
 
