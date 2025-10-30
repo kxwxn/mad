@@ -43,7 +43,7 @@ export default function JournalismModal({ isOpen, onClose, buttonPosition }: Jou
         style={modalStyle}
         onClick={e => e.stopPropagation()}
       >
-        <button className={styles.closeButton} onClick={onClose}>x</button>
+        <button className={styles.closeButton} onClick={onClose}>+</button>
         <div className={styles.content}>
           <h1 className={styles.title}>Journalism</h1>
           <div className={styles.list}>

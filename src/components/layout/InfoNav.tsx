@@ -44,7 +44,7 @@ export default function InfoNav() {
         </div>
         <div className={styles.plusRow}>
           <Link href="/" className={styles.plus}>
-            x
+            +
           </Link>
         </div>
       </div>
