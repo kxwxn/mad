@@ -48,7 +48,7 @@ export default function ShopNav() {
         </div>
         <div className={styles.plusRow}>
           <Link href="/" className={styles.plus}>
-            x
+            +
           </Link>
         </div>
       </div>
