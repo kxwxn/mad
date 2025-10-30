@@ -11,7 +11,7 @@ export const getProducts = async (from: number, to: number): Promise<Product[]> 
     .order('created_at', { ascending: false });
 
   if (error) handleSupabaseError(error);
-  return data;
+  return data || [];
 };
 
 export const getProduct = async (id: string): Promise<Product> => {
@@ -23,6 +23,9 @@ export const getProduct = async (id: string): Promise<Product> => {
     .single();
 
   if (error) handleSupabaseError(error);
+  if (!data) {
+    throw new Error('Product not found');
+  }
   return data;
 };
 

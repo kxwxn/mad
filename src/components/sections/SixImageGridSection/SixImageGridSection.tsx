@@ -10,7 +10,7 @@ export default function SixImageGridSection({ images }: SixImageGridSectionProps
   return (
     <section className={styles.sixImageSection}>
       <div className={styles.imageRow}>
-        {images.slice(0, 3).map((img, index) => (
+        {images.slice(0, 4).map((img, index) => (
           <div key={index} className={styles.imageWrapper}>
             <Image
               src={img.src}
@@ -24,8 +24,8 @@ export default function SixImageGridSection({ images }: SixImageGridSectionProps
         ))}
       </div>
       <div className={styles.imageRow}>
-        {images.slice(3, 6).map((img, index) => (
-          <div key={index + 3} className={styles.imageWrapper}>
+        {images.slice(4, 8).map((img, index) => (
+          <div key={index + 4} className={styles.imageWrapper}>
             <Image
               src={img.src}
               alt={img.alt}

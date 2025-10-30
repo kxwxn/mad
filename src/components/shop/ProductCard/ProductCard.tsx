@@ -23,6 +23,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
   
   const [quantity, setQuantity] = useState(1);
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
@@ -223,7 +224,8 @@ export default function ProductCard({ product }: ProductCardProps) {
             setSelectedSize={setSelectedSize}
             selectedColor={selectedColor}
             setSelectedColor={setSelectedColor}
-            
+            isSelectOpen={isSelectOpen}
+            setIsSelectOpen={setIsSelectOpen}
           />
 
           <div className={styles.addToCartBox}>
