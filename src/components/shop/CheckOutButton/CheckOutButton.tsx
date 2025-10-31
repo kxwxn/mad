@@ -5,7 +5,12 @@ import styles from './CheckOutButton.module.css';
 import { useCartStore } from '@/store/cartStore';
 
 // Stripe 초기화
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
+// 클라이언트 컴포넌트에서는 process.env를 직접 사용합니다 (Next.js가 자동으로 번들링함)
+const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+if (!stripePublishableKey) {
+  throw new Error('Missing required environment variable: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY');
+}
+const stripePromise = loadStripe(stripePublishableKey);
 
 const CheckoutButton: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,14 +41,17 @@ const CheckoutButton: React.FC = () => {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Network response was not ok');
+        const errorMessage = errorData.error || errorData.message || `Checkout failed with status ${response.status}`;
+        console.error('Checkout error:', errorMessage);
+        alert(`Checkout Error:\n\n${errorMessage}`);
+        throw new Error(errorMessage);
       }
 
-      const { sessionId } = await response.json();
+      const responseData = await response.json();
+      const { sessionId } = responseData;
       
-      // sessionId 확인
-      if (!sessionId) {
-        throw new Error('No session ID returned from the server');
+      if (!sessionId || typeof sessionId !== 'string') {
+        throw new Error('No valid session ID returned from the server');
       }
 
       const result = await stripe.redirectToCheckout({ sessionId });
@@ -52,8 +60,9 @@ const CheckoutButton: React.FC = () => {
         throw new Error(result.error.message);
       }
     } catch (error) {
-      console.error('Checkout error:', error);
-      alert('Failed to process checkout. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to process checkout. Please try again.';
+      console.error('Checkout error:', errorMessage);
+      alert(`Checkout Error:\n\n${errorMessage}`);
     } finally {
       setIsLoading(false);
     }

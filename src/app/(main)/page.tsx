@@ -7,12 +7,16 @@ import TextSection from "@/components/sections/TextSection/TextSection";
 import SplitImageSection from "@/components/sections/SplitImageSection/SplitImageSection";
 import FullImageSection from "@/components/sections/FullImageSection/FullImageSection";
 import VideoGridSection from "@/components/sections/VideoGridSection/VideoGridSection";
+import { getOptionalPublicEnv } from "@/utils/env";
 
 export default function Home() {
+  const video1Url = getOptionalPublicEnv('NEXT_PUBLIC_VIDEO1_URL', '');
+  const video2Url = getOptionalPublicEnv('NEXT_PUBLIC_VIDEO2_URL', '');
+
   return (
     <main className={styles.main}>
       <TopNav />
-      <FullscreenVideoSection videoUrl={process.env.NEXT_PUBLIC_VIDEO1_URL!} />
+      {video1Url && <FullscreenVideoSection videoUrl={video1Url} />}
 
       <TextSection
         title="MAD is a material and design company disrupting unsustainable production practices"
@@ -49,15 +53,6 @@ export default function Home() {
         topOverlayText="We develop custom solutions for your projects and products based on our unique recipes and IP. Get in touch!"
       />
 
-      {/* <TextSection
-        title=""
-        description1=""
-        description2=""
-        sectionType="secondTextSection"
-        titleStyle="secondTitle"
-        descriptionStyle="secondDescription"
-      /> */}
-
       <TextSection
         title="PILOT PRODUCT #1"
         description1="MADclimb"
@@ -75,10 +70,12 @@ export default function Home() {
         ]}
       />
 
-      <VideoGridSection
-        videoUrl={process.env.NEXT_PUBLIC_VIDEO2_URL!}
-        count={3}
-      />
+      {video2Url && (
+        <VideoGridSection
+          videoUrl={video2Url}
+          count={3}
+        />
+      )}
 
       <FullImageSection
         imageUrl="/Images/LandingPhoto/MADbau.jpg"

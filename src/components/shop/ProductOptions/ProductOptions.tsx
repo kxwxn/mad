@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import styles from "./ProductOptions.module.css";
 import { Product } from "@/types/product.types";
 

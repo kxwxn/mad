@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "@/app/(main)/page.module.css"; // Assuming page.module.css is shared
 
 interface FullscreenVideoSectionProps {

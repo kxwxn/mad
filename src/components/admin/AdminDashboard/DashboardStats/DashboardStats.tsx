@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "../admin.module.css"; // Assuming admin.module.css is shared
 
 interface DashboardStatsProps {

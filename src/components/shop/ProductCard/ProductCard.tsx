@@ -59,9 +59,9 @@ export default function ProductCard({ product }: ProductCardProps) {
         id: product.id,
         name: product.name,
         price: product.price,
-        imageUrl: product.image_urls[0],
+        imageUrl: product.image_urls?.[0] || '', // 빈 배열이거나 undefined일 경우 빈 문자열
         selectedSize: selectedSize || 'OS',
-        selectedColor,
+        selectedColor: selectedColor || undefined, // undefined로 명시
         quantity
       };
       
@@ -70,7 +70,9 @@ export default function ProductCard({ product }: ProductCardProps) {
       setTimeout(() => setSuccessMessage(""), 3000);
       setIsCartModalOpen(true);
     } catch (err) {
-      console.error("Error adding to cart:", err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error("Error adding to cart:", err);
+      }
       setError("Failed to add to cart");
       setShowAlert(true);
     }
@@ -96,7 +98,9 @@ export default function ProductCard({ product }: ProductCardProps) {
         
         addToWishlist(wishlistItem);
       } catch (err) {
-        console.error("위시리스트 추가 중 에러 발생:", err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error("위시리스트 추가 중 에러 발생:", err);
+        }
       }
     }
   };

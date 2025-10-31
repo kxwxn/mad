@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 import styles from "@/app/(main)/page.module.css"; // Assuming page.module.css is shared
 

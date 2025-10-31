@@ -29,7 +29,9 @@ export async function setRole(formData: FormData): Promise<void> {
       }
     );
   } catch (err: unknown) {
-    console.error("Error setting user role:", err);
+    if (process.env.NODE_ENV === 'development') {
+      console.error("Error setting user role:", err);
+    }
     const message = err instanceof Error ? err.message : "Unknown error";
     throw new Error(`Failed to set user role: ${message}`);
   }
@@ -57,7 +59,9 @@ export async function removeRole(formData: FormData): Promise<void> {
       }
     );
   } catch (err: unknown) {
-    console.error("Error removing user role:", err);
+    if (process.env.NODE_ENV === 'development') {
+      console.error("Error removing user role:", err);
+    }
     const message = err instanceof Error ? err.message : "Unknown error";
     throw new Error(`Failed to remove user role: ${message}`);
   }
