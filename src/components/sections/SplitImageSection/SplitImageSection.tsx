@@ -8,6 +8,27 @@ interface SplitImageSectionProps {
 }
 
 export default function SplitImageSection({ images, variant = "three" }: SplitImageSectionProps) {
+  // 단일 이미지인 경우 전체 너비로 표시
+  if (images.length === 1) {
+    return (
+      <section className={styles.splitSectionSingle}>
+        <div className={styles.imageContainerSingle}>
+          <Image
+            src={images[0].src}
+            alt={images[0].alt}
+            width={1920}
+            height={1080}
+            sizes="100vw"
+            quality={100}
+            className={styles.splitImageSingle}
+            priority
+            style={{ width: '100%', height: 'auto' }}
+          />
+        </div>
+      </section>
+    );
+  }
+
   const sectionClassName = variant === "four" ? styles.splitSectionFour : styles.splitSection;
   const containerClassName = variant === "four" ? styles.imageContainerFour : styles.imageContainer;
   // 더 정확한 sizes 속성으로 이미지 품질 개선
