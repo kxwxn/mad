@@ -7,8 +7,6 @@ import TextSection from "@/components/sections/TextSection/TextSection";
 import SplitImageSection from "@/components/sections/SplitImageSection/SplitImageSection";
 import FullImageSection from "@/components/sections/FullImageSection/FullImageSection";
 import VideoGridSection from "@/components/sections/VideoGridSection/VideoGridSection";
-import SixImageGridSection from "@/components/sections/SixImageGridSection/SixImageGridSection";
-import InfoTripletSection from "@/components/sections/InfoTripletSection/InfoTripletSection";
 
 export default function Home() {
   return (
@@ -28,10 +26,10 @@ export default function Home() {
       <SplitImageSection
         variant="four"
         images={[
-          { src: "/Images/pendingFoto/01.jpg", alt: "Image 1" },
-          { src: "/Images/pendingFoto/02.jpg", alt: "Image 2" },
-          { src: "/Images/pendingFoto/03.jpg", alt: "Image 3" },
-          { src: "/Images/pendingFoto/01.jpg", alt: "Image 4" },
+          { src: "/Images/LandingPhoto/Texture 2.jpeg", alt: "Image 1" },
+          { src: "/Images/LandingPhoto/Texture 4.jpeg", alt: "Image 2" },
+          { src: "/Images/LandingPhoto/Texture 3.jpeg", alt: "Image 3" },
+          { src: "/Images/LandingPhoto/Texture 1.jpeg", alt: "Image 4" },
         ]}
       />
 
@@ -43,21 +41,22 @@ export default function Home() {
         titleStyle="secondTitle"
         descriptionStyle="secondDescription"
       />
-      
+
       <FullImageSection
         imageUrl="/Images/LandingPhoto/Mycelium.jpg"
         altText="Image 1"
         overlayText="We are not industry bound, we are addressing the urgent need for sustainable materials across different industries."
+        topOverlayText="We develop custom solutions for your projects and products based on our unique recipes and IP. Get in touch!"
       />
 
-      <TextSection
-        title="We develop custom solutions for your projects and products based on our unique recipes and IP. Get in touch!"
+      {/* <TextSection
+        title=""
         description1=""
         description2=""
         sectionType="secondTextSection"
         titleStyle="secondTitle"
         descriptionStyle="secondDescription"
-      />
+      /> */}
 
       <TextSection
         title="PILOT PRODUCT #1"
@@ -72,9 +71,7 @@ export default function Home() {
       <SplitImageSection
         variant="three"
         images={[
-          { src: "/Images/LandingPhoto/MADclimb 1.jpg", alt: "Image 1" },
-          { src: "/Images/LandingPhoto/MADclimb 2.jpg", alt: "Image 2" },
-          { src: "/Images/LandingPhoto/MADclimb 3.jpg", alt: "Image 3" },
+          { src: "/Images/LandingPhoto/MADclimb .jpeg", alt: "Image 1" },
         ]}
       />
 
@@ -105,17 +102,10 @@ export default function Home() {
         description2Style="typo-body-2rem"
       />
 
-      <SixImageGridSection
+      <SplitImageSection
+        variant="three"
         images={[
-          { src: "/Images/LandingPhoto/MADobj 1.jpg", alt: "Image A" },
-          { src: "/Images/LandingPhoto/MADobj 1.jpg", alt: "Image A" },
-          { src: "/Images/LandingPhoto/MADobj 1.jpg", alt: "Image A" },
-          { src: "/Images/LandingPhoto/MADobj 1.jpg", alt: "Image A" },
-
-          { src: "/Images/LandingPhoto/MADobj 2.jpg", alt: "Image E" },
-          { src: "/Images/LandingPhoto/MADobj 2.jpg", alt: "Image E" },
-          { src: "/Images/LandingPhoto/MADobj 2.jpg", alt: "Image E" },
-          { src: "/Images/LandingPhoto/MADobj 2.jpg", alt: "Image E" },
+          { src: "/Images/LandingPhoto/MADobj.jpeg", alt: "MADobj combined images" },
         ]}
       />
 
@@ -131,26 +121,6 @@ MUSHROOMS`}
         descriptionStyle="fourthDescription"
         rightBottomTitle="MAD"
         rightBottomText="Mollstraße 1, DE-10178 Berlin"
-      />
-
-      <InfoTripletSection
-        items={[
-          {
-            subtitle: "Mission Statement",
-            content:
-              "MAD is a materials and design company disrupting unsustainable production practices at the intersection of biomaterial science and circular design. We engineer high-performance alternative materials using mycelium - the root-like structure of fungi.",
-          },
-          {
-            subtitle: "Commissions + Collaborations",
-            content:
-              "We develop custom materials and solutions adapted to your project's needs. Open to collaborations with brands, designers, architects, scientists, climbers, and beyond. If you're interested in co-creating, experimenting, or bringing a bold idea to life, let's connect.",
-          },
-          {
-            subtitle: "Impressum",
-            content:
-              "Material Alternative Design UG\nMollstraße 1\nDE-10178 Berlin\nAmtsgericht Charlottenburg Berlin\nRepresented by: Marta agueda Carlero + Manuela Garcia",
-          },
-        ]}
       />
 
       <Footer />

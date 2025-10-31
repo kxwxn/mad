@@ -13,6 +13,14 @@ interface FullImageSectionProps {
   overlayTitleClass?: string; // 클래스 override (CSS Modules key)
   overlaySubtitleClass?: string; // 클래스 override (CSS Modules key)
   overlayDescriptionClass?: string; // 클래스 override (CSS Modules key)
+  // 상단 오버레이 (overlayPosition="bottom"일 때 하단과 함께 사용 가능)
+  topOverlayText?: string;
+  topOverlayTitle?: string;
+  topOverlaySubtitle?: string;
+  topOverlayDescription?: string;
+  topOverlayTitleClass?: string;
+  topOverlaySubtitleClass?: string;
+  topOverlayDescriptionClass?: string;
 }
 
 export default function FullImageSection({ 
@@ -26,14 +34,98 @@ export default function FullImageSection({
   overlayTitleClass,
   overlaySubtitleClass,
   overlayDescriptionClass,
+  topOverlayText,
+  topOverlayTitle,
+  topOverlaySubtitle,
+  topOverlayDescription,
+  topOverlayTitleClass,
+  topOverlaySubtitleClass,
+  topOverlayDescriptionClass,
 }: FullImageSectionProps) {
-  const overlayClassName = overlayPosition === "top" 
-    ? styles.fullImageOverlayTop 
-    : styles.fullImageOverlay;
+  // 하단 오버레이
+  const bottomOverlayClassName = styles.fullImageOverlay;
+  const hasBottomStructuredText = overlayTitle || overlaySubtitle || overlayDescription;
+  const hasBottomOverlayContent = hasBottomStructuredText || overlayText;
 
-  // 구조화된 텍스트가 있으면 그것을 사용, 없으면 기존 overlayText 사용
-  const hasStructuredText = overlayTitle || overlaySubtitle || overlayDescription;
-  const hasOverlayContent = hasStructuredText || overlayText;
+  // 상단 오버레이
+  const topOverlayClassName = styles.fullImageOverlayTop;
+  // overlayPosition이 "top"이고 상단 전용 props가 비어있다면 하단용 props를 상단에 매핑해서 사용
+  const effectiveTopTitle = topOverlayTitle ?? (overlayPosition === "top" ? overlayTitle : undefined);
+  const effectiveTopSubtitle = topOverlaySubtitle ?? (overlayPosition === "top" ? overlaySubtitle : undefined);
+  const effectiveTopDescription = topOverlayDescription ?? (overlayPosition === "top" ? overlayDescription : undefined);
+  const effectiveTopTitleClass = topOverlayTitleClass ?? (overlayPosition === "top" ? overlayTitleClass : undefined);
+  const effectiveTopSubtitleClass = topOverlaySubtitleClass ?? (overlayPosition === "top" ? overlaySubtitleClass : undefined);
+  const effectiveTopDescriptionClass = topOverlayDescriptionClass ?? (overlayPosition === "top" ? overlayDescriptionClass : undefined);
+
+  const hasTopStructuredText = effectiveTopTitle || effectiveTopSubtitle || effectiveTopDescription;
+  const hasTopOverlayContent = hasTopStructuredText || topOverlayText;
+
+  // 오버레이 렌더링 헬퍼
+  const renderOverlay = (
+    isTop: boolean,
+    hasStructured: boolean,
+    overlayCls: string,
+    text?: string,
+    title?: string,
+    subtitle?: string,
+    description?: string,
+    titleCls?: string,
+    subtitleCls?: string,
+    descriptionCls?: string
+  ) => {
+    if (isTop && !hasTopOverlayContent) return null;
+    if (!isTop && !hasBottomOverlayContent) return null;
+
+    return (
+      <div className={overlayCls}>
+        {hasStructured ? (
+          <div className={styles.fullImageStructuredText}>
+            {title && (
+              <h2
+                className={
+                  titleCls
+                    ? `${isTop ? styles.fullImageTitleTop : styles.fullImageTitle} ${styles[titleCls]}`
+                    : isTop
+                      ? styles.fullImageTitleTop
+                      : styles.fullImageTitle
+                }
+              >
+                {title}
+              </h2>
+            )}
+            {subtitle && (
+              <h3
+                className={
+                  subtitleCls
+                    ? `${isTop ? styles.fullImageSubtitleTop : styles.fullImageSubtitle} ${styles[subtitleCls]}`
+                    : isTop
+                      ? styles.fullImageSubtitleTop
+                      : styles.fullImageSubtitle
+                }
+              >
+                {subtitle}
+              </h3>
+            )}
+            {description && (
+              <p
+                className={
+                  descriptionCls
+                    ? `${isTop ? styles.fullImageDescriptionTop : styles.fullImageDescription} ${styles[descriptionCls]}`
+                    : isTop
+                      ? styles.fullImageDescriptionTop
+                      : styles.fullImageDescription
+                }
+              >
+                {description}
+              </p>
+            )}
+          </div>
+        ) : (
+          text && <p className={isTop ? styles.fullImageTextTop : styles.fullImageText}>{text}</p>
+        )}
+      </div>
+    );
+  };
 
   return (
     <section className={styles.fullImageSection}>
@@ -47,56 +139,31 @@ export default function FullImageSection({
           className={styles.fullImage}
         />
       </div>
-      {hasOverlayContent && (
-        <div className={overlayClassName}>
-          {hasStructuredText ? (
-            <div className={styles.fullImageStructuredText}>
-              {overlayTitle && (
-                <h2
-                  className={
-                    overlayTitleClass
-                      ? `${overlayPosition === "top" ? styles.fullImageTitleTop : styles.fullImageTitle} ${styles[overlayTitleClass]}`
-                      : overlayPosition === "top"
-                        ? styles.fullImageTitleTop
-                        : styles.fullImageTitle
-                  }
-                >
-                  {overlayTitle}
-                </h2>
-              )}
-              {overlaySubtitle && (
-                <h3
-                  className={
-                    overlaySubtitleClass
-                      ? `${overlayPosition === "top" ? styles.fullImageSubtitleTop : styles.fullImageSubtitle} ${styles[overlaySubtitleClass]}`
-                      : overlayPosition === "top"
-                        ? styles.fullImageSubtitleTop
-                        : styles.fullImageSubtitle
-                  }
-                >
-                  {overlaySubtitle}
-                </h3>
-              )}
-              {overlayDescription && (
-                <p
-                  className={
-                    overlayDescriptionClass
-                      ? `${overlayPosition === "top" ? styles.fullImageDescriptionTop : styles.fullImageDescription} ${styles[overlayDescriptionClass]}`
-                      : overlayPosition === "top"
-                        ? styles.fullImageDescriptionTop
-                        : styles.fullImageDescription
-                  }
-                >
-                  {overlayDescription}
-                </p>
-              )}
-            </div>
-          ) : (
-            <p className={overlayPosition === "top" ? styles.fullImageTextTop : styles.fullImageText}>
-              {overlayText}
-            </p>
-          )}
-        </div>
+      {/* 상단 오버레이 */}
+      {renderOverlay(
+        true,
+        Boolean(hasTopStructuredText),
+        topOverlayClassName,
+        topOverlayText,
+        effectiveTopTitle,
+        effectiveTopSubtitle,
+        effectiveTopDescription,
+        effectiveTopTitleClass,
+        effectiveTopSubtitleClass,
+        effectiveTopDescriptionClass
+      )}
+      {/* 하단 오버레이 (overlayPosition="top"이 아니면 기본 하단) */}
+      {overlayPosition !== "top" && renderOverlay(
+        false,
+        Boolean(hasBottomStructuredText),
+        bottomOverlayClassName,
+        overlayText,
+        overlayTitle,
+        overlaySubtitle,
+        overlayDescription,
+        overlayTitleClass,
+        overlaySubtitleClass,
+        overlayDescriptionClass
       )}
     </section>
   );

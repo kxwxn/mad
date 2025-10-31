@@ -9,5 +9,5 @@
 .content {
   width: 100%;
   padding: 2rem;
-  margin-top: 0; /* 네비게이션과 겹치도록 여백 제거 */
+  padding-top: 20vh; /* InfoNav(fixed) 높이만큼 상단 패딩 추가 */
 } 
