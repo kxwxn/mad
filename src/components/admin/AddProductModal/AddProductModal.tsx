@@ -148,7 +148,9 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
       resetForm();
       onClose();
     } catch (error) {
-      console.error("Error adding product:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error("Error adding product:", error);
+      }
       alert("Failed to add product. Please try again.");
     } finally {
       setIsLoading(false);

@@ -22,12 +22,7 @@ export async function uploadProductImage(file: File) {
     const fileName = `${Math.random().toString(36).slice(2)}_${Date.now()}.${fileExt}`;
     const filePath = `products/${fileName}`;
 
-    console.log('Attempting to upload file:', {
-      fileName,
-      fileType: file.type,
-      fileSize: file.size,
-      bucketPath: filePath
-    });
+    // 파일 업로드 시도
 
     // 파일 업로드
     const { data, error: uploadError } = await supabase().storage
@@ -38,7 +33,6 @@ export async function uploadProductImage(file: File) {
       });
 
     if (uploadError) {
-      console.error('Upload error details:', uploadError);
       throw uploadError;
     }
 
@@ -51,11 +45,8 @@ export async function uploadProductImage(file: File) {
       .from('product-images')
       .getPublicUrl(filePath);
 
-    console.log('Upload successful, public URL:', publicUrl);
-
     return publicUrl;
   } catch (error) {
-    console.error('Detailed upload error:', error);
     throw error;
   }
 }

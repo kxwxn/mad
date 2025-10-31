@@ -74,7 +74,9 @@ export async function GET(request: NextRequest) {
                     image: product.images?.[0] || '/api/placeholder/400/400'
                   };
                 } catch (error) {
-                  console.error('Error fetching product:', error);
+                  if (process.env.NODE_ENV === 'development') {
+                    console.error('Error fetching product:', error);
+                  }
                   return {
                     name: item.description || 'Unknown Product',
                     quantity: item.quantity || 0,
@@ -94,7 +96,9 @@ export async function GET(request: NextRequest) {
             items: items
           };
         } catch (error) {
-          console.error('Error processing payment:', error);
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Error processing payment:', error);
+          }
           return {
             id: payment.id,
             amount: payment.amount / 100,
@@ -116,7 +120,9 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Dashboard data fetch error:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Dashboard data fetch error:', error);
+    }
     return NextResponse.json(
       { 
         error: 'Failed to fetch dashboard data',

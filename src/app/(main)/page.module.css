@@ -166,10 +166,7 @@
 .bannerTextSection .bannerRightTitle { font-weight: 800; }
 .bannerTextSection .bannerRightText { font-weight: 700; }
 
-/* Banner layout blocks for fourthTextSection */
-
 /* 배너 레이아웃은 네 번째 섹션에만 적용 */
-
 .fourthTextSection .bannerRightBlock {
   position: absolute;
   right: 2rem;
@@ -184,33 +181,6 @@
 
 .fourthTextSection .bannerRightText {
   font-weight: 700;
-}
-
-/* 6개 이미지 섹션 */
-.sixImageSection {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.imageRow {
-  width: 100%;
-  height: 50vh;
-  display: flex;
-  gap: 0;
-}
-
-.imageWrapper {
-  position: relative;
-  flex: 1;
-  height: 100%;
-  overflow: hidden;
-}
-
-.sixImage {
-  object-fit: cover;
-  object-position: center;
 }
 
 /* 전체 이미지 섹션 */
@@ -298,10 +268,6 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-.fullImageTitleTop {
-  font-size: 2rem;
-}
-
 /* 소제목 스타일 */
 .fullImageSubtitle,
 .fullImageSubtitleTop {
@@ -313,10 +279,6 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
-.fullImageSubtitleTop {
-  font-size: 3.5rem;
-}
-
 /* 내용 스타일 */
 .fullImageDescription,
 .fullImageDescriptionTop {
@@ -325,10 +287,6 @@
   line-height: 1.6;
   margin: 0;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.fullImageDescriptionTop {
-  font-size: 2em;
 }
 
 /* 이미지 섹션 - 3장용 */
@@ -448,48 +406,6 @@
   padding: 0;
 }
 
-/* 반응형 스타일 */
-@media (max-width: 768px) {
-  .splitSection,
-  .splitSectionFour {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .imageContainer,
-  .imageContainerFour {
-    height: 25vh;
-    width: 100%;
-  }
-
-  .splitImage {
-    position: relative !important;
-    height: 100% !important;
-    width: 100% !important;
-  }
-
-  .textSection {
-    padding: 2rem 1rem;
-  }
-
-  .fullscreenSection {
-    height: 70vh;
-  }
-
-  .videoContainer {
-    flex-direction: column;
-  }
-
-  .videoWrapper {
-    width: 100%;
-    height: 33.333vh;
-  }
-
-  .videoSection {
-    height: auto;
-  }
-}
-
 /* Tablet breakpoint */
 @media (max-width: 1024px) {
   .typo-title-2rem { font-size: 1.75rem; }
@@ -525,10 +441,9 @@
   .imageContainerFour { aspect-ratio: 4 / 5; }
 
   .videoSection { height: 70vh; }
-  .imageRow { height: 40vh; }
 }
 
-/* Mobile breakpoint refinements */
+/* Mobile breakpoint */
 @media (max-width: 768px) {
   .typo-title-2rem { font-size: 1rem; }
   .typo-subtitle-3_5rem { font-size: 1rem; }
@@ -558,6 +473,34 @@
     margin-top: 1rem;
   }
 
+  /* SplitImageSection 반응형 */
+  .splitSection,
+  .splitSectionFour {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .imageContainer,
+  .imageContainerFour {
+    height: 25vh;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+
+  .splitImage {
+    position: relative !important;
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  .textSection {
+    padding: 2rem 1rem;
+  }
+
+  .fullscreenSection {
+    height: 70vh;
+  }
+
   .fullImageSection { height: 60vh; }
   .fullImageContainer { transform: none; }
   .fullImageOverlay { padding: 1.5rem 1rem 0.75rem; }
@@ -568,7 +511,16 @@
   .fullImageSubtitle, .fullImageSubtitleTop { font-size: 0.75rem; }
   .fullImageDescription, .fullImageDescriptionTop { font-size: 0.75rem; line-height: 1.4; }
 
-  .imageContainer, .imageContainerFour { aspect-ratio: 1 / 1; }
-  .videoSection { height: 50vh; }
-  .imageRow { height: 30vh; }
+  .videoContainer {
+    flex-direction: column;
+  }
+
+  .videoWrapper {
+    width: 100%;
+    height: 33.333vh;
+  }
+
+  .videoSection {
+    height: 50vh;
+  }
 }

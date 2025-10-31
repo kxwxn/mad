@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import styles from "./SuccessMessage.module.css";
 
 interface SuccessMessageProps {

@@ -41,7 +41,9 @@ export default function useDashboardData(): UseDashboardDataResult {
         const dashboardData = await response.json();
         setData(dashboardData);
       } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error("Error fetching dashboard data:", error);
+        }
       } finally {
         setIsLoading(false);
       }

@@ -1,4 +1,3 @@
-import React from "react";
 import sectionStyles from "./InfoTripletSection.module.css";
 
 export interface InfoTripletItem {

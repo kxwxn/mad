@@ -126,7 +126,9 @@ export default function EditProductPanel({
       onProductUpdate();
       handleClose();
     } catch (error) {
-      console.error('Update error:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Update error:', error);
+      }
       alert('Failed to update product');
     }
   };
@@ -137,7 +139,9 @@ export default function EditProductPanel({
       onProductUpdate();
       handleClose();
     } catch (error) {
-      console.error('Delete error:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Delete error:', error);
+      }
       alert('Failed to delete product');
     }
   };

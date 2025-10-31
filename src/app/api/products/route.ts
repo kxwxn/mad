@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerClient } from '@/lib/supabase/client';
+import { getErrorMessage, getErrorStatus } from '@/lib/errorHandling';
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,10 +19,15 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(data);
   } catch (error) {
-    console.error('Error fetching products:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error fetching products:', error);
+    }
+    const status = getErrorStatus(error);
+    const message = getErrorMessage(error);
+    
     return NextResponse.json(
-      { error: 'Failed to fetch products' },
-      { status: 500 }
+      { error: message },
+      { status }
     );
   }
 }
