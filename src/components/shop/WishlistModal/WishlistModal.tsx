@@ -56,7 +56,7 @@ const WishlistModal: React.FC<WishlistModalProps> = ({ isOpen, onClose, openCart
       id: item.id,
       name: item.name,
       price: item.price,
-      imageUrl: item.imageUrl,
+      imageUrl: item.imageUrl || '', // 빈 문자열 기본값
       selectedSize: defaultSize,
       quantity: 1
     });

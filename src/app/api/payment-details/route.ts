@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { getErrorMessage, getErrorStatus } from '@/lib/errorHandling';
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing Stripe secret key');
@@ -39,8 +40,17 @@ export async function GET(request: NextRequest) {
         session.line_items?.data.map((item) => {
           const product = item.price?.product as Stripe.Product;
           const metadata = product.metadata || {};
+          const productId = metadata.productId;
+          
+          if (process.env.NODE_ENV === 'development' && (!productId || productId === '')) {
+            console.warn('Missing productId in metadata:', {
+              metadata,
+              productName: product.name,
+            });
+          }
+          
           return {
-            id: metadata.productId || '',
+            id: productId || '',
             name: product.name || item.description || "",
             quantity: item.quantity || 0,
             price: (item.amount_total || 0) / 100, // 센트 단위를 달러/유로 단위로 변환
@@ -51,11 +61,16 @@ export async function GET(request: NextRequest) {
     };
 
     return NextResponse.json(paymentDetails);
-  } catch {
-    console.error('Error fetching payment details');
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error fetching payment details:', error);
+    }
+    const status = getErrorStatus(error);
+    const message = getErrorMessage(error);
+    
     return NextResponse.json(
-      { error: 'Failed to fetch payment details' },
-      { status: 500 }
+      { error: message },
+      { status }
     );
   }
 }

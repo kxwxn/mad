@@ -1,0 +1,19 @@
+[
+  {
+    "name": "maxNumericValue",
+    "expected": 200,
+    "actual": 275.5,
+    "values": [
+      276,
+      275.5,
+      283.5
+    ],
+    "operator": "<=",
+    "passed": false,
+    "auditId": "total-blocking-time",
+    "level": "warn",
+    "url": "http://localhost:3000/",
+    "auditTitle": "Total Blocking Time",
+    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/performance/lighthouse-total-blocking-time/"
+  }
+]

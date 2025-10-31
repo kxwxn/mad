@@ -1,5 +1,6 @@
 import { getClient } from '@/lib/supabase/client';
-import { Product } from '@/types/product.types';
+import { Product, ProductInput } from '@/types/product.types';
+import { handleSupabaseError } from '@/lib/errorHandling';
 
 export const getProducts = async (from: number, to: number): Promise<Product[]> => {
   const client = getClient();
@@ -9,8 +10,8 @@ export const getProducts = async (from: number, to: number): Promise<Product[]> 
     .range(from, to)
     .order('created_at', { ascending: false });
 
-  if (error) throw error;
-  return data;
+  if (error) handleSupabaseError(error);
+  return data || [];
 };
 
 export const getProduct = async (id: string): Promise<Product> => {
@@ -21,11 +22,14 @@ export const getProduct = async (id: string): Promise<Product> => {
     .eq('id', id)
     .single();
 
-  if (error) throw error;
+  if (error) handleSupabaseError(error);
+  if (!data) {
+    throw new Error('Product not found');
+  }
   return data;
 };
 
-export const createProduct = async (product: Omit<Product, 'id' | 'created_at' | 'updated_at'>): Promise<Product> => {
+export const createProduct = async (product: ProductInput): Promise<Product> => {
   const client = getClient();
   const { data, error } = await client
     .from('products')
@@ -33,7 +37,7 @@ export const createProduct = async (product: Omit<Product, 'id' | 'created_at' |
     .select()
     .single();
 
-  if (error) throw error;
+  if (error) handleSupabaseError(error);
   return data;
 };
 
@@ -46,7 +50,7 @@ export const updateProduct = async (id: string, updates: Partial<Product>): Prom
     .select()
     .single();
 
-  if (error) throw error;
+  if (error) handleSupabaseError(error);
   return data;
 };
 
@@ -57,6 +61,6 @@ export const deleteProduct = async (id: string): Promise<void> => {
     .delete()
     .eq('id', id);
 
-  if (error) throw error;
+  if (error) handleSupabaseError(error);
 };
 

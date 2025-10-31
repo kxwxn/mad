@@ -7,8 +7,8 @@ const ITEMS_PER_PAGE = 8;
 export const PRODUCTS_QUERY_KEY = ['products'] as const;
 export const PRODUCT_QUERY_KEY = (id: string) => ['product', id] as const;
 
-// 캐시 설정
-const CACHE_TIME = 1000 * 60 * 30; // 30분
+// 캐시 설정 - TBT 최적화
+const CACHE_TIME = 1000 * 60 * 10; // 10분 (30분에서 단축)
 const STALE_TIME = 1000 * 60 * 5; // 5분
 
 export const useProducts = () => {
@@ -18,6 +18,8 @@ export const useProducts = () => {
     staleTime: STALE_TIME,
     gcTime: CACHE_TIME,
     refetchOnWindowFocus: false,
+    refetchOnMount: false, // TBT 최적화
+    refetchOnReconnect: false, // TBT 최적화
   });
 };
 
@@ -40,6 +42,8 @@ export const useInfiniteProducts = () => {
     staleTime: STALE_TIME,
     gcTime: CACHE_TIME,
     refetchOnWindowFocus: false,
+    refetchOnMount: false, // TBT 최적화
+    refetchOnReconnect: false, // TBT 최적화
   });
 };
 
