@@ -1,0 +1,94 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.overlay.visible {
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  position: relative;
+  width: 90vw;
+  max-width: 600px;
+  height: 90vh;
+  max-height: 700px;
+  background-color: white;
+  padding: 0;
+  transform: scale(0);
+  transform-origin: center;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.modal.visible {
+  transform: scale(1);
+}
+
+.closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  cursor: pointer;
+  color: black;
+  display: inline-block;
+  transform: rotate(45deg);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: rotate(45deg) scale(1.1);
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* 모바일 */
+@media (max-width: 640px) {
+  .modal {
+    width: 100vw;
+    height: 100vh;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .closeButton {
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+  }
+}
