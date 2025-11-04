@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { Product } from '@/lib/supabase/product';
 
 const ITEMS_PER_PAGE = 8;
@@ -55,64 +55,21 @@ export const useInfiniteProducts = () => {
   });
 };
 
+const fetchProduct = async (id: string): Promise<Product> => {
+  const response = await fetch(`/api/products/${id}`);
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || `Failed to fetch product: ${response.status}`);
+  }
+  return response.json();
+};
+
 export const useProduct = (id: string) => {
   return useQuery<Product>({
     queryKey: PRODUCT_QUERY_KEY(id),
-    queryFn: () => getProduct(id),
+    queryFn: () => fetchProduct(id),
     staleTime: STALE_TIME,
     gcTime: CACHE_TIME,
     refetchOnWindowFocus: false,
   });
 };
-
-interface UpdateProductParams {
-  id: string;
-  updates: Partial<Product>;
-}
-
-export const useProductMutations = () => {
-  const queryClient = useQueryClient();
-
-  const createProductMutation = useMutation({
-    mutationFn: createProduct,
-    onSuccess: (newProduct) => {
-      queryClient.setQueryData(PRODUCTS_QUERY_KEY, (old: Product[] | undefined) => {
-        if (!old) return [newProduct];
-        return [newProduct, ...old];
-      });
-      queryClient.setQueryData(PRODUCT_QUERY_KEY(newProduct.id), newProduct);
-    },
-  });
-
-  const updateProductMutation = useMutation({
-    mutationFn: ({ id, updates }: UpdateProductParams) => updateProduct(id, updates),
-    onSuccess: (updatedProduct) => {
-      queryClient.setQueryData(PRODUCTS_QUERY_KEY, (old: Product[] | undefined) => {
-        if (!old) return [updatedProduct];
-        return old.map(product => 
-          product.id === updatedProduct.id ? updatedProduct : product
-        );
-      });
-      queryClient.setQueryData(PRODUCT_QUERY_KEY(updatedProduct.id), updatedProduct);
-    },
-  });
-
-  const deleteProductMutation = useMutation({
-    mutationFn: deleteProduct,
-    onSuccess: (_, id) => {
-      queryClient.setQueryData(PRODUCTS_QUERY_KEY, (old: Product[] | undefined) => {
-        if (!old) return [];
-        return old.filter(product => product.id !== id);
-      });
-      queryClient.removeQueries({ queryKey: PRODUCT_QUERY_KEY(id) });
-    },
-  });
-
-  return {
-    createProduct: createProductMutation.mutate,
-    updateProduct: updateProductMutation.mutate,
-    deleteProduct: deleteProductMutation.mutate,
-    isLoading: createProductMutation.isPending || updateProductMutation.isPending || deleteProductMutation.isPending,
-    error: createProductMutation.error || updateProductMutation.error || deleteProductMutation.error,
-  };
-}; 
