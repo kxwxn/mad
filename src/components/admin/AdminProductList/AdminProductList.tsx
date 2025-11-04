@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { getAdminProducts } from '@/lib/supabase/adminProduct';
 import styles from './AdminProductList.module.css';
 import { Product } from '@/types/product.types';
 
@@ -18,7 +17,12 @@ const AdminProductList: React.FC<AdminProductListProps> = ({ onProductClick }) =
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await getAdminProducts();
+        const response = await fetch('/api/admin/products');
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `Failed to fetch products: ${response.status}`);
+        }
+        const data = await response.json();
         setProducts(data || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch products');
