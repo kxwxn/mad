@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAdminProducts, getAdminProduct, insertAdminProduct as createAdminProduct, updateAdminProduct, deleteAdminProduct } from '@/lib/supabase/adminProduct';
+import { getAdminProducts, getAdminProduct, insertAdminProduct as createAdminProduct } from '@/lib/supabase/adminProduct';
 import { Product } from '@/lib/supabase/adminProduct';
 
 const ITEMS_PER_PAGE = 8;
@@ -73,7 +73,22 @@ export const useAdminProductMutations = () => {
   });
 
   const updateProductMutation = useMutation({
-    mutationFn: ({ id, updates }: UpdateProductParams) => updateAdminProduct(id, updates),
+    mutationFn: async ({ id, updates }: UpdateProductParams) => {
+      const response = await fetch(`/api/admin/products/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ updates }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Failed to update product: ${response.status}`);
+      }
+
+      return response.json() as Promise<Product>;
+    },
     onSuccess: (updatedProduct) => {
       queryClient.setQueryData(ADMIN_PRODUCTS_QUERY_KEY, (old: Product[] | undefined) => {
         if (!old) return [updatedProduct];
@@ -86,8 +101,19 @@ export const useAdminProductMutations = () => {
   });
 
   const deleteProductMutation = useMutation({
-    mutationFn: deleteAdminProduct,
-    onSuccess: (_, id) => {
+    mutationFn: async (id: string) => {
+      const response = await fetch(`/api/admin/products/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Failed to delete product: ${response.status}`);
+      }
+
+      return id;
+    },
+    onSuccess: (id) => {
       queryClient.setQueryData(ADMIN_PRODUCTS_QUERY_KEY, (old: Product[] | undefined) => {
         if (!old) return [];
         return old.filter(product => product.id !== id);
@@ -98,8 +124,8 @@ export const useAdminProductMutations = () => {
 
   return {
     createProduct: createProductMutation.mutate,
-    updateProduct: updateProductMutation.mutate,
-    deleteProduct: deleteProductMutation.mutate,
+    updateProduct: updateProductMutation.mutateAsync,
+    deleteProduct: deleteProductMutation.mutateAsync,
     isLoading: createProductMutation.isPending || updateProductMutation.isPending || deleteProductMutation.isPending,
     error: createProductMutation.error || updateProductMutation.error || deleteProductMutation.error,
   };

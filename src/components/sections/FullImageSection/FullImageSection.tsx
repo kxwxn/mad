@@ -120,7 +120,19 @@ export default function FullImageSection({
             )}
           </div>
         ) : (
-          text && <p className={isTop ? styles.fullImageTextTop : styles.fullImageText}>{text}</p>
+          text && (
+            <p className={isTop ? styles.fullImageTextTop : styles.fullImageText}>
+              {text.includes('Get in touch!') ? (
+                <>
+                  {text.split('Get in touch!')[0]}
+                  <br />
+                  Get in touch!
+                </>
+              ) : (
+                text
+              )}
+            </p>
+          )
         )}
       </div>
     );
