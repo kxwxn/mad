@@ -1,5 +1,5 @@
 import { getAdminClient } from './adminClient';
-import { Product, ProductInput, ProductType, ColorVariant } from '@/types/product.types';
+import { Product, ProductInput } from '@/types/product.types';
 
 export const getAdminProducts = async (from?: number, to?: number) => {
   const supabase = getAdminClient();
