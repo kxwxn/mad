@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import styles from './JournalismModal.module.css';
 
 interface JournalismModalProps {
@@ -45,20 +44,7 @@ export default function JournalismModal({ isOpen, onClose, buttonPosition }: Jou
       >
         <button className={styles.closeButton} onClick={onClose}>+</button>
         <div className={styles.content}>
-          <h1 className={styles.title}>Journalism</h1>
-          <div className={styles.list}>
-            {/* 임시 데이터 */}
-            {[1, 2, 3, 4, 5].map((item) => (
-              <Link 
-                href={`/journalism/${item}`} 
-                key={item}
-                className={styles.item}
-                onClick={onClose}
-              >
-                Article {item}
-              </Link>
-            ))}
-          </div>
+          <div className={styles.comingSoon}>MANY MORE TO COME...</div>
         </div>
       </div>
     </div>

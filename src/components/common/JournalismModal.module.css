@@ -24,7 +24,10 @@
   position: relative;
   width: 90vw;
   height: 90vh;
-  background-color: white;
+  background-image: url('/Images/LandingPhoto/03.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   padding: 2rem;
   transform: scale(0);
   transform-origin: var(--origin-x) var(--origin-y);
@@ -40,25 +43,39 @@
   top: 2rem;
   right: 2rem;
   font-size: 2rem;
-  background: none;
+  background: rgba(255, 255, 255, 0.9);
   border: none;
   cursor: pointer;
   color: black;
   display: inline-block;
   transform: rotate(45deg);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: rotate(45deg) scale(1.1);
 }
 
 .content {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 2rem;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
 }
 
-.content::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+.comingSoon {
+  font-size: 4rem;
+  font-weight: bold;
+  color: black;
+  text-align: center;
+  letter-spacing: 0.1em;
 }
 
 .title {
@@ -118,11 +135,7 @@
     padding: 1rem;
   }
 
-  .title {
-    font-size: 2rem;
-  }
-
-  .item {
-    font-size: 1.5rem;
+  .comingSoon {
+    font-size: 2.5rem;
   }
 }
