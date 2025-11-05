@@ -1,10 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import styles from './ShopNav.module.css';
 import { useEffect, useState } from 'react';
 
 export default function ShopNav() {
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -28,23 +30,29 @@ export default function ShopNav() {
     };
   }, [lastScrollY]);
 
+  const handleMadClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setIsVisible(false);
+    setTimeout(() => {
+      router.push('/');
+    }, 300); // 애니메이션 시간과 맞춤
+  };
+
   return (
     <nav className={`${styles.nav} ${isVisible ? styles.visible : styles.hidden}`}>
       <div className={styles.container}>
         <div className={styles.topRow}>
-          <div className={styles.mad}>
+          <Link href="/" className={styles.mad} onClick={handleMadClick}>
             MAD
-          </div>
+          </Link>
         </div>
         <div className={styles.middleRow}>
-          <div className={styles.infoHidden}>
+          <Link href="/info" className={styles.info}>
             info
-          </div>
+          </Link>
         </div>
         <div className={styles.bottomRow}>
-          <Link href="/shop" className={styles.shop}>
-            shop
-          </Link>
+          <span className={styles.shopHidden}>shop</span>
         </div>
         <div className={styles.plusRow}>
           <Link href="/" className={styles.plus}>

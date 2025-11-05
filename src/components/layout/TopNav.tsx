@@ -3,11 +3,13 @@
 import styles from "./TopNav.module.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState, useRef } from "react";
 import JournalismModal from '../common/JournalismModal';
 
 export default function TopNav() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,6 +47,14 @@ export default function TopNav() {
     setIsModalOpen(true);
   };
 
+  const handleMadClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setIsVisible(false);
+    setTimeout(() => {
+      router.push('/');
+    }, 300); // 애니메이션 시간과 맞춤
+  };
+
   return (
     <>
       <nav
@@ -52,9 +62,9 @@ export default function TopNav() {
       >
         <div className={styles.container}>
           <div className={styles.topRow}>
-            <div className={styles.mad}>
+            <Link href="/" className={styles.mad} onClick={handleMadClick}>
               MAD
-            </div>
+            </Link>
           </div>
           <div className={styles.middleRow}>
             <Link
