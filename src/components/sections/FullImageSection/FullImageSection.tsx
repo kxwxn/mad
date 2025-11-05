@@ -146,7 +146,7 @@ export default function FullImageSection({
           alt={altText}
           fill
           sizes="200vw"
-          quality={100}
+          quality={85}
           className={styles.fullImage}
         />
       </div>
