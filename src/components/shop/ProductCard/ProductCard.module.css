@@ -83,6 +83,7 @@
   padding: 0;
   text-decoration: none;
   transition: text-decoration 0.2s ease;
+  color: #000;
 }
 
 .sizeGuideBtn.active {
@@ -180,13 +181,22 @@
   opacity: 1;
   visibility: visible;
   height: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sizeGuideInfo::-webkit-scrollbar {
+  display: none;
 }
 
 .sizeTable {
   position: relative;
-  width: 100%;
+  width: auto;
+  min-width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: auto;
 }
 
 .sizeTable th,
@@ -194,12 +204,16 @@
   padding: 0.5rem;
   text-align: center;
   border: none;
+  white-space: nowrap;
+  min-width: fit-content;
 }
 
 .sizeTable th {
   background: none;
   font-weight: 600;
   text-transform: uppercase;
+  white-space: nowrap;
+  padding: 0.5rem 0.25rem;
 }
 
 .sizeTable td:first-child {
@@ -247,6 +261,32 @@
   .addToCartBox {
     width: 100%;
   }
+
+  .headerSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .buttonGroup {
+    width: 100%;
+    flex-wrap: nowrap;
+    gap: 5px;
+    justify-content: center;
+  }
+
+  .shopButton, .cartButton {
+    font-size: 12px;
+  }
+
+  .sizeTable {
+    font-size: 0.75rem;
+  }
+
+  .sizeTable th,
+  .sizeTable td {
+    padding: 0.5rem 0.25rem;
+  }
 }
 
 .headerSection {
@@ -260,6 +300,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
 
 .shopButton, .cartButton {
@@ -275,6 +317,8 @@
   display: inline-block;
   line-height: 1;
   vertical-align: middle;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .shopButton span {

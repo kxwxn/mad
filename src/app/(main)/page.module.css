@@ -478,19 +478,22 @@
   .splitSectionFour {
     flex-direction: column;
     height: auto;
+    gap: 0;
   }
 
   .imageContainer,
   .imageContainerFour {
-    height: 25vh;
     width: 100%;
     aspect-ratio: 1 / 1;
+    min-height: 0;
   }
 
   .splitImage {
-    position: relative !important;
+    position: absolute !important;
     height: 100% !important;
     width: 100% !important;
+    object-fit: cover;
+    object-position: center;
   }
 
   .textSection {
