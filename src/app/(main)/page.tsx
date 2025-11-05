@@ -49,8 +49,8 @@ export default function Home() {
       <FullImageSection
         imageUrl="/Images/LandingPhoto/Mycelium.jpeg"
         altText="Image 1"
-        overlayText="We are not industry bound, we are addressing the urgent need for sustainable materials across different industries."
-        topOverlayText="We develop custom solutions for your projects and products based on our unique recipes and IP. Get in touch!"
+        overlayText="We develop custom solutions for your projects and products based on our unique recipes and IP. Get in touch!"
+        topOverlayText="We are not industry bound, we are addressing the urgent need for sustainable materials across different industries."
       />
 
       <TextSection

@@ -38,27 +38,44 @@ export default function Footer() {
   };
 
   const menuItems = [
-    { 
-      href: "https://preview.mailerlite.io/forms/1664989/169702033605002470/share", 
+    {
+      href: "https://preview.mailerlite.io/forms/1664989/169702033605002470/share",
       label: "NEWSLETTER",
-      isNewsletter: true
+      isNewsletter: true,
     },
-    { href: "/contact", label: "CONTACT" },
-    { href: "https://www.linkedin.com/company/madmaterialalternativedesign/", label: "LINKEDIN" },
+    { href: "mailto:info@wearenotmad.com", label: "CONTACT" },
+    {
+      href: "https://www.linkedin.com/company/madmaterialalternativedesign/",
+      label: "LINKEDIN",
+    },
     { href: "https://instagram.com/weare___mad", label: "INSTAGRAM" },
   ];
 
   return (
     <>
-      <footer className={`${styles.bottomNav} ${isVisible ? styles.visible : styles.hidden}`}>
+      <footer
+        className={`${styles.bottomNav} ${
+          isVisible ? styles.visible : styles.hidden
+        }`}
+      >
         <div className={styles.container}>
           {menuItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={styles.menuItem}
-              target={item.href.startsWith('http') && !item.isNewsletter ? '_blank' : undefined}
-              rel={item.href.startsWith('http') && !item.isNewsletter ? 'noopener noreferrer' : undefined}
+              target={
+                item.href.startsWith("http") && !item.isNewsletter
+                  ? "_blank"
+                  : item.href.startsWith("mailto:")
+                  ? undefined
+                  : undefined
+              }
+              rel={
+                item.href.startsWith("http") && !item.isNewsletter
+                  ? "noopener noreferrer"
+                  : undefined
+              }
               onClick={item.isNewsletter ? handleNewsletterClick : undefined}
             >
               {item.label}
@@ -66,9 +83,9 @@ export default function Footer() {
           ))}
         </div>
       </footer>
-      <NewsletterModal 
-        isOpen={isNewsletterOpen} 
-        onClose={() => setIsNewsletterOpen(false)} 
+      <NewsletterModal
+        isOpen={isNewsletterOpen}
+        onClose={() => setIsNewsletterOpen(false)}
       />
     </>
   );
