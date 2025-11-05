@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./AddProductModal.module.css";
-import { insertAdminProduct, ProductInput, ColorVariant, ProductType } from "@/lib/supabase/adminProduct";
+import { insertAdminProduct } from "@/lib/supabase/adminProduct";
+import { ProductInput, ColorVariant, ProductType } from "@/types/product.types";
 import { uploadProductImage } from "@/lib/supabase/storage";
 import ImageUploadPreview from "./ImageUploadPreview/ImageUploadPreview";
 import ProductForm from "./ProductForm/ProductForm";

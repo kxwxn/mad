@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./ProductForm.module.css";
-import { ProductType, ColorVariant } from "@/lib/supabase/adminProduct";
+import { ProductType, ColorVariant } from "@/types/product.types";
 
 interface ProductFormData {
   name: string;

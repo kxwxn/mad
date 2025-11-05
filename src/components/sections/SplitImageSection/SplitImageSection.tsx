@@ -18,7 +18,7 @@ export default function SplitImageSection({ images, variant = "three" }: SplitIm
             width={1920}
             height={1080}
             sizes="100vw"
-            quality={100}
+            quality={85}
             className={styles.splitImageSingle}
             priority
             style={{ width: '100%', height: 'auto' }}
@@ -44,7 +44,7 @@ export default function SplitImageSection({ images, variant = "three" }: SplitIm
             alt={img.alt}
             fill
             sizes={imageSizes}
-            quality={100}
+            quality={85}
             className={styles.splitImage}
             priority={index === 0} // 첫 번째 이미지에 priority 추가
           />
