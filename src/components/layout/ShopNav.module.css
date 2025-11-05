@@ -7,7 +7,7 @@
   background-color: transparent;
   z-index: 1;
   padding: 1rem;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease;
   will-change: transform;
   transform: translateY(0);
   pointer-events: none;
@@ -33,7 +33,7 @@
 .plusRow {
   display: flex;
   align-items: center;
-  flex: 1;
+  flex: 0 1 auto;
 }
 
 .visible {
@@ -45,15 +45,21 @@
 }
 
 .mad,
-.shop,
-.infoHidden {
-  font-size: 12.4vw;
+.info,
+.shopHidden {
+  font-size: 10vw;
   color: #000000;
   text-decoration: none;
   font-weight: 800;
   line-height: 0.9;
   white-space: nowrap;
   transition: opacity 0.3s ease;
+  position: relative;
+}
+
+.mad {
+  position: relative;
+  display: block;
 }
 
 .plus {
@@ -65,53 +71,18 @@
   white-space: nowrap;
   transition: opacity 0.3s ease;
   cursor: pointer;
+  position: relative;
   display: inline-block;
   transform: rotate(45deg);
 }
 
-.infoHidden {
+.shopHidden {
   visibility: hidden;
 }
 
+.info:hover,
 .plus:hover {
   opacity: 0.8;
-}
-
-.shopNav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: #fff;
-  border-bottom: 1px solid #eee;
-}
-
-.shopLogo a {
-  font-weight: bold;
-  text-decoration: none;
-  color: #000;
-}
-
-.shopNavLinks {
-  display: flex;
-  gap: 1rem;
-}
-
-.shopNavLinks a {
-  text-decoration: none;
-  color: #333;
-}
-
-.shopNavActions {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.shopNavActions button {
-  background: none;
-  border: none;
-  cursor: pointer;
 }
 
 /* 모바일 화면에서만 세로 정렬 */
@@ -123,13 +94,8 @@
   }
 
   .mad,
-  .shop,
-  .infoHidden {
-    font-size: 18vw;
-    margin-bottom: 1vh;
-  }
-
-  .plus {
+  .info,
+  .shopHidden {
     font-size: 18vw;
     margin-bottom: 1vh;
   }
@@ -142,8 +108,8 @@
   }
 
   .mad,
-  .shop,
-  .infoHidden {
+  .info,
+  .shopHidden {
     font-size: 12.4vw;
   }
 
@@ -161,8 +127,8 @@
   }
 
   .mad,
-  .shop,
-  .infoHidden {
+  .info,
+  .shopHidden {
     font-size: 12.4vw;
   }
 

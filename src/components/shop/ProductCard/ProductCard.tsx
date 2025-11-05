@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useCartStore } from "@/store/cartStore";
 import { useWishlistStore } from "@/store/wishlistStore";
 import WishlistIcon from "../WishlistIcon/WishlistIcon";
-import { Product } from "@/lib/supabase/product";
+import { Product } from "@/types/product.types";
 import ProductOptions from "../ProductOptions/ProductOptions";
 import QuantitySelector from "../QuantitySelector/QuantitySelector";
 import AlertMessage from "@/components/ui/AlertMessage/AlertMessage";

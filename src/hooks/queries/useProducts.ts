@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { Product } from '@/lib/supabase/product';
+import { Product } from '@/types/product.types';
 
 const ITEMS_PER_PAGE = 8;
 

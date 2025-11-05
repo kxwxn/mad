@@ -7,7 +7,7 @@
   background-color: transparent;
   z-index: 1000;
   padding: 1rem;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease;
   will-change: transform;
   transform: translateY(0);
 }
@@ -31,7 +31,7 @@
 .plusRow {
   display: flex;
   align-items: center;
-  flex: 1;
+  flex: 0 1 auto;
 }
 
 .visible {
@@ -43,15 +43,21 @@
 }
 
 .mad,
-.info,
-.shopHidden {
-  font-size: 12.4vw;
+.infoHidden,
+.shop {
+  font-size: 10vw;
   color: #000000;
   text-decoration: none;
   font-weight: 800;
   line-height: 0.9;
   white-space: nowrap;
   transition: opacity 0.3s ease;
+  position: relative;
+}
+
+.mad {
+  position: relative;
+  display: block;
 }
 
 .plus {
@@ -63,44 +69,18 @@
   white-space: nowrap;
   transition: opacity 0.3s ease;
   cursor: pointer;
+  position: relative;
   display: inline-block;
   transform: rotate(45deg);
 }
 
-.shopHidden {
+.infoHidden {
   visibility: hidden;
 }
 
+.shop:hover,
 .plus:hover {
   opacity: 0.8;
-}
-
-.infoNav {
-  position: sticky;
-  top: 0;
-  background-color: white;
-  z-index: 999;
-  border-bottom: 1px solid #eaeaea;
-}
-
-.infoNavList {
-  display: flex;
-  justify-content: center;
-  list-style: none;
-  margin: 0;
-  padding: 1rem 0;
-}
-
-.infoNavItem a {
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-  color: black;
-  transition: background-color 0.3s ease;
-}
-
-.infoNavItem a:hover,
-.infoNavItem a.active {
-  background-color: #f0f0f0;
 }
 
 /* 모바일 화면에서만 세로 정렬 */
@@ -112,13 +92,8 @@
   }
 
   .mad,
-  .info,
-  .shopHidden {
-    font-size: 18vw;
-    margin-bottom: 1vh;
-  }
-
-  .plus {
+  .infoHidden,
+  .shop {
     font-size: 18vw;
     margin-bottom: 1vh;
   }
@@ -131,8 +106,8 @@
   }
 
   .mad,
-  .info,
-  .shopHidden {
+  .infoHidden,
+  .shop {
     font-size: 12.4vw;
   }
 
@@ -150,8 +125,8 @@
   }
 
   .mad,
-  .info,
-  .shopHidden {
+  .infoHidden,
+  .shop {
     font-size: 12.4vw;
   }
 
