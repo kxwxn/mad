@@ -1,11 +1,7 @@
-import { supabase } from '@/lib/supabase/config';
-import { Database } from '@/types/database.types';
+import { getServerClient } from '@/lib/supabase/client';
+import { Product, ProductInput } from '@/types/product.types';
 import { handleSupabaseError } from '@/lib/errorHandling';
 import { NotFoundError } from '@/lib/errors';
-
-type Product = Database['public']['Tables']['products']['Row'];
-type ProductInsert = Database['public']['Tables']['products']['Insert'];
-type ProductUpdate = Database['public']['Tables']['products']['Update'];
 
 export interface GetProductsParams {
   from?: number;
@@ -25,7 +21,8 @@ export const productApi = {
     orderBy = 'created_at',
     orderDirection = 'desc' 
   }: GetProductsParams = {}): Promise<Product[]> => {
-    const { data, error } = await supabase()
+    const client = getServerClient();
+    const { data, error } = await client
       .from('products')
       .select('*')
       .range(from, to)
@@ -35,11 +32,12 @@ export const productApi = {
       handleSupabaseError(error);
     }
 
-    return data || [];
+    return (data || []) as Product[];
   },
 
   getProduct: async ({ id }: GetProductParams): Promise<Product> => {
-    const { data, error } = await supabase()
+    const client = getServerClient();
+    const { data, error } = await client
       .from('products')
       .select('*')
       .eq('id', id)
@@ -53,11 +51,12 @@ export const productApi = {
       throw new NotFoundError(`Product with id ${id} not found`);
     }
 
-    return data;
+    return data as Product;
   },
 
-  createProduct: async (product: ProductInsert): Promise<Product> => {
-    const { data, error } = await supabase()
+  createProduct: async (product: ProductInput): Promise<Product> => {
+    const client = getServerClient();
+    const { data, error } = await client
       .from('products')
       .insert([product])
       .select()
@@ -67,11 +66,12 @@ export const productApi = {
       handleSupabaseError(error);
     }
 
-    return data;
+    return data as Product;
   },
 
-  updateProduct: async (id: string, updates: ProductUpdate): Promise<Product> => {
-    const { data, error } = await supabase()
+  updateProduct: async (id: string, updates: Partial<Product>): Promise<Product> => {
+    const client = getServerClient();
+    const { data, error } = await client
       .from('products')
       .update(updates)
       .eq('id', id)
@@ -86,11 +86,12 @@ export const productApi = {
       throw new NotFoundError(`Product with id ${id} not found`);
     }
 
-    return data;
+    return data as Product;
   },
 
   deleteProduct: async (id: string): Promise<void> => {
-    const { error } = await supabase()
+    const client = getServerClient();
+    const { error } = await client
       .from('products')
       .delete()
       .eq('id', id);

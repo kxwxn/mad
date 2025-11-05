@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAdminProducts, getAdminProduct, insertAdminProduct as createAdminProduct } from '@/lib/supabase/adminProduct';
-import { Product } from '@/lib/supabase/adminProduct';
+import { Product } from '@/types/product.types';
 
 const ITEMS_PER_PAGE = 8;
 

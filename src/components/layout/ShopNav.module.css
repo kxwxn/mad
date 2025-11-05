@@ -85,43 +85,6 @@
   opacity: 0.8;
 }
 
-.shopNav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: #fff;
-  border-bottom: 1px solid #eee;
-}
-
-.shopLogo a {
-  font-weight: bold;
-  text-decoration: none;
-  color: #000;
-}
-
-.shopNavLinks {
-  display: flex;
-  gap: 1rem;
-}
-
-.shopNavLinks a {
-  text-decoration: none;
-  color: #333;
-}
-
-.shopNavActions {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.shopNavActions button {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
 /* 모바일 화면에서만 세로 정렬 */
 @media (max-width: 640px) {
   .container {

@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { useInfiniteProducts } from '@/hooks/queries/useProducts';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { useInView } from 'react-intersection-observer';
-import { Product } from "@/lib/supabase/product";
+import { Product } from "@/types/product.types";
 
 const ProductCard = memo(({ product, index }: { product: Product; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
