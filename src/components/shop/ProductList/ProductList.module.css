@@ -5,6 +5,53 @@
   margin-top: calc(13vw * 0.9); /* TopNav의 높이만큼 여백 추가 */
 }
 
+.emptyContainer {
+  width: 100%;
+  margin: 0;
+  padding: calc(13vw * 0.9) 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  min-height: calc(100vh - (13vw * 0.9));
+  text-align: center;
+}
+
+.emptyImageWrapper {
+  position: relative;
+  width: min(90%, 1000px);
+  aspect-ratio: 3 / 2;
+  border: 2px solid #000;
+  background-color: #f5f5f5;
+  overflow: hidden;
+}
+
+.emptyOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.emptyImage {
+  object-fit: cover;
+}
+
+.emptyMessage {
+  font-size: clamp(1.75rem, 3vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 0.15rem;
+  text-transform: uppercase;
+  color: #000;
+  text-align: center;
+}
+
 .loadingContainer {
   display: flex;
   align-items: center;

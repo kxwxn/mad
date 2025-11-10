@@ -1,49 +1,51 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
-const isAdminDashboard = createRouteMatcher(['/admin/dashboard'])
+const isPublicRoute = createRouteMatcher([
+  '/admin/sign-in(.*)',
+  '/admin/sign-up(.*)',
+])
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId, sessionClaims } = await auth();
   const isAdmin = sessionClaims?.metadata?.role === 'admin';
   const path = req.nextUrl.pathname;
-  
-  // 로그인 페이지에서 이미 로그인한 관리자인 경우 dashboard 페이지로 리다이렉트
-  if (userId && isAdmin && path === '/admin/sign-in') {
-    const productUrl = new URL('/admin/dashboard', req.url);
-    return NextResponse.redirect(productUrl);
-  }
 
-  if (userId && !isAdmin && path === '/admin') {
-    // 로그인했지만 관리자가 아닌 경우 (access-denied)로 리다이렉트
-    const accessDeniedUrl = new URL('/admin/access-denied', req.url);
-    return NextResponse.redirect(accessDeniedUrl);
-  }
-
-  // 관리자가 아닌 경우 dashboard 접근 방지
-  if (isAdminDashboard(req) && !isAdmin) {
-    const url = new URL('/', req.url);
-    return NextResponse.redirect(url);
-  }
-    // 관리자가 아닌 경우 /admin/product 접근 방지
-    if (path === '/admin/product' && !isAdmin) {
-      const url = new URL('/', req.url);
-      return NextResponse.redirect(url);
+  // Allow public routes (sign-in, sign-up) to pass through
+  if (isPublicRoute(req)) {
+    // If already logged in as admin, redirect away from sign-in
+    if (userId && isAdmin && path.startsWith('/admin/sign-in')) {
+      return NextResponse.redirect(new URL('/admin/dashboard', req.url));
     }
+    return NextResponse.next();
+  }
   
+  // If not logged in and trying to access admin routes, redirect to sign-in
+  if (!userId && path.startsWith('/admin')) {
+    return NextResponse.redirect(new URL('/admin/sign-in', req.url));
+  }
 
-  // 로그인한 관리자의 경우
+  // If user is logged in but not an admin, and tries to access /admin routes, redirect to access-denied
+  if (userId && !isAdmin && path.startsWith('/admin')) {
+    return NextResponse.redirect(new URL('/admin/access-denied', req.url));
+  }
+
+  // If trying to access admin dashboard or product page without being an admin, redirect to access-denied
+  if ((path === '/admin/dashboard' || path === '/admin/product') && userId && !isAdmin) {
+    return NextResponse.redirect(new URL('/admin/access-denied', req.url));
+  }
+
+  // If user is an admin and tries to access /admin, redirect to dashboard
   if (userId && isAdmin && path === '/admin') {
-    const productUrl = new URL('/admin/dashboard', req.url);  // dashboard 
-    return NextResponse.redirect(productUrl);
+    return NextResponse.redirect(new URL('/admin/dashboard', req.url));
   }
 
   return NextResponse.next();
-})
+});
 
 export const config = {
   matcher: [
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    '/((?!_next|[^?]*\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
     '/(api|trpc)(.*)',
   ],
 }

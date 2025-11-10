@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { Product } from "@/lib/supabase/product";
+import { Product } from "@/types/product.types";
 
 // 1. 명확한 타입 정의
 type PageProps = {

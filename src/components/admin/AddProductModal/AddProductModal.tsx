@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styles from "./AddProductModal.module.css";
-import { insertProduct, ProductInput, ColorVariant, ProductType } from "@/lib/supabase/product";
+import { insertAdminProduct } from "@/lib/supabase/adminProduct";
+import { ProductInput, ColorVariant, ProductType } from "@/types/product.types";
 import { uploadProductImage } from "@/lib/supabase/storage";
-import Image from "next/image";
+import ImageUploadPreview from "./ImageUploadPreview/ImageUploadPreview";
+import ProductForm from "./ProductForm/ProductForm";
 
 interface AddProductModalProps {
   isOpen: boolean;
@@ -142,12 +144,14 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         product_info: formData.product_info || ''
       };
 
-      await insertProduct(productInput);
+      await insertAdminProduct(productInput);
       alert("Product added successfully.");
       resetForm();
       onClose();
     } catch (error) {
-      console.error("Error adding product:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error("Error adding product:", error);
+      }
       alert("Failed to add product. Please try again.");
     } finally {
       setIsLoading(false);
@@ -203,202 +207,20 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         </div>
         <div className={styles.content}>
           <form onSubmit={handleSubmit}>
-            <div className={styles.formGroup}>
-              <label htmlFor="productType">Product Type</label>
-              <select
-                id="productType"
-                name="product_type"
-                value={formData.product_type}
-                onChange={handleInputChange}
-                required
-              >
-                <option value="T-shirts">T-shirts</option>
-                <option value="Hoodie">Hoodie</option>
-                <option value="Earrings">Earrings</option>
-                <option value="Miscellaneous">Miscellaneous</option>
-              </select>
-            </div>
+            <ProductForm
+              formData={formData}
+              handleInputChange={handleInputChange}
+              addColor={addColor}
+              updateColor={updateColor}
+              removeColor={removeColor}
+            />
 
-            <div className={styles.formGroup}>
-              <label htmlFor="name">Product Name</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="price">Price</label>
-              <input
-                type="text"
-                id="price"
-                name="price"
-                value={formData.price}
-                onChange={handleInputChange}
-                pattern="[0-9]*"
-                inputMode="numeric"
-                required
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="description">Short Description</label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="productInfo">Detailed Information</label>
-              <textarea
-                id="productInfo"
-                name="product_info"
-                value={formData.product_info}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            {(formData.product_type === 'T-shirts' || formData.product_type === 'Hoodie') && (
-              <div className={styles.sizesContainer}>
-                <div className={styles.sizeGroup}>
-                  <label>Size S Quantity</label>
-                  <input
-                    type="text"
-                    name="s"
-                    value={formData.s}
-                    onChange={handleInputChange}
-                    pattern="[0-9]*"
-                    inputMode="numeric"
-                  />
-                </div>
-                <div className={styles.sizeGroup}>
-                  <label>Size M Quantity</label>
-                  <input
-                    type="text"
-                    name="m"
-                    value={formData.m}
-                    onChange={handleInputChange}
-                    pattern="[0-9]*"
-                    inputMode="numeric"
-                  />
-                </div>
-                <div className={styles.sizeGroup}>
-                  <label>Size L Quantity</label>
-                  <input
-                    type="text"
-                    name="l"
-                    value={formData.l}
-                    onChange={handleInputChange}
-                    pattern="[0-9]*"
-                    inputMode="numeric"
-                  />
-                </div>
-              </div>
-            )}
-
-            {formData.product_type === 'Earrings' && (
-              <div className={styles.sizesContainer}>
-                <div className={styles.colorSection}>
-                  <div className={styles.colorHeader}>
-                    <h3>Color Variants</h3>
-                    <button 
-                      type="button" 
-                      onClick={addColor}
-                      className={styles.addColorBtn}
-                    >
-                      + Add Color
-                    </button>
-                  </div>
-                  {formData.colors.map((colorVar, index) => (
-                    <div key={index} className={styles.colorGroup}>
-                      <input
-                        type="text"
-                        placeholder="Color name"
-                        value={colorVar.color}
-                        onChange={(e) => updateColor(index, 'color', e.target.value)}
-                        className={styles.colorInput}
-                      />
-                      <input
-                        type="number"
-                        placeholder="Quantity"
-                        value={colorVar.quantity}
-                        onChange={(e) => updateColor(index, 'quantity', parseInt(e.target.value) || 0)}
-                        min="0"
-                        className={styles.quantityInput}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeColor(index)}
-                        className={styles.removeColorBtn}
-                      >
-                        ×
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {formData.product_type === 'Miscellaneous' && (
-              <div className={styles.sizesContainer}>
-                <div className={styles.sizeGroup}>
-                  <label>Total Quantity</label>
-                  <input
-                    type="text"
-                    name="os"
-                    value={formData.os}
-                    onChange={handleInputChange}
-                    pattern="[0-9]*"
-                    inputMode="numeric"
-                  />
-                </div>
-              </div>
-            )}
-
-            <div className={styles.formGroup}>
-              <label htmlFor="images">Product Images (Maximum 5)</label>
-              <input
-                type="file"
-                id="images"
-                accept="image/*"
-                multiple
-                onChange={handleImageChange}
-                className={styles.fileInput}
-              />
-              {formData.images.length > 0 && (
-                <div className={styles.imagePreviewContainer}>
-                  {formData.images.map((file, index) => (
-                    <div key={index} className={styles.imagePreview}>
-                      <Image
-                        src={imageUrls[index]}
-                        alt={`Preview ${index + 1}`}
-                        width={100}
-                        height={100}
-                        style={{ objectFit: "cover" }}
-                        unoptimized
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeImage(index)}
-                        className={styles.removeImageBtn}
-                      >
-                        ×
-                      </button>
-                      <span className={styles.imageNumber}>{index + 1}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <ImageUploadPreview
+              images={formData.images}
+              imageUrls={imageUrls}
+              handleImageChange={handleImageChange}
+              removeImage={removeImage}
+            />
 
             <button
               type="submit"
@@ -415,3 +237,4 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 };
 
 export default AddProductModal;
+
