@@ -122,8 +122,19 @@ const ProductList: React.FC = () => {
   if (!products.length) {
     return (
       <div className={styles.emptyContainer}>
-        <h2>No products available</h2>
-        <p>Please check back later</p>
+        <div className={styles.emptyImageWrapper}>
+          <Image
+            src="/Images/LandingPhoto/emptyshop.jpeg"
+            alt="Empty shop display"
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
+            className={styles.emptyImage}
+          />
+          <div className={styles.emptyOverlay}>
+            <p className={styles.emptyMessage}>Next drop coming soon...</p>
+          </div>
+        </div>
       </div>
     );
   }
